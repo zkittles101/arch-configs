@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/boot/grub'
+let g:netrw_dirhist_5='/home/zkitty/.config/ranger'
+let g:netrw_dirhist_4='/boot/grub'
+let g:netrw_dirhist_3='/boot/grub/locale'
+let g:netrw_dirhist_2='/boot/grub'
+let g:netrw_dirhist_1='/home/zkitty/.config/polybar'
