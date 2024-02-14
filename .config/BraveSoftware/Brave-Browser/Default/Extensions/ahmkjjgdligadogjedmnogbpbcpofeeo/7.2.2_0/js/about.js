@@ -1,0 +1,1 @@
+!function(t){"use strict";try{chrome.extension.getBackgroundPage().tgs.setViewGlobals(t)}catch(t){return void window.setTimeout((()=>window.location.reload()),1e3)}}(this);

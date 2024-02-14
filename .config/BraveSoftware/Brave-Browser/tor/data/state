@@ -1,0 +1,42 @@
+# Tor state file last generated on 2022-06-12 21:28:19 local time
+# Other times below are in UTC
+# You *do not* need to edit this file.
+
+CircuitBuildTimeBin 625 1
+CircuitBuildTimeBin 635 1
+CircuitBuildTimeBin 675 1
+CircuitBuildTimeBin 705 1
+CircuitBuildTimeBin 735 1
+CircuitBuildTimeBin 745 1
+CircuitBuildTimeBin 805 3
+CircuitBuildTimeBin 825 1
+CircuitBuildTimeBin 915 1
+CircuitBuildTimeBin 1035 2
+CircuitBuildTimeBin 1055 1
+CircuitBuildTimeBin 1065 1
+CircuitBuildTimeBin 1465 1
+CircuitBuildTimeBin 1505 1
+Dormant 0
+Guard in=default rsa_id=FA4D02F71E5B59DA43EB98BC9694875154FAF6FE nickname=p8miz7ttgr5 sampled_on=2022-05-19T13:37:44 sampled_idx=0 sampled_by=0.4.6.10 listed=1 confirmed_on=2022-05-24T07:37:50 confirmed_idx=2 pb_use_attempts=4.000000 pb_use_successes=4.000000 pb_circ_attempts=19.000000 pb_circ_successes=17.000000 pb_successful_circuits_closed=17.000000
+Guard in=default rsa_id=490832B7557808031E25E89DB7A88FE1A48002D8 nickname=AndrewRyan sampled_on=2022-05-20T14:22:23 sampled_idx=1 sampled_by=0.4.6.10 listed=1 confirmed_on=2022-05-30T01:05:17 confirmed_idx=0
+Guard in=default rsa_id=166850D169CC7956E77525A1A9228BC4563CFC8B nickname=Piratenpartei10 sampled_on=2022-05-22T20:37:34 sampled_idx=2 sampled_by=0.4.6.10 listed=1 confirmed_on=2022-05-22T12:58:42 confirmed_idx=1
+Guard in=default rsa_id=9989315CECD82ADA9C27F474F67A3450DD014262 nickname=Unnamed sampled_on=2022-05-22T15:25:02 sampled_idx=3 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=9F99431ACF942B5138C3B11CB0793DF2AED59EE6 nickname=ElephantorUsLas24 sampled_on=2022-05-21T05:40:27 sampled_idx=4 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=5CB30C264BB9EB17CF2FC6AEB611593B54C371C2 nickname=torminator sampled_on=2022-05-22T09:03:07 sampled_idx=5 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=6B46E784431E309ABA10388F28FE7425C6B82AFA nickname=NTH110 sampled_on=2022-05-27T03:45:58 sampled_idx=6 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=8929AF5554BE622DE3FE34812C03D65FE7D5D0F1 nickname=NTH107 sampled_on=2022-05-21T01:55:05 sampled_idx=7 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=291F60CF0346E8DF0A2D48B498CE44CDF2A9189C nickname=Cobalt sampled_on=2022-05-30T16:15:37 sampled_idx=8 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=90C2000180D9588C7641E865A448ABC14F40547F nickname=AkashaShrooms sampled_on=2022-05-30T08:17:34 sampled_idx=9 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=6C41B08E707662EEB4B436F08CB9F9337D520904 nickname=bauruine sampled_on=2022-05-28T09:55:54 sampled_idx=10 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=D36A72A73F81EDE51E81F7CBAD1C440B7E34BDD5 nickname=n0x0r sampled_on=2022-05-24T20:10:45 sampled_idx=11 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=D2ABAF66E9A9B524CEB872008A73E07C7DBC9259 nickname=TK640 sampled_on=2022-05-29T00:28:53 sampled_idx=12 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=2D79BCA52AE3754F299A7199E05DE8D03AFB5AF3 nickname=poisona2 sampled_on=2022-05-22T05:08:28 sampled_idx=13 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=82A4BD0933B59E5A6F94BEA01A8EF55ABC031725 nickname=operator sampled_on=2022-05-23T01:44:04 sampled_idx=14 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=12CF84D3D2E30BB9799BFC0E1DDDFDA8D35AF007 nickname=Unnamed sampled_on=2022-05-19T13:22:36 sampled_idx=15 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=8ACAE8E05B37E7B61BB1EF70333A91F387054327 nickname=pooh2001 sampled_on=2022-05-24T21:20:42 sampled_idx=16 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=05C32C5EE14454E0C4CD81DAE0F3DC32F729DA4B nickname=TORtuga sampled_on=2022-05-23T12:24:42 sampled_idx=17 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=7C1A1517C27A0C68329D84D94372E0ACA9390B00 nickname=ForPrivacyNET sampled_on=2022-05-23T14:30:37 sampled_idx=18 sampled_by=0.4.6.10 listed=1
+Guard in=default rsa_id=09A70E396DE93F54D4541BBB0EC8E2B23761F34F nickname=Deepsky sampled_on=2022-05-26T21:21:51 sampled_idx=19 sampled_by=0.4.6.10 listed=1
+LastWritten 2022-06-12 18:28:19
+TorVersion Tor 0.4.6.10
+TotalBuildTimes 17

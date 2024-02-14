@@ -1,0 +1,52 @@
+2023-09-21 17:31:41.466 [info] Uninstalling extension from the profile: hookyqr.beautify@1.5.0 vscode-userdata:/home/zkitty/.vscode-oss/extensions/extensions.json
+2023-09-21 17:31:41.757 [info] Marked extension as uninstalled hookyqr.beautify-1.5.0
+2023-09-21 17:31:42.322 [info] Successfully uninstalled extension from the profile hookyqr.beautify@1.5.0 vscode-userdata:/home/zkitty/.vscode-oss/extensions/extensions.json
+2023-09-21 17:33:13.342 [info] Getting Manifest... ms-python.python
+2023-09-21 17:33:13.645 [info] Installing extension: ms-python.python
+2023-09-21 17:33:15.984 [info] Getting Manifest... ms-python.vscode-pylance
+2023-09-21 17:33:17.091 [info] Installing extension: ms-python.vscode-pylance ms-python.python
+2023-09-21 17:34:15.977 [info] Extension signature verification is not done: ms-python.python
+2023-09-21 17:34:16.436 [info] Getting Manifest... ms-toolsai.jupyter
+2023-09-21 17:34:16.632 [info] Installing extension: ms-toolsai.jupyter
+2023-09-21 17:34:18.332 [info] Getting Manifest... ms-toolsai.jupyter-keymap
+2023-09-21 17:34:19.294 [info] Getting Manifest... ms-toolsai.jupyter-renderers
+2023-09-21 17:34:19.444 [info] Getting Manifest... ms-toolsai.vscode-jupyter-cell-tags
+2023-09-21 17:34:19.651 [info] Getting Manifest... ms-toolsai.vscode-jupyter-slideshow
+2023-09-21 17:34:20.241 [info] Installing extension: ms-toolsai.jupyter-keymap ms-toolsai.jupyter
+2023-09-21 17:34:20.243 [info] Installing extension: ms-toolsai.jupyter-renderers ms-toolsai.jupyter
+2023-09-21 17:34:20.244 [info] Installing extension: ms-toolsai.vscode-jupyter-cell-tags ms-toolsai.jupyter
+2023-09-21 17:34:20.246 [info] Installing extension: ms-toolsai.vscode-jupyter-slideshow ms-toolsai.jupyter
+2023-09-21 17:34:30.978 [info] Extension signature verification is not done: ms-toolsai.vscode-jupyter-slideshow
+2023-09-21 17:34:31.024 [info] Extension signature verification is not done: ms-toolsai.jupyter-keymap
+2023-09-21 17:34:31.049 [info] Extension signature verification is not done: ms-toolsai.vscode-jupyter-cell-tags
+2023-09-21 17:34:31.235 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.471d9615-0136-4cae-977b-1bf69b5bb75a: ms-toolsai.jupyter-keymap
+2023-09-21 17:34:31.324 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-toolsai.jupyter-keymap-1.1.2
+2023-09-21 17:34:31.340 [info] Extracting extension completed. ms-toolsai.jupyter-keymap
+2023-09-21 17:34:31.345 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.230bae34-7caf-42d9-b476-f59305d728b6: ms-toolsai.vscode-jupyter-slideshow
+2023-09-21 17:34:31.404 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-toolsai.vscode-jupyter-slideshow-0.1.5
+2023-09-21 17:34:31.421 [info] Extracting extension completed. ms-toolsai.vscode-jupyter-slideshow
+2023-09-21 17:34:31.465 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.f6d2b3e0-52ba-4ae2-8999-f0beccb5563a: ms-toolsai.vscode-jupyter-cell-tags
+2023-09-21 17:34:31.524 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-toolsai.vscode-jupyter-cell-tags-0.1.8
+2023-09-21 17:34:31.562 [info] Extracting extension completed. ms-toolsai.vscode-jupyter-cell-tags
+2023-09-21 17:34:33.926 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.4fc89c26-b910-4a74-a43d-9ae3226505d5: ms-python.python
+2023-09-21 17:34:33.995 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-python.python-2023.14.0
+2023-09-21 17:34:34.021 [info] Extracting extension completed. ms-python.python
+2023-09-21 17:34:59.711 [info] Extension signature verification is not done: ms-toolsai.jupyter-renderers
+2023-09-21 17:35:01.224 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.19bdfd05-f9d8-4236-96f5-a446c1320b68: ms-toolsai.jupyter-renderers
+2023-09-21 17:35:01.278 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-toolsai.jupyter-renderers-1.0.15
+2023-09-21 17:35:01.286 [info] Extracting extension completed. ms-toolsai.jupyter-renderers
+2023-09-21 17:36:03.504 [info] Extension signature verification is not done: ms-python.vscode-pylance
+2023-09-21 17:36:03.562 [info] Extension signature verification is not done: ms-toolsai.jupyter
+2023-09-21 17:36:05.454 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.931716c4-160d-44cd-88e5-d54b5a4cd0b0: ms-toolsai.jupyter
+2023-09-21 17:36:05.516 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-toolsai.jupyter-2023.5.1101742258-linux-x64
+2023-09-21 17:36:05.535 [info] Extracting extension completed. ms-toolsai.jupyter
+2023-09-21 17:36:05.628 [info] Extension installed successfully: ms-toolsai.jupyter-keymap
+2023-09-21 17:36:05.629 [info] Extension installed successfully: ms-toolsai.vscode-jupyter-slideshow
+2023-09-21 17:36:05.631 [info] Extension installed successfully: ms-toolsai.vscode-jupyter-cell-tags
+2023-09-21 17:36:05.633 [info] Extension installed successfully: ms-toolsai.jupyter-renderers
+2023-09-21 17:36:05.634 [info] Extension installed successfully: ms-toolsai.jupyter
+2023-09-21 17:36:21.466 [info] Extracted extension to /home/zkitty/.vscode-oss/extensions/.aa21bc58-5ecd-4b25-bb4a-a03c2405f06c: ms-python.vscode-pylance
+2023-09-21 17:36:21.581 [info] Renamed to /home/zkitty/.vscode-oss/extensions/ms-python.vscode-pylance-2023.9.20
+2023-09-21 17:36:21.590 [info] Extracting extension completed. ms-python.vscode-pylance
+2023-09-21 17:36:21.651 [info] Extension installed successfully: ms-python.python
+2023-09-21 17:36:21.652 [info] Extension installed successfully: ms-python.vscode-pylance

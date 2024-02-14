@@ -1,0 +1,15 @@
+2022/07/30-23:17:20.795 d84 Reusing MANIFEST /home/zkitty/.config/notion-app/Partitions/notion/IndexedDB/https_indify.co_0.indexeddb.leveldb/MANIFEST-000001
+2022/07/30-23:17:20.796 d84 Recovering log #11
+2022/07/30-23:17:20.796 d84 Reusing old log /home/zkitty/.config/notion-app/Partitions/notion/IndexedDB/https_indify.co_0.indexeddb.leveldb/000011.log 
+2022/07/30-23:17:27.332 d83 Level-0 table #16: started
+2022/07/30-23:17:27.374 d83 Level-0 table #16: 501 bytes OK
+2022/07/30-23:17:27.404 d83 Delete type=0 #11
+2022/07/30-23:17:27.404 d83 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2022/07/30-23:17:27.404 d83 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x01\x01\x02\x01\x0e\x00_\x00_\x00s\x00a\x00k\x006\x009\x003\x007\x001\x009\x002\x004\x005' @ 105 : 1
+2022/07/30-23:17:27.404 d83 Compacting 1@1 + 1@2 files
+2022/07/30-23:17:27.441 d83 Generated table #17@1: 17 keys, 520 bytes
+2022/07/30-23:17:27.441 d83 Compacted 1@1 + 1@2 files => 520 bytes
+2022/07/30-23:17:27.470 d83 compacted to: files[ 0 0 1 0 0 0 0 ]
+2022/07/30-23:17:27.471 d83 Delete type=2 #13
+2022/07/30-23:17:27.471 d83 Delete type=2 #16
+2022/07/30-23:17:27.471 d83 Manual compaction at level-1 from '\x00\x01\x01\x02\x01\x0e\x00_\x00_\x00s\x00a\x00k\x006\x009\x003\x007\x001\x009\x002\x004\x005' @ 105 : 1 .. (end); will stop at (end)

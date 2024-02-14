@@ -1,0 +1,12 @@
+2022/07/30-23:16:40.341 d83 Reusing MANIFEST /home/zkitty/.config/notion-app/Partitions/notion/IndexedDB/notion_www.notion.so_0.indexeddb.leveldb/MANIFEST-000001
+2022/07/30-23:16:40.342 d83 Recovering log #4
+2022/07/30-23:16:40.407 d83 Reusing old log /home/zkitty/.config/notion-app/Partitions/notion/IndexedDB/notion_www.notion.so_0.indexeddb.leveldb/000004.log 
+2022/07/30-23:24:47.966 d81 Level-0 table #8: started
+2022/07/30-23:24:48.104 d81 Level-0 table #8: 1165660 bytes OK
+2022/07/30-23:24:48.158 d81 Delete type=0 #4
+2022/07/30-23:24:50.785 d81 Compacting 1@1 + 1@2 files
+2022/07/30-23:24:50.920 d81 Generated table #9@1: 2235 keys, 288620 bytes
+2022/07/30-23:24:50.920 d81 Compacted 1@1 + 1@2 files => 288620 bytes
+2022/07/30-23:24:51.001 d81 compacted to: files[ 0 0 1 0 0 0 0 ]
+2022/07/30-23:24:51.002 d81 Delete type=2 #5
+2022/07/30-23:24:51.002 d81 Delete type=2 #8

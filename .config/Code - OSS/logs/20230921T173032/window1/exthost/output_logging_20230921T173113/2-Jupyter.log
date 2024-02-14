@@ -1,0 +1,16 @@
+Visual Studio Code (1.79.2, undefined, desktop)
+Jupyter Extension Version: 2023.5.1101742258.
+Python Extension not installed.
+Platform: linux (x64).
+Workspace folder ~/Spotify-Playlist-Download, Home = /home/zkitty
+17:36:10.941 [info] Start refreshing Kernel Picker (1695306970941)
+17:36:11.111 [info] Not using Pylance
+17:36:11.203 [info] Process Execution: /jupyter notebook --version
+17:36:11.231 [info] Process Execution: /jupyter lab --version
+17:36:11.307 [info] End refreshing Kernel Picker (1695306970941)
+17:36:22.448 [info] Using Pylance
+17:36:22.449 [info] End refreshing Kernel Picker (1695306970941)
+17:36:30.052 [warn] Failed to get activated env vars for /bin/python in 1477ms
+17:36:30.076 [info] Process Execution: /bin/python -c "import site;print("USER_BASE_VALUE");print(site.USER_BASE);print("USER_BASE_VALUE");"
+17:36:30.122 [info] End refreshing Kernel Picker (1695306970941)
+17:36:30.364 [info] Process Execution: /bin/python -m pip list

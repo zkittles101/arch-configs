@@ -1,0 +1,6 @@
+2023/12/24-18:24:37.738 cd090 Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_chat.pop-os.org_0.indexeddb.leveldb since it was missing.
+2023/12/24-18:24:38.051 cd090 Delete type=3 #1
+2023/12/24-19:52:40.597 cd091 Level-0 table #5: started
+2023/12/24-19:52:40.629 cd091 Level-0 table #5: 1645 bytes OK
+2023/12/24-19:52:40.658 cd091 Delete type=0 #3
+2023/12/24-19:52:40.678 cd091 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

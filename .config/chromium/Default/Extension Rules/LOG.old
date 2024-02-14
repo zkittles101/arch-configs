@@ -1,0 +1,5 @@
+2024/01/31-12:24:47.967 f89d Recovering log #42
+2024/01/31-12:24:47.987 f89d Level-0 table #44: started
+2024/01/31-12:24:47.987 f89d Level-0 table #44: 0 bytes OK
+2024/01/31-12:24:48.113 f89d Delete type=0 #42
+2024/01/31-12:24:48.113 f89d Delete type=3 #40

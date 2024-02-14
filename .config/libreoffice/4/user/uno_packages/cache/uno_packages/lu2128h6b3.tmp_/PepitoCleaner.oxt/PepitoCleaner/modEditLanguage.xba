@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modEditLanguage" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+&apos;type
+type Language
+	txt as string
+	key as string
+end type 
+
+dim dlg_re
+Dim editLang
+dim originalLang
+dim editValid as boolean
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub refreshEditLanguage
+   Dim s as string
+   Dim obj, obj2
+   Dim LangFileRight, pSel
+   Dim myFilePath as string
+   dim l as language
+   
+   on error goto refreshEditLanguageKO
+   set editLang=new collection
+   editValid=False
+   &apos;popolate language used
+   obj=dlg_re.getControl(&quot;lstLanguageUsed&quot;)
+   obj2=dlg_re.getControl(&quot;lstLanguageVisualized&quot;)
+   obj.removeitems(0, obj.ItemCount)
+   obj2.removeitems(0, obj2.ItemCount)
+   obj.addItem (&quot;default&quot;,  obj.ItemCount)
+   for each s in enumerate_file_language(extensionLocation &amp; &quot;/&quot;)
+      obj.addItem(replace(s,&quot;.txt&quot;,&quot;&quot;),  obj.ItemCount)
+      obj2.addItem(replace(s,&quot;.txt&quot;,&quot;&quot;),  obj.ItemCount)
+   next
+   
+   pSel=gPreference.LanguageChoise
+   LangFileRight = &quot;language_&quot; &amp; GetLanguage &amp; &quot;.txt&quot;
+   myFilePath = extensionLocation &amp; &quot;/&quot; &amp; LangFileRight
+   if FileExists(myFilePath) then
+   		dlg_re.getControl(&quot;butCreateLanguage&quot;).setVisible(False)
+   		editValid=LoadLanguageCollection(myFilePath, editlang)
+   else
+   		editValid=False
+   end if
+   if not editValid then
+   		dlg_re.getControl(&quot;butCreateLanguage&quot;).setVisible(True)
+   		dlg_re.getControl(&quot;butCreateLanguage&quot;).model.label=gLang(&quot;default_lang_00004&quot;).txt &amp; &quot;&apos;&quot; &amp; LangFileRight &amp; &quot;&apos;&quot;
+   end if
+   if pSel = &quot;default&quot; then psel=LangFileRight
+   myFilePath = extensionLocation &amp; &quot;/&quot; &amp; pSel
+   if not FileExists(myFilePath) then pSel=obj2.GetItem(0)
+   gBlockEvent=true
+   obj.selectItem(replace(gPreference.LanguageChoise,&quot;.txt&quot;,&quot;&quot;),True)
+   obj2.selectItem(replace(pSel,&quot;.txt&quot;,&quot;&quot;),True)
+   dlg_re.getControl(&quot;txtEdit&quot;).text=&quot;&quot;
+   gBlockEvent=False  
+   
+   
+   on error goto 0
+   exit sub
+   refreshEditLanguageKO:
+   msgbox (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in refreshEditLanguage !&quot;)
+   On Error Goto 0  	
+End sub
+sub initEditLanguage
+   Dim s as string
+   Dim obj, obj2
+   Dim LangFileRight, pSel
+   Dim myFilePath as string
+   dim l as language
+   
+   on error goto initEditLanguageKO
+   set originalLang=new collection
+   set editLang=new collection
+   editValid=False
+     
+   dlg_re=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgLanguage)
+   &apos;popolate language used
+   dlg_re.getControl(&quot;lblLanguageUsed&quot;).text=gLang(&quot;default_lang_00001&quot;).txt
+   dlg_re.getControl(&quot;lblOriginalString&quot;).text=gLang(&quot;default_lang_00002&quot;).txt
+   dlg_re.getControl(&quot;lblEditString&quot;).text=gLang(&quot;default_lang_00003&quot;).txt
+   obj=dlg_re.getControl(&quot;lstLanguageUsed&quot;)
+   obj2=dlg_re.getControl(&quot;lstLanguageVisualized&quot;)
+   obj.removeitems(0, obj.ItemCount)
+   obj2.removeitems(0, obj2.ItemCount)
+   obj.addItem (&quot;default&quot;,  obj.ItemCount)
+   for each s in enumerate_file_language(extensionLocation &amp; &quot;/&quot;)
+      obj.addItem(replace(s,&quot;.txt&quot;,&quot;&quot;),  obj.ItemCount)
+      obj2.addItem(replace(s,&quot;.txt&quot;,&quot;&quot;),  obj.ItemCount)
+   next
+   
+   pSel=gPreference.LanguageChoise &amp; &quot;.txt&quot;
+   LangFileRight = &quot;language_&quot; &amp; GetLanguage &amp; &quot;.txt&quot;
+   myFilePath = extensionLocation &amp; &quot;/&quot; &amp; LangFileRight
+   if FileExists(myFilePath) then
+   		dlg_re.getControl(&quot;butCreateLanguage&quot;).setVisible(False)
+   		editValid=LoadLanguageCollection(myFilePath, editlang)
+   else
+   		editValid=False
+   end if
+   if not editValid then
+   		dlg_re.getControl(&quot;butCreateLanguage&quot;).setVisible(True)
+   		dlg_re.getControl(&quot;butCreateLanguage&quot;).model.label=gLang(&quot;default_lang_00004&quot;).txt &amp; &quot;&apos;&quot; &amp; LangFileRight &amp; &quot;&apos;&quot;
+   end if
+   if pSel = &quot;default&quot; then 
+   		psel=LangFileRight
+   end if
+   myFilePath = extensionLocation &amp; &quot;/&quot; &amp; pSel
+   if not FileExists(myFilePath) then pSel=obj2.GetItem(0)
+   gBlockEvent=true
+   obj.selectItem(replace(gPreference.LanguageChoise,&quot;.txt&quot;,&quot;&quot;),True)
+   obj2.selectItem(replace(pSel,&quot;.txt&quot;,&quot;&quot;),True)
+   gBlockEvent=False
+   
+   initLanguage(originalLang)
+   obj=dlg_re.getControl(&quot;lstOriginal&quot;)
+   obj.removeitems(0, obj.ItemCount)
+   for each l in originalLang
+      obj.addItem(l.txt,  obj.ItemCount)
+   next
+   
+   dlg_re.Execute()  
+   
+    on error goto 0
+    exit sub
+    initEditLanguageKO:
+    msgbox (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in initEditLanguage !&quot;)
+    On Error Goto 0  
+End Sub
+
+function LoadLanguageCollection(myFileName as string, myColl) as boolean
+	Dim myTextFile As Object, sf As Object, fileStream As Object
+    Dim aLineOfText As String, myFilePath As String
+    Dim OOLang as string
+	dim matLine
+	dim l as Language
+	
+	OOLang = GetLanguage
+    if FileExists(myFileName) then
+       sf = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+       On Error Goto LoadLanguageCollectionKO
+       fileStream = sf.openFileRead(myFileName)
+       myTextFile = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+       myTextFile.InputStream = fileStream
+       myTextFile.Encoding = &quot;UTF-8&quot;
+       if not myTextFile.IsEOF then aLineOfText=myTextFile.readLine
+       if aLineOfText = gVersionFileLanguage then
+          Do while not myTextFile.IsEOF
+             aLineOfText =  myTextFile.readLine
+             &apos;if file end must delete last chr(13)
+             if myTextFile.IsEOF then aLineOfText=replace(aLineOfText,chr(13),&quot;&quot;)
+             if trim(aLineOfText&lt;&gt;&quot;&quot;) then 
+             	 LoadLanguageCollection=True
+                 matLine = split(aLineOfText, &quot;|&quot;)
+                 set l=new Language
+                 l.txt=matLine(1)
+                 l.Key=matLine(0)
+                 myColl.Add l, l.Key
+             end if
+          Loop
+       end if
+       fileStream.closeInput
+       myTextFile.closeInput
+    end if
+    On Error Goto 0
+    Exit function
+
+    LoadLanguageCollectionKO:
+    LoadLanguageCollection=False
+    msgbox (&quot;│ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;│ ▲ in LoadLanguageCollection !&quot;)
+    On Error Resume Next
+    fileStream.closeInput
+    myTextFile.closeInput
+    On Error Goto 0
+End Function
+
+function SaveLanguageCollection(myFileName as string, myColl) as boolean
+    Dim oOutputAccess As Object
+	Dim oOutputStream As Object
+	Dim vOutputData   As Variant
+	dim l as Language
+	dim w as string
+	
+	on error goto SaveLanguageCollectionKO
+	If FileExists(myFileName) Then Kill(myFileName)
+	oOutputAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oOutputStream = CreateUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+	vOutputData   = oOutputAccess.openFileWrite(myFileName)
+	oOutputStream.setOutputStream(vOutputData)
+	oOutputStream.setEncoding(&quot;UTF-8&quot;)
+	oOutputStream.writeString(gVersionFileLanguage &amp; chr(13))
+	for each l in editlang
+		if trim(l.txt)&lt;&gt;&quot;&quot; then
+		w=l.key &amp; &quot;|&quot; &amp; l.txt &amp; chr(13)
+		oOutputStream.writeString w
+		end if
+	next
+    oOutputStream.writeString (&quot;&quot; &amp; chr(13))
+	oOutputStream.flush()
+	oOutputStream.closeOutput()
+	
+	On Error Goto 0
+    Exit function
+
+    SaveLanguageCollectionKO:
+    SaveLanguageCollection=False
+    msgbox (&quot;│ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;│ ▲ in SaveLanguageCollection !&quot;)
+    On Error Resume Next
+    oOutputStream.closeOutput()
+    On Error Goto 0
+End function
+
+function CreateLanguageFile(myFileName as string) as boolean
+    Dim oOutputAccess As Object
+	Dim oOutputStream As Object
+	Dim vOutputData   As Variant
+	dim l as Language
+	dim w as string
+	
+	on error goto CreateLanguageFileKO
+	If FileExists(myFileName) Then Kill(myFileName)
+	oOutputAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oOutputStream = CreateUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+	vOutputData   = oOutputAccess.openFileWrite(myFileName)
+	oOutputStream.setOutputStream(vOutputData)
+	oOutputStream.setEncoding(&quot;UTF-8&quot;)
+	oOutputStream.writeString(gVersionFileLanguage &amp; chr(13))
+    oOutputStream.writeString (&quot;&quot; &amp; chr(13))
+	oOutputStream.flush()
+	oOutputStream.closeOutput()
+	CreateLanguageFile=True
+	On Error Goto 0
+    Exit function
+
+    CreateLanguageFileKO:
+    CreateLanguageFile=True
+    msgbox (&quot;│ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;│ ▲ in CreateLanguageFile !&quot;)
+    On Error Resume Next
+    oOutputStream.closeOutput()
+    On Error Goto 0
+End function
+
+function enumerate_file_language(strDir)
+	Dim NextFile As String
+	Dim AllFiles
+ 
+ 	set AllFiles=new Collection
+	NextFile = Dir(strDir, 0)
+ 
+	While NextFile  &lt;&gt; &quot;&quot;
+		if left(NextFile,8)=&quot;language&quot; then
+			AllFiles.Add NextFile
+		end if
+		NextFile = Dir
+	Wend
+ 	enumerate_file_language=AllFiles
+End function
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub lstLanguageUsed_change(event as object)
+	if gBlockEvent then exit sub
+	gPreference.LanguageChoise=dlg_re.getControl(&quot;lstLanguageUsed&quot;).getSelectedItem
+	&apos;msgbox gPreference.LanguageChoise
+End sub
+sub butExit_click(event as object)
+	dlg_re.endExecute()
+End Sub
+sub butCreate_click(event as object)
+	Dim LangFileRight as string
+	Dim myFilePath as string
+	
+	LangFileRight = &quot;language_&quot; &amp; GetLanguage &amp; &quot;.txt&quot;
+    myFilePath = extensionLocation &amp; &quot;/&quot; &amp; LangFileRight
+	CreateLanguageFile(myFilePath)
+	refreshEditLanguage
+End sub
+sub butOk_Click(event as object)
+	dim n as integer
+	dim key as string
+	dim o_l as language
+	dim l as language
+	dim psel as string
+	dim myFilePath as string
+
+	if gBlockEvent then exit sub
+	n=dlg_re.getControl(&quot;lstOriginal&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+	   o_l=originalLang.item(n+1)
+	   l=LookupCollection(editlang, o_l.Key)
+	   if not isnull(l) then
+	   		l.txt=dlg_re.getControl(&quot;txtEdit&quot;).text
+	   else
+	   		set l=new language
+	   		l.txt=dlg_re.getControl(&quot;txtEdit&quot;).text
+	   		l.key=o_l.key
+	   		editlang.add l, l.Key
+	   end if
+	   psel=dlg_re.getControl(&quot;lstLanguageVisualized&quot;).getSelectedItem
+   	   myFilePath = extensionLocation &amp; &quot;/&quot; &amp; psel &amp; &quot;.txt&quot;
+	   SaveLanguageCollection(myFilePath, editLang)
+    end if
+end sub
+sub lstOrginal_change(event as object)
+	dim n as integer
+	dim key as string
+	dim o_l as language
+	dim l as language
+
+	if gBlockEvent then exit sub
+	n=dlg_re.getControl(&quot;lstOriginal&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+	   o_l=originalLang.item(n+1)
+	   l=LookupCollection(editlang, o_l.Key)
+	   if not isnull(l) then
+	   		dlg_re.getControl(&quot;txtEdit&quot;).text=l.txt
+	   else
+	   		dlg_re.getControl(&quot;txtEdit&quot;).text=&quot;&quot;
+	   end if
+    end if
+End sub
+sub lstLanguageVisualized_change(event as object)
+	dim pSel as string
+	dim myFilePath as string
+	dim editValid as boolean
+	dim temp_coll
+	
+	if gBlockEvent then exit sub
+	set temp_coll=new collection
+	
+	psel=dlg_re.getControl(&quot;lstLanguageVisualized&quot;).getSelectedItem
+   	myFilePath = extensionLocation &amp; &quot;/&quot; &amp; psel &amp; &quot;.txt&quot;
+   	if FileExists(myFilePath) then
+   		editValid=LoadLanguageCollection(myFilePath, temp_coll)
+    else
+   		editValid=False
+    end if
+    if not editValid then
+   		msgbox &quot;error&quot;
+   	else
+   		editLang=temp_coll
+    end if
+    lstOrginal_change(event)
+End sub
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+
+
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+</script:module>

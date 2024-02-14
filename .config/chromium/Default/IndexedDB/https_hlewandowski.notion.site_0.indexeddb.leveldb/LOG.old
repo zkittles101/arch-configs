@@ -1,0 +1,18 @@
+2023/10/29-11:34:10.979 80d62 Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_hlewandowski.notion.site_0.indexeddb.leveldb since it was missing.
+2023/10/29-11:34:11.193 80d62 Delete type=3 #1
+2023/10/29-11:34:14.172 80d7f Level-0 table #5: started
+2023/10/29-11:34:14.207 80d7f Level-0 table #5: 570 bytes OK
+2023/10/29-11:34:14.237 80d7f Delete type=0 #3
+2023/10/29-11:34:14.237 80d62 Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/10/29-11:34:16.259 80d63 Level-0 table #7: started
+2023/10/29-11:34:16.292 80d63 Level-0 table #7: 256 bytes OK
+2023/10/29-11:34:16.320 80d63 Delete type=0 #4
+2023/10/29-11:34:16.321 80d63 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2023/10/29-11:34:16.321 80d63 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x00\x00\x002\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00' @ 21 : 0
+2023/10/29-11:34:16.321 80d63 Compacting 1@1 + 1@2 files
+2023/10/29-11:34:16.359 80d63 Generated table #8@1: 6 keys, 253 bytes
+2023/10/29-11:34:16.359 80d63 Compacted 1@1 + 1@2 files => 253 bytes
+2023/10/29-11:34:16.386 80d63 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/10/29-11:34:16.387 80d63 Delete type=2 #5
+2023/10/29-11:34:16.387 80d63 Delete type=2 #7
+2023/10/29-11:34:16.388 80d63 Manual compaction at level-1 from '\x00\x00\x00\x002\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00' @ 21 : 0 .. (end); will stop at (end)

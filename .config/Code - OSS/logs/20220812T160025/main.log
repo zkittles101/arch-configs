@@ -1,0 +1,4 @@
+[2022-08-12 16:00:26.983] [main] [info] update#ctor - updates are disabled as there is no update URL
+[2022-08-12 16:00:40.399] [main] [info] Starting extension host with pid 13295 (fork() took 47 ms).
+[2022-08-12 16:02:39.564] [main] [info] Waiting for extension host with pid 13295 to exit.
+[2022-08-12 16:02:40.544] [main] [info] Extension host with pid 13295 exited with code: 0, signal: null.

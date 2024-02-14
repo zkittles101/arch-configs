@@ -1,0 +1,205 @@
+2023-09-21 17:31:04.183 [info] [perf] Render performance baseline is 523ms
+2023-09-21 17:31:17.143 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:31:17.144 [warning] NotebookEditorWidget#setInput failed Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:31:17.149 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:31:19.729 [info] [perf] Render performance baseline is 269ms
+2023-09-21 17:31:50.067 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:31:50.070 [warning] NotebookEditorWidget#setInput failed Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:31:50.071 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:32:00.100 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:32:00.101 [warning] NotebookEditorWidget#setInput failed Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:32:00.102 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:32:09.027 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:32:09.030 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:32:21.245 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:32:21.252 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:32:51.474 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:32:51.475 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:35:19.993 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:35:20.011 [warning] NotebookEditorWidget#setInput failed Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:35:20.012 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)
+2023-09-21 17:41:26.344 [warning] Webgl could not be loaded. Falling back to the canvas renderer type. WebGL2 not supported null
+2023-09-21 17:42:58.523 [error] FAILED to destory notebook Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:42:58.553 [warning] NotebookEditorWidget#setInput failed Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+2023-09-21 17:42:58.554 [error] SyntaxError: Unexpected token 'g', ..."name)\n",
+git clone "... is not valid JSON
+	at JSON.parse (<anonymous>)
+	at e.NotebookSerializer.deserializeNotebook (/usr/lib/code/extensions/ipynb/dist/ipynbMain.js:1:156776)
+	at d.$dataToNotebook (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:101:91757)
+	at s.N (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11717)
+	at s.M (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:11435)
+	at s.H (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:10477)
+	at s.G (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:9651)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:111:8282
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at /usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:32461
+	at b.invoke (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:145)
+	at d.deliver (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:2121)
+	at n.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:63:1729)
+	at p.fire (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:73:14783)
+	at MessagePortMain.<anonymous> (/usr/lib/code/out/vs/workbench/api/node/extensionHostProcess.js:127:30587)
+	at MessagePortMain.emit (node:events:513:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:367)

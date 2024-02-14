@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modFunction" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+
+&apos;Type
+type TabMenu
+	NameButton as string
+    ButtonImage as string
+    FlatImage as string
+    TagId as string
+    FlagShow as string
+    ToolTypeText as string
+    Index as Integer
+end type
+
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Function LoadDialog_(Libname as String, DialogName as String, Optional oLibContainer)
+Dim oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+	If IsMissing(oLibContainer ) then
+		oLibContainer = GlobalScope.DialogLibraries
+	End If
+	oLibContainer.LoadLibrary(LibName)
+	oLib = oLibContainer.GetByName(Libname)
+	oLibDialog = oLib.GetByName(DialogName)
+	oRuntimeDialog = CreateUnoDialog(oLibDialog)
+	LoadDialog_() = oRuntimeDialog
+End Function
+Sub loadSomeLibraries
+	&apos;Carica le librerie &apos;PepitoCleaner&apos;,&apos;tools&apos; e &apos;xraitool&apos; 
+	&apos;Load the libraries &apos;PepitoCleaner&apos;, &apos;tools&apos; and &apos;xraitool&apos;
+	&apos;PepitoCleaner
+	&apos;DialogLibraries.LoadLibrary(gMyAppName)
+	&apos;tools
+	If NOT GlobalScope.BasicLibraries.isLibraryLoaded( &quot;Tools&quot; ) Then 
+		GlobalScope.BasicLibraries.loadLibrary( &quot;Tools&quot; )
+	End If
+	&apos;====== XRAY DIAGNOSTIC ============
+	&apos; If the XRAY library is installed, loads it
+	&apos; for more info about XRAY see http://bernard.marcelly.perso.sfr.fr/index2.html	
+	If BasicLibraries.hasByName(&quot;XrayTool&quot;) Then	
+		If NOT BasicLibraries.isLibraryLoaded(&quot;XrayTool&quot;) Then 
+			BasicLibraries.LoadLibrary(&quot;XrayTool&quot;)
+		End If
+	End If
+End Sub
+function getStyle(strString) as object
+	dim chstyles
+	chstyles = thisComponent.StyleFamilies.getByName(&quot;ParagraphStyles&quot;)
+    if chstyles.hasByName(strString) then
+       getStyle = chstyles.getByName(strString)
+    end if
+end function
+function getSyleDisplayName(strString) as string
+	dim chstyles
+	
+	chstyles = thisComponent.StyleFamilies.getByName(&quot;ParagraphStyles&quot;)
+    if chstyles.hasByName(strString) then
+        getSyleDisplayName = chstyles.getByName(strString).DisplayName 
+    else 
+        getSyleDisplayName = strString
+    end if
+end function
+function getSyleName(strString) as string
+	dim chstyles
+	chstyles = thisComponent.StyleFamilies.getByName(&quot;ParagraphStyles&quot;)
+    if chstyles.hasByName(strString) then
+        getSyleName = chstyles.getByName(strString).Name 
+    else 
+        getSyleName = strString
+    end if
+end function
+function DecodeMsgBox(str as string) as string
+	dim s as string
+	s=replace(str,&quot;\n&quot;,chr(10))
+	DecodeMsgBox=s
+end function
+Sub setInitialVariables
+   &apos;Imposta i valori basi delle variabili globali
+   &apos;Set the values ​​of global variables
+   
+   &apos;Language
+   set gLang = new Collection
+   initLanguage(gLang)
+   
+   &apos;various
+   gDirection_LastFind=&quot;next&quot;
+   set gStyleHeader = new Collection
+   set gUndo = new Collection
+   
+   &apos;RegEx collection
+   Set gRegEx_General = new Collection
+   Set gRegEx_Header = new Collection
+   Set gRegEx_Hyphenation = new Collection
+   Set gRegEx_Warning = new Collection
+   
+   &apos;Menu button
+   dim MenuObject as TabMenu
+   set gTabMenu = new collection
+
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;findMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/find2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/find.png&quot;)
+   MenuObject.TagId = &quot;fin&quot;
+   MenuObject.FlagShow = &quot;fin_gen&quot;
+   MenuObject.ToolTypeText =&quot;default_menubut_find&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;hypMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/hyp2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/hyp.png&quot;)
+   MenuObject.TagId = &quot;hyp&quot;
+   MenuObject.FlagShow = &quot;hyp_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_hypens&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;warningMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/warning2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/warning.png&quot;)
+   MenuObject.TagId = &quot;war&quot;
+   MenuObject.FlagShow = &quot;war_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_warning&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;headerMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/header2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/header.png&quot;)
+   MenuObject.TagId = &quot;hea&quot;
+   MenuObject.FlagShow = &quot;hea_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_header&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;styleMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/style2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/style.png&quot;)
+   MenuObject.TagId = &quot;sty&quot;
+   MenuObject.FlagShow = &quot;sty_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_style&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;regexMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/regex2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/regex.png&quot;)
+   MenuObject.TagId = &quot;reg&quot;
+   MenuObject.FlagShow = &quot;reg_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_regex&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;optionsMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/options2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/options.png&quot;)
+   MenuObject.TagId = &quot;opt&quot;
+   MenuObject.FlagShow = &quot;opt_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_options&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   set MenuObject = new TabMenu
+   MenuObject.NameButton = &quot;debugMenu&quot;
+   MenuObject.ButtonImage = (extensionLocation() &amp; &quot;/icons/debug2.png&quot;)
+   MenuObject.FlatImage = (extensionLocation() &amp; &quot;/icons/debug.png&quot;)
+   MenuObject.TagId = &quot;deb&quot;
+   MenuObject.FlagShow = &quot;deb_gen&quot;
+   MenuObject.ToolTypeText = &quot;default_menubut_debug&quot;
+   gTabMenu.add MenuObject, MenuObject.NameButton
+   
+   dim oDocument, oStyles, oStyle, cycle
+   &apos;popolate gStyleUsed with used style by document
+   set gStyleUsed = new Collection
+   set gStyleGeneral = new Collection
+   oStyles=ThisComponent.StyleFamilies.getbyName(&quot;ParagraphStyles&quot;)
+   dim MatrixStyle(oStyles.Count - 1)
+   For cycle = 0 to oStyles.Count - 1
+      oStyle = oStyles(cycle)
+      MatrixStyle(cycle)=oStyle.DisplayName
+      &apos;gStyleGeneral.add oStyle, oStyle.DisplayName
+      if oStyle.isInUse() then
+    	  gStyleUsed.add oStyle, oStyle.DisplayName
+      end if
+      select case lcase(oStyle.Name)
+      	 case &quot;heading 1&quot;
+      	 	 if isNull(LookupCollection(gStyleHeader, &quot;alphabetic_1&quot;)) then gStyleHeader.add oStyle, &quot;alphabetic_1&quot;
+      	 case &quot;heading 2&quot;
+      	 	 if isNull(LookupCollection(gStyleHeader, &quot;alphabetic_2&quot;)) then gStyleHeader.add oStyle, &quot;alphabetic_2&quot;
+      	 case &quot;heading 3&quot;
+      	 	 if isNull(LookupCollection(gStyleHeader, &quot;alphabetic_3&quot;)) then gStyleHeader.add oStyle, &quot;alphabetic_3&quot;
+      	 case &quot;heading 4&quot;
+      	 	 if isNull(LookupCollection(gStyleHeader, &quot;alphabetic_4&quot;)) then gStyleHeader.add oStyle, &quot;alphabetic_4&quot;
+      	 case &quot;text body&quot;
+      	 	 if isNull(LookupCollection(gStyleHeader, &quot;alphabetic_5&quot;)) then gStyleHeader.add oStyle, &quot;alphabetic_5&quot;
+      	 case &quot;standard&quot;
+      	 	 if isNull(LookupCollection(gStyleHeader, &quot;alphabetic_6&quot;)) then gStyleHeader.add oStyle, &quot;alphabetic_6&quot;
+         case else
+      end select
+   Next
+   QuickSort(MatrixStyle)
+   For cycle = 0 to ubound(MatrixStyle)
+      oStyle=getStyle(MatrixStyle(cycle))
+      if not isnull(oSTyle) then
+      	if isnull(LookupCollection(gStyleGeneral, oStyle.DisplayName)) then
+   	  		gStyleGeneral.add ostyle, oStyle.DisplayName
+   	  	end if	
+   	  end if
+   next
+   
+   change_direction(&quot;next&quot;)
+   gBoolExit = false
+   
+   &apos;escamotage for find method right
+   dim oOptions
+   on error goto type_transliterate
+   oOptions = CreateUnoStruct(&quot;com.sun.star.util.SearchOptions&quot;)
+   oOptions.searchFlag= 1
+   searchflag_type=1
+   exit sub
+   type_transliterate:
+   searchflag_type=2
+End Sub
+
+Sub setFontSize
+	gDlgMain.getControl(&quot;fin_lstList&quot;).Model.FontHeight=gPreference.FontSize
+	gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.FontHeight=gPreference.FontSize
+	gDlgMain.getControl(&quot;war_lstList&quot;).Model.FontHeight=gPreference.FontSize
+	gDlgMain.getControl(&quot;reg_lstList&quot;).Model.FontHeight=gPreference.FontSize
+	gDlgMain.getControl(&quot;hea_lstList&quot;).Model.FontHeight=gPreference.FontSize
+	gDlgMain.getControl(&quot;sty_lstList&quot;).Model.FontHeight=gPreference.FontSize
+End Sub
+
+Sub createDialogMain 
+   dim ol
+   &apos;crea la DialogMain / Create DialogMain
+   
+   oL = createUnoListener(&quot;window_&quot;,&quot;com.sun.star.awt.XTopWindowListener&quot;) 
+   gDlgMain.addTopWindowListener(oL)	  
+   
+   &apos;Menu Button
+   dim objButton
+   dim x,y,w,num as integer
+   dim x_frame, y_frame, w_frame, h_frame as integer
+   dim pMenu as TabMenu
+   x=2
+   y=2
+   w=18
+   num=0
+   for each pMenu in gTabMenu
+   	  num=num+1
+   	  pMenu.Index=num
+   	  objButton =  gDlgMain.getControl(&quot;but_&quot; + pMenu.NameButton)
+      objButton.Model.PositionX = x
+   	  objButton.Model.PositionY = y
+   	  objButton.Model.ImageURL = pMenu.ButtonImage
+   	  
+   	  objButton =  gDlgMain.getControl(&quot;img_&quot; + pMenu.NameButton)
+      objButton.Model.PositionX = x + 2
+   	  objButton.Model.PositionY = y + 1
+   	  objButton.Model.ImageURL = pMenu.FlatImage
+   	  x = x + w
+   next
+   &apos;gen_frmButton
+   gDlgMain.getControl(&quot;gen_frmButton&quot;).Model.Width = x
+   
+   &apos;frame limit
+   x_frame = gDlgMain.getControl(&quot;gen_frmBox&quot;).Model.PositionX
+   y_frame = gDlgMain.getControl(&quot;gen_frmBox&quot;).Model.PositionY
+   w_frame = gDlgMain.getControl(&quot;gen_frmBox&quot;).Model.Width
+   h_frame = gDlgMain.getControl(&quot;gen_frmBox&quot;).Model.Height
+   
+   &apos;find control
+   gDlgMain.getControl(&quot;fin_cmbStyle&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;fin_cmbStyle&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;fin_cmbStyle&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;fin_lstList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;fin_lstList&quot;).Model.PositionY = gDlgMain.getControl(&quot;fin_cmbStyle&quot;).Model.PositionY + gDlgMain.getControl(&quot;fin_cmbStyle&quot;).Model.Height + 2
+   gDlgMain.getControl(&quot;fin_lstList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;fin_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;fin_lstList&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;sm_fin_next&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_prev&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/prev_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_make&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_makeAll&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make_all.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_make2&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make2.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_makeAll2&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make_all2.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_qrefind_on&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_qrefind_off&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_fin_undo&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/undo.png&quot;)
+   
+   &apos;Hyphenation control
+   gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;sm_hyp_cancel&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/cancel_hyp.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_space&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/space_hyp.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_replace&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/replace_hyp.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_ignore&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/ignore.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_dictionary&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/dictionary.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_qrefind_on&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_qrefind_off&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_hyp_undo&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/undo.png&quot;)
+   
+   &apos;Warning control
+   gDlgMain.getControl(&quot;war_cmbList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;war_cmbList&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;war_cmbList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;war_lstList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;war_lstList&quot;).Model.PositionY = gDlgMain.getControl(&quot;war_cmbList&quot;).Model.PositionY + gDlgMain.getControl(&quot;war_cmbList&quot;).Model.Height + 2
+   gDlgMain.getControl(&quot;war_lstList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;war_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;war_lstList&quot;).Model.PositionY   
+   &apos;gDlgMain.getControl(&quot;war_lstList&quot;).Model.PositionX = x_frame + 2
+   &apos;gDlgMain.getControl(&quot;war_lstList&quot;).Model.PositionY = y_frame + 2
+   &apos;gDlgMain.getControl(&quot;war_lstList&quot;).Model.Width = w_frame - 4
+   &apos;gDlgMain.getControl(&quot;war_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;sm_war_text&quot;).Model.Width=65
+   gDlgMain.getControl(&quot;sm_war_make&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make.png&quot;)
+   gDlgMain.getControl(&quot;sm_war_ignore&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/ignore.png&quot;)
+   gDlgMain.getControl(&quot;sm_war_dictionary&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/dictionary.png&quot;)
+   gDlgMain.getControl(&quot;sm_war_qrefind_on&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_war_qrefind_off&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_war_undo&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/undo.png&quot;)
+   
+   &apos;Header control
+   gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.Width = (w_frame - 4) - gDlgMain.getControl(&quot;hea_butExecute&quot;).Model.Width
+   gDlgMain.getControl(&quot;hea_butExecute&quot;).Model.PositionX = gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.PositionX + gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.Width
+   gDlgMain.getControl(&quot;hea_butExecute&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;hea_lstList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;hea_lstList&quot;).Model.PositionY = gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.PositionY + gDlgMain.getControl(&quot;hea_cmbList&quot;).Model.Height + 2
+   gDlgMain.getControl(&quot;hea_lstList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;hea_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;hea_lstList&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;hea_butExecute&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/execute.png&quot;)
+   gDlgMain.getControl(&quot;sm_hea_style&quot;).Model.Width=gDlgMain.getControl(&quot;hea_lstList&quot;).Model.Width - gDlgMain.getControl(&quot;sm_hea_undo&quot;).Model.width
+   gDlgMain.getControl(&quot;sm_hea_undo&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/undo.png&quot;)
+   
+   &apos;style control
+   gDlgMain.getControl(&quot;sty_lstList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;sty_lstList&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;sty_lstList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;sty_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;sm_sty_style&quot;).Model.Width=65
+   gDlgMain.getControl(&quot;sm_sty_next&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_sty_prev&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/prev_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_sty_make&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make.png&quot;)
+   gDlgMain.getControl(&quot;sm_sty_makeAll&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/make_all.png&quot;)
+   gDlgMain.getControl(&quot;sm_sty_qrefind_on&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_sty_qrefind_off&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/qrefind_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_sty_undo&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/undo.png&quot;)
+   
+   &apos;regex control
+   gDlgMain.getControl(&quot;reg_cmbList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;reg_cmbList&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;reg_cmbList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionY = gDlgMain.getControl(&quot;reg_cmbList&quot;).Model.PositionY + gDlgMain.getControl(&quot;reg_cmbList&quot;).Model.Height + 2
+   gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Height = (h_frame - gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionY) - 15
+   &apos;gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Height = h_frame - gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;sm_reg_add&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/generic_add.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_separator&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/generic_separator.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_remove&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/generic_remove.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_on&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/generic_on.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_off&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/generic_off.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_up&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/up.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_down&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/down.png&quot;)
+   gDlgMain.getControl(&quot;sm_reg_edit&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/edit.png&quot;)
+   gDlgMain.getControl(&quot;reg_save&quot;).Model.PositionX = gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionX + gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Width - gDlgMain.getControl(&quot;reg_save&quot;).Model.Width 
+   gDlgMain.getControl(&quot;reg_save&quot;).Model.PositionY = gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionY + gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Height
+   gDlgMain.getControl(&quot;reg_save&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/save.png&quot;)
+   gDlgMain.getControl(&quot;reg_restore&quot;).Model.PositionX = gDlgMain.getControl(&quot;reg_save&quot;).Model.PositionX - gDlgMain.getControl(&quot;reg_save&quot;).Model.Width + 2
+   gDlgMain.getControl(&quot;reg_restore&quot;).Model.PositionY = gDlgMain.getControl(&quot;reg_save&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;reg_restore&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/restore.png&quot;)
+   gDlgMain.getControl(&quot;reg_paste&quot;).Model.PositionX = gDlgMain.getControl(&quot;reg_restore&quot;).Model.PositionX - gDlgMain.getControl(&quot;reg_restore&quot;).Model.Width + 2
+   gDlgMain.getControl(&quot;reg_paste&quot;).Model.PositionY = gDlgMain.getControl(&quot;reg_restore&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;reg_paste&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/paste.png&quot;)
+   gDlgMain.getControl(&quot;reg_copy&quot;).Model.PositionX = gDlgMain.getControl(&quot;reg_paste&quot;).Model.PositionX - gDlgMain.getControl(&quot;reg_paste&quot;).Model.Width + 2
+   gDlgMain.getControl(&quot;reg_copy&quot;).Model.PositionY = gDlgMain.getControl(&quot;reg_paste&quot;).Model.PositionY
+   gDlgMain.getControl(&quot;reg_copy&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/copy.png&quot;)
+   gDlgMain.getControl(&quot;reg_cmdSiteRegEx&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;reg_cmdSiteRegEx&quot;).Model.PositionY = gDlgMain.getControl(&quot;reg_restore&quot;).Model.PositionY + gDlgMain.getControl(&quot;reg_restore&quot;).Model.Height + 2
+   gDlgMain.getControl(&quot;reg_cmdSiteRegEx&quot;).Model.Width = w_frame - 4
+   
+   
+   &apos;wait control
+   gDlgMain.getControl(&quot;wai_prgBar&quot;).Model.PositionX=x_frame + 10
+   gDlgMain.getControl(&quot;wai_prgBar&quot;).Model.PositionY=y_frame + (h_frame/5)
+   gDlgMain.getControl(&quot;wai_prgBar&quot;).Model.Width=w_frame - 20
+   gDlgMain.getControl(&quot;wai_prgBar&quot;).setValue(0)
+   gDlgMain.getControl(&quot;wai_lblWait&quot;).Model.PositionX=x_frame
+   gDlgMain.getControl(&quot;wai_lblWait&quot;).Model.PositionY=(y_frame + (h_frame/5)) - 40
+   gDlgMain.getControl(&quot;wai_lblWait&quot;).Model.Width=w_frame
+   gDlgMain.getControl(&quot;wai_lblTitle&quot;).Model.PositionX=x_frame
+   gDlgMain.getControl(&quot;wai_lblTitle&quot;).Model.PositionY=(y_frame + (h_frame/5)) - 20
+   gDlgMain.getControl(&quot;wai_lblTitle&quot;).Model.Width=w_frame
+   gDlgMain.getControl(&quot;wai_lblSubject&quot;).Model.PositionX=x_frame
+   gDlgMain.getControl(&quot;wai_lblSubject&quot;).Model.PositionY=y_frame + (h_frame/5) + gDlgMain.getControl(&quot;wai_prgBar&quot;).Model.Height
+   gDlgMain.getControl(&quot;wai_lblSubject&quot;).Model.Width=w_frame
+   &apos;wai_imglogo is in splash_intro
+  
+   &apos;options
+   y=(y_frame + h_frame) - gDlgMain.getControl(&quot;opt_butLanguages&quot;).Model.Height * 2.5
+   gDlgMain.getControl(&quot;opt_butLanguages&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;opt_butLanguages&quot;).Model.PositionY = y
+   gDlgMain.getControl(&quot;opt_butLanguages&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;opt_butShowPath&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;opt_butShowPath&quot;).Model.PositionY = y + gDlgMain.getControl(&quot;opt_butLanguages&quot;).Model.Height
+   gDlgMain.getControl(&quot;opt_butShowPath&quot;).Model.Width = w_frame - 4
+   y=y_frame + 2
+   gDlgMain.getControl(&quot;opt_visitSite&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;opt_visitSite&quot;).Model.PositionY = y
+   gDlgMain.getControl(&quot;opt_visitSite&quot;).Model.Width = w_frame - 4
+   y=y_frame + 19
+   gDlgMain.getControl(&quot;opt_lblFontSize&quot;).Model.PositionX = x_frame + 4
+   gDlgMain.getControl(&quot;opt_lblFontSize&quot;).Model.PositionY = y
+   gDlgMain.getControl(&quot;opt_lblFontSize&quot;).Model.Width = w_frame - 40
+   y=y_frame + 17
+   gDlgMain.getControl(&quot;opt_fontSize&quot;).Model.PositionX = gDlgMain.getControl(&quot;opt_lblFontSize&quot;).Model.PositionX + gDlgMain.getControl(&quot;opt_lblFontSize&quot;).Model.Width + 2
+   gDlgMain.getControl(&quot;opt_fontSize&quot;).Model.PositionY = y
+   gDlgMain.getControl(&quot;opt_fontSize&quot;).Model.Width = w_frame - gDlgMain.getControl(&quot;opt_fontSize&quot;).Model.PositionX
+    y=y_frame + 34
+   gDlgMain.getControl(&quot;opt_lblUseClipboard&quot;).Model.PositionX = x_frame + 4
+   gDlgMain.getControl(&quot;opt_lblUseClipboard&quot;).Model.PositionY = y
+   gDlgMain.getControl(&quot;opt_lblUseClipboard&quot;).Model.Width = w_frame - 40
+   y=y_frame + 32
+   gDlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).Model.PositionX = gDlgMain.getControl(&quot;opt_lblUseClipboard&quot;).Model.PositionX + gDlgMain.getControl(&quot;opt_lblUseClipboard&quot;).Model.Width + 2
+   gDlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).Model.PositionY = y
+   gDlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).Model.Width = w_frame - gDlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).Model.PositionX
+   &apos;opt_lblVersion is in splash_intro
+   
+   
+   &apos;debug control
+   gDlgMain.getControl(&quot;deb_textDebug&quot;).Model.PositionX = x_frame + 2
+   gDlgMain.getControl(&quot;deb_textDebug&quot;).Model.PositionY = y_frame + 2
+   gDlgMain.getControl(&quot;deb_textDebug&quot;).Model.Width = w_frame - 4
+   gDlgMain.getControl(&quot;deb_textDebug&quot;).Model.Height = h_frame - 4
+   &apos;gDlgMain.getControl(&quot;deb_textDebug&quot;).text=&quot;&quot;
+   
+   &apos;gen
+   gDlgMain.getControl(&quot;gen_Refresh&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/refresh.png&quot;)
+End Sub
+
+sub change_direction(newDirection as string)
+	if newDirection=&quot;next&quot; then
+		if gDirection_LastFind=&quot;prev&quot; then
+			gDlgMain.getControl(&quot;sm_fin_next&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_on.png&quot;)
+   			gDlgMain.getControl(&quot;sm_fin_prev&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/prev_off.png&quot;)
+   			gDlgMain.getControl(&quot;sm_sty_next&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_on.png&quot;)
+   			gDlgMain.getControl(&quot;sm_sty_prev&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/prev_off.png&quot;)	
+   			gDirection_LastFind=&quot;next&quot;
+		end if
+	else
+		if gDirection_LastFind=&quot;next&quot; then
+			gDlgMain.getControl(&quot;sm_fin_next&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_off.png&quot;)
+   			gDlgMain.getControl(&quot;sm_fin_prev&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/prev_on.png&quot;)
+   			gDlgMain.getControl(&quot;sm_sty_next&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_off.png&quot;)
+   			gDlgMain.getControl(&quot;sm_sty_prev&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/prev_on.png&quot;)	
+   			gDirection_LastFind=&quot;prev&quot;
+		end if
+	end if
+end sub
+
+sub popolateControlString
+   Dim obj as object
+   dim s as string
+   dim oStyle
+   dim index
+   
+   gBlockEvent=True
+   &apos;reg_cmbList
+   obj=gdlgMain.getControl(&quot;reg_cmbList&quot;)
+   s=&quot;general|header|warning|hyphenation&quot;
+   obj.addItem(gLang.Item(&quot;default_regex_00001&quot;).txt, obj.ItemCount)
+   obj.addItem(gLang.Item(&quot;default_regex_00002&quot;).txt, obj.ItemCount)
+   obj.addItem(gLang.Item(&quot;default_regex_00003&quot;).txt, obj.ItemCount)
+   obj.addItem(gLang.Item(&quot;default_regex_00004&quot;).txt, obj.ItemCount)
+   obj.selectItemPos(0, True) 
+   obj.model.tag=s
+   gDlgMain.getControl(&quot;reg_cmdSiteRegEx&quot;).model.label = gLang.item(&quot;default_regex_00005&quot;).txt
+   
+   obj=gdlgMain.getControl(&quot;fin_cmbStyle&quot;)
+   obj.addItem(gLang(&quot;default_find_00001&quot;).txt, obj.ItemCount)
+   for each oStyle in gStyleUsed
+   	  obj.addItem(oStyle.Displayname, obj.ItemCount)
+   next
+   obj.selectItemPos(0, True) 
+   
+   obj=gdlgMain.getControl(&quot;sm_sty_style&quot;)
+   for each oStyle in gStyleGeneral
+   	  obj.addItem(oStyle.Displayname, obj.ItemCount)
+   next
+   obj.selectItemPos(0, True) 
+   gBlockEvent=false
+   
+   
+   obj=gdlgMain.getControl(&quot;sm_hea_style&quot;)
+   for index=1 to gStyleHeader.count
+   	   obj.addItem(gStyleHeader(&quot;alphabetic_&quot; &amp; index).DisplayName, obj.ItemCount)
+   next
+   
+   gDlgMain.getControl(&quot;wai_lblWait&quot;).text = gLang.item(&quot;default_wait_00001&quot;).txt
+   gDlgMain.getControl(&quot;opt_butLanguages&quot;).model.label = gLang.item(&quot;default_option_00002&quot;).txt
+   gDlgMain.getControl(&quot;opt_butShowPath&quot;).model.label = gLang.item(&quot;default_option_00001&quot;).txt
+   
+   obj=gdlgMain.getControl(&quot;opt_cmbUseClipboard&quot;)
+   obj.addItem(gLang(&quot;default_option_00003&quot;).txt, obj.ItemCount)
+   obj.addItem(gLang(&quot;default_option_00004&quot;).txt, obj.ItemCount)  
+End sub
+
+sub selectMenuButton(nameButton as string)
+   on Local Error goto sMB_badkey
+   if gTabMenu(gPreference.MenuSelected).TagId = &quot;deb&quot; and gError then ErrorClear
+   gPreference.MenuSelected = gTabMenu.Item(nameButton).Index
+   showDialog
+   On Error Goto 0
+   Exit Sub
+   sMB_badkey:
+   ErrorLog (&quot;┌ ▲ Key &apos;&quot; &amp; nameButton &amp; &quot;&apos; not find &quot; &amp; chr(13) &amp; &quot;└ ▲ in selectMenuButton !&quot;)
+   On Error Goto 0
+End Sub
+
+Function extensionLocation
+    &apos; this routine returns the path of the extension, useful to embed and access files 	
+	Dim pip As Object
+    if not(gBoolDebug) then on error Resume Next
+	Const extensionIdentifier as String = &quot;PepitoCleaner.addon&quot;
+	pip = GetDefaultContext.getByName(&quot;/singletons/com.sun.star.deployment.PackageInformationProvider&quot;)
+	extensionLocation = pip.getPackageLocation(extensionIdentifier)
+End Function
+
+Function GetLanguage
+
+	Dim OOLang As string	
+ 	Dim aSettings, aConfigProvider
+ 	Dim aParams2(0) As new com.sun.star.beans.PropertyValue
+ 	
+	aParams2(0).Name = &quot;nodepath&quot;
+ 	aParams2(0).Value = &quot;/org.openoffice.Setup/L10N&quot;
+ 	aConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot; )
+ 	aSettings = aConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aParams2() )
+ 	OOLang = aSettings.getbyname(&quot;ooLocale&quot;)
+ 	GetLanguage = OOLang
+ 	
+End Function
+
+function Get_RandomKey(lenght as integer, prefix as string)
+    dim val_char as string
+    dim num as integer
+    dim Randomkey as string
+    Dim s as string
+    
+    Randomize
+    RandomKey=prefix
+    val_char=ucase(&quot;qwertyuiopasdfghjklzxcvbnm01234567890&quot;)
+    Do while len(RandomKey)&lt;lenght
+        num = int(rnd()*(len(val_char)-1))
+        s = mid(val_char,num+1,1)
+        RandomKey=RandomKey &amp; s
+    Loop
+    
+    Get_RandomKey=RandomKey
+end function
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+
+Sub showDialog()	
+	hideAll
+	popolateSelected
+End Sub
+
+Sub hideAll()
+    dim ctrls
+    dim i as integer
+    ctrls=gDlgMain.getControls()
+    For i = 0 to uBound(gDlgMain.getControls())
+       ctrls(i).setvisible(false)  
+    next i
+End Sub
+
+Sub showWait()
+	&apos;gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = &quot;&quot;
+	&apos;gDlgMain.getControl(&quot;wai_lblSubject&quot;).text = &quot;&quot;
+    gDlgMain.getControl(&quot;wai_prgBar&quot;).setValue(0)
+	showFlags(&quot;wai&quot;)
+	gDlgMain.getControl(&quot;opt_lblVersion&quot;).setvisible(True) 
+End Sub
+
+Sub showFlags(flag as string)
+    dim ctrls
+    dim obj   
+    ctrls=gDlgMain.getControls()
+    For each obj in ctrls
+    	if instr(flag, left(obj.Model.Name,3)) then obj.setvisible(true) 
+    next 
+End Sub
+
+Sub popolateSelected
+    Select Case gTabMenu(gPreference.MenuSelected).TagId
+    	case &quot;fin&quot;
+    	    showWait
+    	    popolateSelected_fin
+    	    hideAll
+    		showSelected
+			showButtonSubMenu(flagButtonSubMenu)
+		case &quot;sty&quot;
+    	    showWait
+    	    popolateSelected_sty
+    	    hideAll
+    		showSelected
+			showButtonSubMenu(flagButtonSubMenu)
+		case &quot;hyp&quot;
+    	    showWait
+    	    popolateSelected_hyp
+    	    hideAll
+    		showSelected
+			showButtonSubMenu(flagButtonSubMenu)
+    	Case &quot;reg&quot;
+    		popolateSelected_Reg
+    		showSelected
+			showButtonSubMenu(flagButtonSubMenu)
+		case &quot;war&quot;
+			showWait
+    	    popolateSelected_war
+    	    hideAll
+    		showSelected
+			showButtonSubMenu(flagButtonSubMenu)
+		case &quot;deb&quot;
+    		showSelected
+    		showButtonSubMenu(flagButtonSubMenu)
+    	case &quot;hea&quot;
+    		popolateSelected_hea
+    		showSelected
+    		showButtonSubMenu(flagButtonSubMenu)
+    	case &quot;opt&quot;
+    		popolateSelected_opt
+    		showSelected
+    		gDlgMain.getControl(&quot;wai_imgLogo&quot;).setvisible(True) 
+    		&apos;showButtonSubMenu(flagButtonSubMenu)
+        Case Else
+        	showSelected
+			showButtonSubMenu(flagButtonSubMenu)
+			ErrorLog (&quot;┌ ▲ Error:  Type &quot; &amp; gTabMenu(gPreference.MenuSelected).TagId &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in popolateSelected !&quot;)
+   End Select
+End Sub
+
+function flagButtonSubMenu
+    dim fbm_string as string
+    dim n as integer
+    Dim pRegEx
+    Dim re as RegEx
+    fbm_string=&quot;&quot;
+    Select Case gTabMenu(gPreference.MenuSelected).TagId
+    	Case &quot;reg&quot;
+    	    if get_reg_cmbList_val = &quot;general&quot; then fbm_string=fbm_string &amp; &quot;►sm_reg_separator|&quot;
+    		fbm_string=fbm_string &amp; &quot;►sm_reg_add|&quot;
+    		n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+    		if n&lt;&gt;-1 then
+    			pRegEx=getRegExCollection
+    			fbm_string=fbm_string &amp; &quot;►sm_reg_remove|&quot;
+    			if pRegEx(n+1).Tipologia&lt;&gt;0 then fbm_string=fbm_string &amp; &quot;►sm_reg_edit|&quot;
+    			if pRegEx(n+1).Visible then
+    				fbm_string=fbm_string &amp; &quot;►sm_reg_off|&quot;
+    			else
+    				fbm_string=fbm_string &amp; &quot;►sm_reg_on|&quot;
+    			end if
+    			if n+1&gt;1 then fbm_string=fbm_string &amp; &quot;►sm_reg_up|&quot;
+    			if n+1&lt;pRegEx.Count then fbm_string=fbm_string &amp; &quot;►sm_reg_down|&quot;
+    		end if
+    	case &quot;hyp&quot;
+    	    n=gdlgMain.getControl(&quot;hyp_lstList&quot;).getSelectedItemPos()
+    		if n&lt;&gt;-1 then
+    		    fbm_string=fbm_string &amp; &quot;►sm_hyp_cancel|►sm_hyp_space|►sm_hyp_replace|&quot;
+    		    if gExistStandardDic then fbm_string=fbm_string &amp; &quot;◄sm_hyp_dictionary|&quot;
+    		    fbm_string=fbm_string &amp; &quot;◄sm_hyp_ignore|&quot;
+    		    if gPreference.QuestionEndPage then
+    		    	fbm_string=fbm_string &amp; &quot;◄sm_hyp_qrefind_on|&quot;
+    		    else
+    		    	fbm_string=fbm_string &amp; &quot;◄sm_hyp_qrefind_off|&quot;
+    		    end if
+    		end if
+    		if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;◄sm_hyp_undo|&quot;
+    	case &quot;war&quot;
+    		n=gdlgMain.getControl(&quot;war_lstList&quot;).getSelectedItemPos()
+    		if n&lt;&gt;-1 then
+    		    fbm_string=fbm_string &amp; &quot;►■sm_war_text|►sm_war_make|&quot;
+    		    if gExistStandardDic then fbm_string=fbm_string &amp; &quot;◄sm_war_dictionary|&quot;
+    		    fbm_string=fbm_string &amp; &quot;◄sm_war_ignore|&quot;
+    		    if gPreference.QuestionEndPage then
+    		    	fbm_string=fbm_string &amp; &quot;◄sm_war_qrefind_on|&quot;
+    		    else
+    		    	fbm_string=fbm_string &amp; &quot;◄sm_war_qrefind_off|&quot;
+    		    end if
+    		end if
+    		if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;◄sm_war_undo|&quot;
+    	case &quot;hea&quot;
+    		n=gdlgMain.getControl(&quot;hea_lstList&quot;).getSelectedItemPos()
+    		if n&lt;&gt;-1 then
+    		    fbm_string=fbm_string &amp; &quot;►■sm_hea_style|&quot;
+    		end if
+    		if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;◄sm_hea_undo|&quot;
+    	case &quot;fin&quot;
+    		n=gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemPos()
+    		if n&lt;&gt;-1 then
+    		    if ubound(gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemsPos)=0 then
+    		    	if gRegEx_General(gActView(n+1)).Tipologia&lt;&gt;0 then
+    		    	   fbm_string=fbm_string &amp; &quot;►sm_fin_prev|►sm_fin_next|►sm_fin_make|&quot;
+    		    	   if gRegEx_General(gActView(n+1)).Dual then 
+    		    	      fbm_string=fbm_string &amp; &quot;►sm_fin_make2|◄sm_fin_makeAll2|&quot;
+    		    	   end if
+    		    	   fbm_string=fbm_string &amp; &quot;◄sm_fin_makeAll|&quot;
+    		    	end if
+    		    	&apos;if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;►sm_fin_undo|&quot;
+    		    	if gPreference.QuestionEndPage then
+    		    	   fbm_string=fbm_string &amp; &quot;◄sm_fin_qrefind_on|&quot;
+    		    	else
+    		    	   fbm_string=fbm_string &amp; &quot;◄sm_fin_qrefind_off|&quot;
+    		    	end if
+    			else
+    				&apos;if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;►sm_fin_undo|&quot;
+    				fbm_string=fbm_string &amp; &quot;◄sm_fin_makeAll|&quot;
+    			end if
+    		else
+    			&apos;if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;►sm_fin_undo|&quot;
+    		end if
+    		if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;◄sm_fin_undo|&quot;
+    	case &quot;sty&quot;
+    		n=gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemPos()
+    		if n&lt;&gt;-1 then
+    		    if ubound(gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemsPos)=0 then
+    		    	fbm_string=fbm_string &amp; &quot;►sm_sty_prev|►sm_sty_next|►■sm_sty_style|►sm_sty_make|&quot;
+    		    	fbm_string=fbm_string &amp; &quot;◄sm_sty_makeAll|&quot;
+    		    	if gPreference.QuestionEndPage then
+    		    	   fbm_string=fbm_string &amp; &quot;◄sm_sty_qrefind_on|&quot;
+    		    	else
+    		    	   fbm_string=fbm_string &amp; &quot;◄sm_sty_qrefind_off|&quot;
+    		    	end if
+    			else
+    				fbm_string=fbm_string &amp; &quot;►■sm_sty_style|◄sm_sty_makeAll|&quot;
+    			end if
+    		end if
+    		if gUndo.Count&gt;0 then fbm_string=fbm_string &amp; &quot;◄sm_sty_undo|&quot;
+    	case &quot;deb&quot;
+    		fbm_string=&quot;&quot;
+        Case Else
+        	ErrorLog (&quot;┌ ▲ Error:  Type &quot; &amp; gTabMenu(gPreference.MenuSelected).TagId &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in flagButtonSubMenu.&quot;)
+   End Select
+   flagButtonSubMenu = fbm_string
+End function
+
+sub showButtonSubMenu(flagSubMenuButton as string)
+    dim ctrls
+    dim obj
+    dim mat   
+    dim n as integer
+    Dim sw
+    dim flag
+    dim xl, xr, y, w
+    
+    flag=&quot;sm_&quot; &amp; gTabMenu(gPreference.MenuSelected).TagId &amp; &quot;_&quot;
+    ctrls=gDlgMain.getControls()
+    For each obj in ctrls
+    	if instr(flag, left(obj.Model.Name,7)) then obj.setvisible(False) 
+    next 
+    mat=split(flagSubMenuButton,&quot;|&quot;)
+    
+    xl=gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionX
+    xr=gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionX + gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Width - 2
+    if gTabMenu(gPreference.MenuSelected).TagId=&quot;reg&quot; then
+    	y=gDlgMain.getControl(&quot;reg_lstList&quot;).Model.PositionY + gDlgMain.getControl(&quot;reg_lstList&quot;).Model.Height
+    else
+    	y=gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.PositionY + gDlgMain.getControl(&quot;hyp_lstList&quot;).Model.Height
+    end if
+    for n=0 to ubound(mat)
+        if (mat(n))&lt;&gt;&quot;&quot; then
+        	w=18
+        	sw=mid(mat(n),2,1)
+            if sw=&quot;■&quot; then
+            	obj = gdlgMain.getControl(mid(mat(n),3))
+            	w=obj.model.Width
+            	obj.model.PositionY=y+1
+            	&apos;special adjust
+            	if mid(mat(n),3,6)=&quot;sm_sty&quot; then xl=xl+2
+            else
+            	obj = gdlgMain.getControl(mid(mat(n),2))
+            	obj.model.PositionY=y
+            end if
+            if left(mat(n),1)=&quot;◄&quot; then
+            	xr=xr-w
+            	obj.model.PositionX=xr
+            else
+            	obj.model.PositionX=xl
+            	xl=xl+w
+            end if
+            obj.setvisible(True) 
+        end if
+    next
+end sub
+Sub showSelected()
+    dim pMenu as TabMenu
+    dim v as boolean
+    Dim flag as string 
+    for each pMenu in gTabMenu
+    	v = false
+   		if pMenu.Index = gPreference.MenuSelected then
+   			v = true	
+   		end if
+   	    gDlgMain.getControl(&quot;but_&quot; + pMenu.NameButton).setvisible(not v)  
+   	    gDlgMain.getControl(&quot;img_&quot; + pMenu.NameButton).setvisible(v)  
+    next
+    flag = gTabMenu(gPreference.MenuSelected).FlagShow
+    showFlags(flag)
+End Sub
+
+&apos; Look up an element of a Collection value by key, returning Null if the key is not valid
+Function LookupCollection(c as Collection, key as String) as Variant
+  &apos; Is there really no method to check for a valid key ?!?!!
+  on Local Error goto badkey
+  LookupCollection = c.Item(key)
+  exit Function
+ badkey:
+  LookupCollection = nothing
+  exit Function
+End Function 
+
+Sub ToolTypeText(txt as String)
+    gDlgMain.getControl(&quot;gen_lblToolType&quot;).text = txt
+End Sub
+
+Sub QuickSort(myList())
+qSort(myList(), LBound(myList()), UBound(myList()) )
+End Sub
+
+
+Function partition(myList(), xMin As Long, xMax As Long) As Long
+Dim yMin As Long, yMax As Long
+Dim currentKey, swapping
+
+&apos;currentKey = myList(xMin)
+currentKey = myList((xMin +xMax) \ 2)
+yMin = xMin -1
+yMax = xMax +1
+Do
+  Do
+    yMax = yMax-1
+  Loop Until StrComp(myList(yMax), currentKey, 0) &lt;= 0
+  Do
+    yMin = yMin+1
+  Loop Until StrComp(myList(yMin), currentKey, 0) &gt;= 0
+  if yMin &lt; yMax  then
+    swapping = myList(yMin)
+    myList(yMin) = myList(yMax)
+    myList(yMax) = swapping
+  else
+    partition = yMax
+    Exit Function
+  end if
+Loop
+End Function
+
+
+Sub qSort(myList(), xMin As Long, xMax As Long)
+Dim p As Long
+
+if xMin &lt; xMax  then
+  p = partition(myList(), xMin, xMax)
+  qSort(myList(), xMin, p)
+  qSort(myList(), p+1, xMax)
+end if
+End Sub
+</script:module>

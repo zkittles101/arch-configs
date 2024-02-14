@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modHeader" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+type tUndo
+	IDMenu
+	IDObject
+end type
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function get_hea_RegEx_to_find() as Regex
+	dim oCmb
+	Dim s as string
+	dim matString
+	dim index as integer
+	dim pRE as RegEx
+	
+	oCmb=gDlgMain.getControl(&quot;hea_cmbList&quot;)
+	s=oCmb.Text
+	matString = oCmb.GetItems
+	if trim(s)=&quot;&quot; then
+		s=oCmb.GetItem(0)
+		oCmb.Text=s
+	end if
+	for index=0 to ubound(matString)
+		if s=matstring(index) then
+			exit for
+		end if
+	next
+	
+    if index=0 then &apos;all header
+    	set pRe=newRegEx()
+    	pRe.Key=&quot;ALL_HEADER&quot;
+    	pRe.Tipologia=9
+    elseif index&gt;ubound(matString) then &apos;new re
+    	set pRe=newRegEx()
+    	pRe.Tipologia=2
+		pRe.Find=s
+		pRe.CaseSensitive=False
+    else &apos;re in gRegEx_Header
+    	pRe=gRegEx_Header(index)
+    end if
+    	
+	get_hea_RegEx_to_find=pRE
+end function
+
+function Find_Header_Found(range)
+   Dim pCurs
+   
+   on error goto Find_Header_FoundKO
+   pCurs = thisComponent.getCurrentController.getViewCursor()
+   pCurs.gotoRange(range,false)
+   Find_Header_Found=true
+   on error goto 0
+   exit function
+   
+   Find_Header_FoundKO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Find_Header_Found !&quot;)
+   Find_Header_Found=False
+   On Error Goto 0
+End Function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function popolateSelected_hea as boolean
+	    
+    on error goto popolateSelected_heaKO
+    
+    popolate_hea_cmbList
+    popolate_hea_lstList
+     
+    popolateSelected_hea=true
+    on error goto 0
+    exit function
+   
+	popolateSelected_heaKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in popolateSelected_hea !&quot;)
+	popolateSelected_hea=False
+    On Error Goto 0
+end function
+sub popolate_hea_cmbList
+	dim re as RegEx
+	dim oCmb
+	
+	oCmb=gDlgMain.getControl(&quot;hea_cmbList&quot;)
+	oCmb.removeitems(0, oCmb.ItemCount)
+	oCmb.addItem (&quot;-&gt; &quot; &amp; gLang(&quot;default_hea_00001&quot;).txt &amp; &quot; &lt;-&quot;,  oCmb.ItemCount)
+	for each re in gRegEx_Header
+		if re.visible then oCmb.addItem (re.TextString,  oCmb.ItemCount)	
+	next
+end sub
+sub popolate_hea_lstList
+	dim re as RegEx
+	dim oBar
+	Dim n_wait as long
+	Dim pCursor
+	Dim ptext as string
+	Dim pFound
+	Dim oList
+	Dim pSearch
+	Dim oParEnum
+	Dim oPar
+	dim i
+	
+	on error goto popolate_hea_lstListKO
+	&apos;initialize wait
+	hideAll
+    showWait
+    obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	obar.setRange(0,0)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00008&quot;).txt
+	gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=&quot;&quot;
+	n_wait=0
+	&apos;get listbox
+	oList=gdlgMain.getControl(&quot;hea_lstList&quot;)
+    oList.removeitems(0, oList.ItemCount)
+	
+	set gActView=new collection
+	 
+	re=get_hea_RegEx_to_find
+	if re.Tipologia=9 then
+		oBar.setRange(0,thisComponent.ParagraphCount/10)
+		pCursor = thisComponent.getText.createTextCursor()
+		pCursor.GotoStart(false)
+		pFound=pCursor
+		pSearch = thisComponent.createSearchDescriptor
+    	pSearch.searchStyles = True
+		oParEnum = thisComponent.getText().createEnumeration()
+		Do While oParEnum.hasMoreElements()
+			n_wait=n_wait+1
+			if n_wait mod 10=0 then oBar.SetValue(n_wait/10)
+			oPar = oParEnum.nextElement()
+			If oPar.supportsService(&quot;com.sun.star.text.Paragraph&quot;) Then
+			if lcase(left(opar.ParaStyleName,8))=&quot;heading &quot; then
+		    	pSearch.SearchString = getSyleDisplayName(opar.ParaStyleName)
+		    	pFound=thisComponent.findnext(pFound.end, pSearch)
+		    	pCursor.gotoRange(pFound.GetEnd,false)
+		   		gActView.add pFound
+			end if
+			end if
+		loop		
+	elseif re.Tipologia=2 then
+		obar.setRange(0,countsMatch(re, &quot;&quot;))		
+		pCursor = thisComponent.getText.createTextCursor()
+    	pSearch = thisComponent.createSearchDescriptor
+    	pSearch.SearchRegularExpression = True
+    	pSearch.SearchCaseSensitive=re.CaseSensitive
+    	pSearch.SearchString=re.Find
+    	pFound = thisComponent.findAll(pSearch)
+    	if pFound.getCount() &gt;= 1 Then
+           For i = 0 To pFound.getCount - 1
+        	  gActView.add pFound.getByIndex(i)
+           Next
+        end if
+	else
+		ErrorLog (&quot;┌ ▲ Tipologia &quot; &amp; re.Tipologia &amp; &quot; not implemented,&quot; &amp; chr(13) &amp; &quot;└ ▲ in popolate_hea_lstList !&quot;)
+		goto popolate_hea_lstListEXIT
+	end if
+	
+	for each pFound in gActView
+		pText = getSyleDisplayName(pFound.ParaStyleName)
+      	pText = pText &amp; &quot; - &quot; &amp; pFound.String
+      	oList.addItem (pText,  oList.ItemCount)
+	next
+	goto popolate_hea_lstListEXIT
+   
+	popolate_hea_lstListKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in popolate_hea_lstList !&quot;)
+    popolate_hea_lstListEXIT:
+    hideAll
+    showSelected
+    On Error Goto 0
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub virtual_Header_Execute_Click
+	popolate_hea_lstList
+End sub
+sub virtual_Find_Header_Click
+	dim n as integer
+	Dim pFound
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;hea_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+       if ubound(gdlgMain.getControl(&quot;hea_lstList&quot;).getSelectedItemsPos)=0 then 
+       	   pFound=gActView(n+1)
+       	   if not Find_Header_Found(pFound) then
+       	   	  showDialog	 
+       	   	  exit sub
+       	   else
+       	   	  gBlockEvent=true
+       	   	  gdlgMain.getControl(&quot;sm_hea_style&quot;).selectItem(getSyleDisplayName(pFound.ParaStyleName),True)
+       	   	  gBlockEvent=false
+       	   end if
+       end if
+    end if
+end sub
+sub virtual_Header_Style_Change
+	dim obj
+	dim indexMat
+	dim index
+	dim range
+	dim toStyle
+	dim act
+	
+	tostyle=getSyleName(gdlgMain.getControl(&quot;sm_hea_style&quot;).getSelectedItem)
+    obj=gDlgMain.getControl(&quot;hea_lstList&quot;)
+    indexMat = obj.getSelectedItemsPos
+   	for index=0 to ubound(indexMat)
+      range=gActView(indexMat(index)+1)
+      if range.ParaStyleName&lt;&gt;toStyle then 
+          range.ParaStyleName=toStyle
+          set act = new tUndo
+          act.IDMenu=gTabMenu(gPreference.MenuSelected).TagId
+          act.IDObject=indexMat(index)+1
+          add_undo(act)
+      end if
+   next	
+End sub
+
+</script:module>

@@ -1,0 +1,25 @@
+# settings
+
+(GimpGegl-gegl-color-temperature-config "2022-08-01 14:35:07"
+    (time 1659353707)
+    (gimp-opacity 0.52400000000000002)
+    (original-temperature 4184.1999999999998)
+    (intended-temperature 7585.5))
+(GimpGegl-gegl-color-temperature-config "2022-07-02 15:03:44"
+    (time 1656763424)
+    (original-temperature 7404.6000000000004)
+    (intended-temperature 4618.3999999999996))
+(GimpGegl-gegl-color-temperature-config "2022-04-20 23:40:15"
+    (time 1650487215)
+    (original-temperature 10480.299999999999)
+    (intended-temperature 3134.9000000000001))
+(GimpGegl-gegl-color-temperature-config "2022-04-20 23:37:33"
+    (time 1650487053)
+    (original-temperature 5740.1000000000004)
+    (intended-temperature 8309.2000000000007))
+(GimpGegl-gegl-color-temperature-config "2022-04-20 23:31:47"
+    (time 1650486707)
+    (original-temperature 7911.1999999999998)
+    (intended-temperature 5269.6999999999998))
+
+# end of settings

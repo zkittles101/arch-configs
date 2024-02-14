@@ -1,0 +1,11 @@
+2023/12/26-13:14:45.799 ec6f Recovering log #17
+2023/12/26-13:14:45.853 ec6f Level-0 table #20: started
+2023/12/26-13:14:45.904 ec6f Level-0 table #20: 426906 bytes OK
+2023/12/26-13:14:45.995 ec6f Delete type=3 #15
+2023/12/26-13:14:45.995 ec6f Delete type=0 #17
+2023/12/26-13:18:40.149 ec6f Compacting 1@0 + 1@1 files
+2023/12/26-13:18:40.549 ec6f Generated table #22@0: 126 keys, 87619 bytes
+2023/12/26-13:18:40.549 ec6f Compacted 1@0 + 1@1 files => 87619 bytes
+2023/12/26-13:18:40.663 ec6f compacted to: files[ 0 1 0 0 0 0 0 ]
+2023/12/26-13:18:40.664 ec6f Delete type=2 #18
+2023/12/26-13:18:40.664 ec6f Delete type=2 #20

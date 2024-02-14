@@ -1,0 +1,1277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modFind" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+type tUndo
+	IDMenu
+	IDObject
+end type
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   COUNT FIND &amp; REPLACE
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Function countsMatch(re as RegExp, style as string) as integer
+	dim ret_count as integer
+	ret_count=0
+	Select Case re.Tipologia
+	    Case 1, 2, 3
+	    	ret_count = counts_Normal(re, style)
+        case 9
+        	ret_count = counts_Special(re, style)
+        Case else
+        	ErrorLog (&quot;┌ ▲ Error:  Tipologia &quot; &amp; re.tipologia &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in  countsMatch !&quot;)
+           	ret_count=0
+    End Select
+    countsMatch=ret_count
+End function
+function Find_Core(pCursor, re as RegEx, style as string)
+	Select Case re.Tipologia
+        Case 1
+        	if gDirection_LastFind=&quot;next&quot; then
+    			Find_Core = Find(pCursor, re.Find, re.CaseSensitive, style, re.isRegEx)
+    		else
+    			Find_Core = Find_Back(pCursor, re.Find, re.CaseSensitive, style, re.isRegEx)
+    		end if
+    	case 9
+        	Find_Core = Find_Special(pCursor, re, style)
+   		case else
+   			ErrorLog (&quot;┌ ▲ Error:  Tipologia &quot; &amp; re.tipologia &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in Find_Core !&quot;)
+   	end select
+end function
+function Find_general(re as RegExp, optional isRegEx as Boolean)
+	dim style as string
+	Dim refind as boolean
+	Dim pCursor as Object
+	Dim pFound as object
+    
+    on error goto Find_generalKO
+    if isMissing(isRegEx) then isRegEx=True
+    refind=True
+   	pCursor = thisComponent.getCurrentController.getViewCursor()
+    &apos;get a style limit find
+    style=&quot;&quot;
+    if gTabMenu(gPreference.MenuSelected).TagId = &quot;fin&quot; then
+		style=getSyleSelected
+	end if
+    
+    pFound=Find_Core(pCursor, re, style)
+   	if IsNull(pFound) then 
+   		if gPreference.QuestionEndPage then
+  			refind = QuestionEndPage
+   			gDlgMain.SetFocus()
+   		end if
+   		if refind then
+   		   if gDirection_LastFind=&quot;next&quot; then
+   		   	  gotoStart(pCursor)
+   		   else
+   		   	  gotoEnd(pCursor)
+   		   end if
+   		   pFound=Find_Core(pCursor, re, style)
+   		end if
+   	end if
+   	if isNull(pFound) then
+        Find_general = False
+    else
+        if gDirection_LastFind=&quot;next&quot; then
+   		  	 pCursor.gotoRange(pFound,false)
+   		else
+   		  	 pCursor.gotoRange(pFound.Start,false)
+        	 pCursor.gotoRange(pFound.End,True)
+   		end if
+        Find_general = True
+    end if
+    on error goto 0
+    exit function
+
+	Find_generalKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Find_general !&quot;)
+    Find_general = False
+    On Error Goto 0
+End Function
+Function makeAll_general(collRE, alternative as boolean) as boolean
+	Dim pCursor as Object
+    Dim pOk as boolean  
+    Dim obar as Object
+    Dim re as RegEx
+    Dim style as string
+    Dim n_wait as integer
+    
+    hideAll
+    showWait
+    obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	obar.setRange(0,collRE.Count)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00003&quot;).txt
+	n_wait=0
+			
+    style=getSyleSelected
+   	for each re in collRE
+   		oBar.SetValue(n_wait) : n_wait=n_wait+1
+   		gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=re.TextString
+    	pOk=makeOneAll(re,alternative, style)
+    	if not pOK then
+       		exit for
+    	end if
+   	next
+    makeAll_general = pOK
+End Function
+Function make_general(re as RegExp, alternative as boolean, recount as boolean, optional pcursor as variant) as boolean
+    Dim pOk as boolean  
+    dim act as tUndo
+    dim mode as integer
+    dim replace as string
+    dim direction as string
+    dim movesel as integer
+    if ismissing(pcursor) then pCursor = thisComponent.getCurrentController.getViewCursor()
+    
+    if alternative and re.dual then
+    	mode=re.mode_2	
+    	replace=re.replace_2
+    	direction=re.direction_2
+    	movesel=re.sel_2
+    else
+    	mode=re.mode_1	
+    	replace=re.replace_1
+    	direction=re.direction_1
+    	movesel=re.sel_1    
+    end if
+    Select Case re.Tipologia
+        Case 1 &apos;tipologia 1
+        	if mode=1 then
+            	pOk = make_Tipologia1(pCursor, re.Find, replace, direction, MoveSel, re.CaseSensitive)
+            else
+            	pOk = make_Tipologia2(pCursor, re.Find, replace, re.CaseSensitive)
+            end if
+        Case 9
+        	pOk = make_Special(pCursor, re)
+        Case else
+        	ErrorLog (&quot;┌ ▲ Error:  Tipologia &quot; &amp; re.tipologia &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in make_general !&quot;)
+            make_general=False
+            exit function
+    End Select
+    if pOK then
+       if recount then
+       	  pOK=adjustCount_lstList(re, -1)
+       end if
+	   set act = new tUndo
+	   act.IDMenu=gTabMenu(gPreference.MenuSelected).TagId
+	   act.IDObject=re.Key
+	   add_undo(act)
+    end if
+    make_general = pOK
+End Function
+function makeOneAll(re as RegEx, alternative as boolean, style as string) as boolean
+   Dim pCursor As Object
+   Dim pReplace as object
+   Dim pFound as object
+   Dim result as boolean
+   dim act
+   dim mode as integer
+   dim replace as string
+   dim direction as string
+   dim movesel as integer
+   
+   on error goto makeOneAllKO
+   result=True
+   if alternative and re.dual then
+    	mode=re.mode_2	
+    	replace=re.replace_2
+    	direction=re.direction_2
+    	movesel=re.sel_2
+   else
+    	mode=re.mode_1	
+    	replace=re.replace_1
+    	direction=re.direction_1
+    	movesel=re.sel_1    
+   end if
+   
+   if style=&quot;&quot; and mode=2 then
+   	  pReplace = thisComponent.createReplaceDescriptor
+   	  pReplace.SearchRegularExpression = true
+      pReplace.SearchString = re.Find
+   	  pReplace.ReplaceString = replace
+   	  pReplace.SearchCaseSensitive=re.CaseSensitive
+      thisComponent.replaceAll(pReplace)
+      set act = new tUndo
+      act.IDMenu=gTabMenu(gPreference.MenuSelected).TagId
+      act.IDObject=re.Key
+      add_undo(act)
+   else
+     &apos;pCursor = thisComponent.getText.createTextCursor()
+   	  pCursor = thisComponent.getCurrentController.getViewCursor()
+   	  gotoStart(pCursor)
+   	  pFound = Find_core(pcursor, re, style)
+   	  Do Until IsNull(pFound)
+   	  	pCursor.gotoRange(pFound,false)
+   	  	result = make_general(re, alternative, false, pcursor)
+      	if result then
+          pCursor.CollapsetoEnd
+   		  pFound = Find_core(pcursor, re, style)
+      	else
+      	  exit do
+      	end if
+   	  loop
+   end if
+   makeOneAll=result   
+   on error goto 0
+   exit function
+   
+   makeOneAllKO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in makeOneAll !&quot;)
+   makeOneAll = False
+   On Error Goto 0   
+End Function
+
+Function AdjustKeyCase(strText as string) as string
+   dim n as integer
+   dim code as long
+   dim char as string
+   dim newtext as string
+   newtext=&quot;&quot;
+   for n=1 to len(strText)
+   	  char=mid(strtext,n,1)
+   	  code=Asc(char)
+   	  if code&gt;=65 and code&lt;=90 then
+   	  	newtext=newtext &amp; &quot;u&quot;
+   	  end if
+   	  newtext=newtext &amp; char
+   next
+   AdjustKeyCase=newtext
+End Function
+
+Function Replace_RegExp(strText as string, strFind as string, strReplace as string, bolCaseSensitive as boolean) as string
+   Dim pos as integer
+   Dim n as string
+   dim nt
+   dim s as string
+   dim f as string
+   dim sostituire as boolean
+   dim index as integer
+   
+   on error goto Replace_RegExpKO
+   n=strReplace
+   
+   &apos;guardo se in replace c&apos;è $1-9
+   sostituire=false
+   pos=instr(1,strReplace,&quot;$&quot;)
+   do while pos&gt;0
+   	  s=mid(strReplace,pos+1,1)
+      if isNumeric(s) then
+      	sostituire=true
+      	exit do
+      end if
+      pos=instr(pos+1,strReplace,&quot;$&quot;)
+   loop
+   if sostituire then
+   	  nt=Replace_core(strText,strFind, bolCaseSensitive)
+   	  for index=1 to nt.subRegExpressions - 1
+   	  	 n=replace(n,&quot;$&quot; &amp; index, Mid(strText, nt.startOffset(index) + 1, nt.endOffset(index) - nt.startOffset(index)))
+   	  next
+   end if
+   
+   &apos;guardo se c&apos;è \
+   pos=instr(1,strReplace,&quot;\&quot;)
+   if pos&gt;0 then
+   	  n=replace(n,&quot;\n&quot;,chr(13))
+   	  n=replace(n,&quot;\t&quot;,chr(9))
+   end if
+   
+   Replace_RegExp=n
+   exit function
+   
+   Replace_RegExpKO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Replace_RegExp !&quot;)
+   Replace_RegExp = &quot;CT_Message: ERROR&quot;
+   On Error Goto 0
+end function
+Function Replace_core(a as string, b as string , bCase as boolean)
+	dim oTextSearch, oOptions, oFound
+
+	oTextSearch = CreateUnoService(&quot;com.sun.star.util.TextSearch&quot;)
+	oOptions = CreateUnoStruct(&quot;com.sun.star.util.SearchOptions&quot;)
+	oOptions.algorithmType = com.sun.star.util.SearchAlgorithms.REGEXP
+	if not bCase then 
+		if searchflag_type=1 then 
+			oOptions.searchFlag= 1
+		else
+			oOption.TransliterateFlags = 7
+		end if
+	end if
+	oOptions.searchString = b
+	oTextSearch.setOptions(oOptions)
+	oFound = oTextSearch.searchForward(a, 0, Len(a))
+	Replace_core=oFound
+End Function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function getREinFindSelected() as RegEx
+	dim n as integer
+	dim re as RegEx
+	n=gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+       if ubound(gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemsPos)=0 then 
+       	   re = gRegEx_General(gActView(n+1))
+       	   getREinFindSelected=re
+       	   exit function
+       end if
+    end if
+    re = gRegEx_General(0)
+    getREinFindSelected=re
+end function
+Function counts_Normal(re as RegExp, style as string) as integer
+    Dim pCursor as Object
+    Dim pSearch as Object
+    Dim pFound as Object
+    Dim matchCount
+    Dim i
+    dim obj_coll as object
+    Dim oCursor
+    on error goto countsMatchKO
+    pCursor = thisComponent.getText.createTextCursor()
+    pSearch = thisComponent.createSearchDescriptor
+    pSearch.SearchRegularExpression = re.isRegEx
+    pSearch.SearchCaseSensitive=re.CaseSensitive
+    pSearch.SearchString=re.Find
+    pFound = thisComponent.findAll(pSearch)
+    matchCount = pFound.getCount()
+    if style&lt;&gt;&quot;&quot; then
+       if matchCount &gt;= 1 Then
+          For i = 0 To pFound.getCount - 1
+        	 obj_coll= pFound.getByIndex(i)
+             oCursor = thisComponent.getText.createTextCursorByRange(obj_coll)
+             if ocursor.ParaStyleName &lt;&gt; style then matchCount=matchCount-1
+          Next
+       end if
+    end if
+    counts_Normal = matchCount
+    on error goto 0
+    exit function
+   
+	countsMatchKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in countsMatch !&quot;)
+	counts_Normal=0
+    On Error Goto 0
+end function
+function Find(ocursor, strFind, bolCaseSensitive, style, optional isRegEx as Boolean)
+    Dim pSearch as object
+    Dim pFound as object
+    Dim pCursor
+   
+    on error goto findKO
+    if isMissing(isRegEx) then isRegEx=True
+    pSearch = thisComponent.createSearchDescriptor
+    pSearch.SearchRegularExpression = isRegEx
+    pSearch.SearchCaseSensitive=bolCaseSensitive
+    pSearch.SearchString=strFind
+    pSearch.SearchBackwards = False
+    pCursor=ThisComponent.CurrentController.ViewCursor
+    &apos;pCursor = thisComponent.getText.createTextCursorbyRange(oCursor.getend)
+    
+    pFound = thisComponent.findnext(pCursor.getend,pSearch)
+    Do while not isNull(pFound) and style&lt;&gt;&quot;&quot;
+       pCursor.gotoRange(pFound,false) 
+       if pcursor.ParaStyleName = style then
+         exit do
+       end if
+       pFound = thisComponent.findnext(pCursor.getend,pSearch)
+    Loop	
+	Find=pFound
+	on error goto 0
+    exit function
+	
+	FindKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Find !&quot;)
+    On Error Goto 0
+end function
+function Find_Back(ocursor, strFind, bolCaseSensitive, style, optional isRegEx as Boolean) as object
+    Dim pCursor as Object
+    Dim pSearch as Object
+    Dim pFound as Object
+    Dim i
+    dim oText
+    dim oret as integer
+    on error goto Find_BackKO
+    oText=ThisComponent.Text 
+    pSearch = thisComponent.createSearchDescriptor
+    pSearch.SearchRegularExpression = isRegEx
+    pSearch.SearchCaseSensitive=bolCaseSensitive
+    pSearch.SearchString=strFind
+    pFound = thisComponent.findAll(pSearch)
+    oRet=-1
+    for i=0 to pFound.getCount - 1
+    	If oText.compareRegionEnds(pFound.getByIndex(i),oCursor.start) &lt; 0 then
+    		exit for
+    	else
+    		if style&lt;&gt;&quot;&quot; then
+    			pCursor = thisComponent.getText.createTextCursorByRange(pFound.getByIndex(i))
+    			if pcursor.ParaStyleName = style then
+         			oret=i
+       			end if
+    		else
+    			oret=i
+    		end if	
+    	end if
+    next
+    if oret&lt;&gt;-1 then
+    	Find_Back=pFound.getByIndex(oRet)
+    end if
+    on error goto 0
+    exit function
+   
+	Find_BackKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Find_Back !&quot;)
+	Find_Back=Null
+    On Error Goto 0
+end function
+function make_Tipologia1(cur as object, strFind as string, strReplace as string, moveDirection as string, moveSel as integer, bolCaseSensitive as boolean) as boolean
+   dim txt as string
+   dim strNew as string
+   dim selection as object
+   dim pend as object
+   on error goto make_Tipologia1KO	
+   txt=ThisComponent.CurrentController.getSelection().getByIndex(0).getString()
+   strNew=Replace_RegExp(txt, strFind, strReplace, bolCaseSensitive)	
+   if moveDirection=&quot;L&quot; then
+   	  pend=cur.getEnd()
+   	  cur.collapsetostart
+	  cur.goleft(moveSel,false)
+	  cur.gotorange(pend,true)
+      ThisComponent.CurrentController.getSelection().getByIndex(0).setString(strNew)
+   elseif moveDirection=&quot;R&quot; then
+      txt=ThisComponent.CurrentController.getSelection().getByIndex(0).getString()
+      cur.goright(moveSel,true) 
+      ThisComponent.CurrentController.getSelection().getByIndex(0).setString(strNew)
+   end if 
+   if gDirection_LastFind=&quot;next&quot; then
+   		cur.goright(1,false) 
+   	else
+   		cur.goleft(1,false) 
+   	end if
+
+   on error goto 0
+   make_Tipologia1 = true
+   exit function
+   
+   make_Tipologia1KO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in make_Tipologia1 !&quot;)
+   make_Tipologia1 = False
+   On Error Goto 0
+End function
+Function make_Tipologia2(cur as object, strFind as string, strReplace as string, bolCaseSensitive as boolean) as boolean
+   dim strNew as string
+   dim txt as string
+   on error goto make_Tipologia2KO
+   
+   txt=ThisComponent.CurrentController.getSelection().getByIndex(0).getString()
+   strNew=Replace_RegExp(txt, strFind, strReplace, bolCaseSensitive)
+   if strNew=&quot;CT_Message: ERROR&quot; then
+      make_Tipologia2 = False
+   else
+   	  ThisComponent.CurrentController.getSelection().getByIndex(0).setString(strNew)   
+   	  make_Tipologia2 = true
+   end if
+   on error goto 0
+   exit function
+   
+   make_Tipologia2KO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in make_Tipologia2 !&quot;)
+   make_Tipologia2 = False
+   On Error Goto 0
+end Function
+Sub gotoStart(cur)
+	dim new_c
+	if cur.text.ImplementationName = &quot;SwXCell&quot; then
+		new_c = thisComponent.getText.createTextCursor()
+		new_c.gotoStart(false)
+		cur.gotoRange(new_c.getEnd,false)
+	else
+		cur.gotoStart(False)
+	end if
+End sub
+Sub gotoEnd(cur)
+	dim new_c
+	if cur.text.ImplementationName = &quot;SwXCell&quot; then
+		new_c = thisComponent.getText.createTextCursor()
+		new_c.gotoEnd(false)
+		cur.gotoRange(new_c.getEnd,false)
+	else
+		cur.gotoEnd(False)
+	end if
+End sub
+function QuestionEndPage as Boolean
+    &apos;dim r
+    &apos;r=MsgBox(gLang.item(&quot;dialog_find_0002&quot;).txt , 36 , gLang.item(&quot;dialog_find_0001&quot;).txt)
+    &apos;if r=6 then QuestionEndPage=True else QuestionEndPage=False
+	QuestionEndPage=True
+End function
+function getSyleSelected() as string
+	dim str_return as string
+	dim chstyles
+	
+	str_return=&quot;&quot;
+	if gdlgmain.getControl(&quot;fin_cmbStyle&quot;).getSelectedItemPos&lt;&gt;0 then
+		str_return=gdlgmain.getControl(&quot;fin_cmbStyle&quot;).getSelectedItem
+		chstyles = thisComponent.StyleFamilies.getByName(&quot;ParagraphStyles&quot;)
+        if chstyles.hasByName(str_return) then
+            str_return = chstyles.getByName(str_return).name 
+        else 
+            str_return = str_return
+        end if
+	end if
+	getSyleSelected=str_return
+end function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function popolateSelected_fin as boolean
+	Dim oBar as object
+	Dim oList as object
+	Dim n as integer
+	Dim re as RegEx
+	dim count as integer
+	dim s as string
+	dim find_style as string
+	
+	set gActView=new collection
+	set gCountSpecial=new collection	
+	obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	obar.setRange(0,gRegEx_General.Count)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00002&quot;).txt
+	oList=gdlgMain.getControl(&quot;fin_lstList&quot;)
+    oList.removeitems(0, oList.ItemCount)
+	n=0
+	find_style=getSyleSelected	
+	for each re in gRegEx_General
+		oBar.SetValue(n) : n=n+1
+		if re.Visible then
+			if re.Tipologia&lt;&gt;0 then
+				gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=re.TextString
+				count = countsMatch(re, find_style)
+				if count&gt;0 then
+					s=&quot;&quot;
+					if len(str(count))&lt;5 then s = string(5-len(str(count)),&quot; &quot;)
+					s = s &amp; count &amp; &quot; &quot; &amp; re.TextString
+					oList.addItem (s,  oList.ItemCount)
+					gActView.add re.Key
+				end if
+			else
+				oList.addItem (&quot;&quot;,  oList.ItemCount)
+				gActView.add re.Key
+			end if
+		end if
+	next	
+End function
+function adjustCount_lstList(re as RegEx, addNum as integer) as boolean
+    dim rn as integer
+    dim newList
+    dim obj as object
+    dim indexList as integer
+    dim count as integer
+    Dim s as string
+    
+    on error goto adjustCount_lstListKO
+    set gCountSpecial=new collection
+    gBlockEvent=True
+    obj = gDlgMain.getControl(&quot;fin_lstList&quot;)
+    for indexList=1 to gActView.Count
+     	if gActView(indexList)=re.Key then
+    	    exit for
+    	end if
+    next
+    indexList=indexList-1
+    set newList = new Collection
+    for rn=0 to obj.getItemCount-1
+       if rn=indexList then
+          count = countsMatch(re, getSyleSelected)
+          if count&gt;0 then 
+    	  	if len(str(count))&lt;5 then s=string(5-len(str(count)),&quot; &quot;)
+	      	newList.add (s &amp; count &amp; &quot; &quot; &amp; re.TextString)
+	      	adjustCount_lstList=True
+	      else
+	        adjustCount_lstList=False
+	      end if
+       else
+          newList.add obj.getItem(rn)
+       end if
+    next
+ 
+    obj.setvisible(false)
+    obj.removeitems(0, obj.ItemCount)
+    for each s in newList
+       obj.additem(s, obj.getItemCount)
+    next
+    obj.makeVisible(indexlist)
+    obj.setvisible(true)
+    obj.selectItemPos(indexlist,true)
+    gBlockEvent=False
+	exit function
+	
+	adjustCount_lstListKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in adjustCount_lstList !&quot;)
+	adjustCount_lstList=False
+    On Error Goto 0
+End function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub virtual_Find_Click
+	dim n as integer
+	dim re as RegEx
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+       if ubound(gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemsPos)=0 then 
+       	   re = gRegEx_General(gActView(n+1))
+       	   if re.tipologia&lt;&gt;0 then
+       	      if not Find_general(re) then
+       	   	  	 showDialog	 
+       	   	     exit sub
+       	   	  end if
+       	   end if
+       end if
+    end if
+end sub
+sub virtual_Make_Click(alternative as boolean)
+	dim n as integer
+	dim re as RegEx
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+       if ubound(gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemsPos)=0 then 
+       	   re = gRegEx_General(gActView(n+1))
+       	   if re.tipologia&lt;&gt;0 then
+       	      if not Make_general(re, alternative, true) then
+       	   	  	 showDialog	 
+       	   	     exit sub
+       	   	  else
+       	   	     if gUndo.Count=1 then showButtonSubMenu(flagButtonSubMenu)
+       	   	     virtual_Find_Click
+       	   	  end if
+       	   end if
+       end if
+    end if
+end sub
+sub virtual_MakeAll_Click(alternative as boolean)
+	dim n as integer
+	dim re as RegEx
+	dim collRE
+	dim sel
+	
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+	   set collRE = new collection
+	   sel=gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemsPos
+	   for n=0 to ubound(sel)
+       	  re = gRegEx_General(gActView(sel(n)+1))
+       	  if re.tipologia&lt;&gt;0 then
+       	     collRE.add re
+       	  end if
+       next n
+       MakeAll_general(collRE, alternative)
+       showDialog
+    end if
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   SPECIAL
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Function counts_Special(re as RegExp, style as string) as integer
+	dim v
+    select case re.key
+    	case &quot;RE_SPECIAL_00001&quot;
+    		v=LookupCollection(gCountSpecial, &quot;RE_SPECIAL_00001&quot;)
+    		if isnull(v) then counts_PageBreak_co(style)
+    		counts_Special=gCountSpecial(&quot;RE_SPECIAL_00001&quot;)
+    	case &quot;RE_SPECIAL_00002&quot;
+    		v=LookupCollection(gCountSpecial, &quot;RE_SPECIAL_00002&quot;)
+    		if isnull(v) then counts_PageBreak_co(style)
+    		counts_Special=gCountSpecial(&quot;RE_SPECIAL_00002&quot;)
+    	case &quot;RE_SPECIAL_00003&quot;
+    		v=LookupCollection(gCountSpecial, &quot;RE_SPECIAL_00003&quot;)
+    		if isnull(v) then counts_PageBreak_co(style)
+    		counts_Special=gCountSpecial(&quot;RE_SPECIAL_00003&quot;)
+    	case &quot;RE_SPECIAL_00004&quot;
+    		v=LookupCollection(gCountSpecial, &quot;RE_SPECIAL_00004&quot;)
+    		if isnull(v) then counts_PageBreak_co(style)
+    		counts_Special=gCountSpecial(&quot;RE_SPECIAL_00004&quot;)
+    	case &quot;RE_SPECIAL_00005&quot;
+    		v=LookupCollection(gCountSpecial, &quot;RE_SPECIAL_00005&quot;)
+    		if isnull(v) then counts_PageBreak_co(style)
+    		counts_Special=gCountSpecial(&quot;RE_SPECIAL_00005&quot;)
+    	case &quot;RE_SPECIAL_00006&quot;
+    		v=LookupCollection(gCountSpecial, &quot;RE_SPECIAL_00006&quot;)
+    		if isnull(v) then counts_MultiBlankLines(style)
+    		counts_Special=gCountSpecial(&quot;RE_SPECIAL_00006&quot;)
+    	case else
+    		ErrorLog (&quot;┌ ▲ Error:  Key &quot; &amp; re.Key &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in  counts_Special !&quot;)
+           	counts_Special=0
+    end select
+end function
+Function Find_Special(oCursor, re as RegExp, style as string)
+	dim v
+    select case re.key
+    	case &quot;RE_SPECIAL_00001&quot;, &quot;RE_SPECIAL_00002&quot;, &quot;RE_SPECIAL_00003&quot;, &quot;RE_SPECIAL_00004&quot;, &quot;RE_SPECIAL_00005&quot;
+    		if gDirection_LastFind=&quot;next&quot; then
+    			Find_Special=find_PageBreak_co(oCursor, re.key, style)
+    		else
+    			Find_Special=find_Back_PageBreak_co(oCursor, re.key, style)
+    		end if
+    	case &quot;RE_SPECIAL_00006&quot;
+    		if gDirection_LastFind=&quot;next&quot; then
+    			Find_Special=find_MultiBlankLines(oCursor, re.key, style)
+    		else
+    			Find_Special=find_Back_MultiBlankLines(oCursor, re.key, style)
+    		end if
+    	case else
+    		ErrorLog (&quot;┌ ▲ Error:  Key &quot; &amp; re.Key &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in  Find_Special !&quot;)
+           	counts_Special=0
+    end select
+end function
+function makeOneAll_Special(re as RegEx, strStyle as string) as boolean
+   Dim pCursor As Object
+   Dim pSearch as object
+   Dim pFound as object
+   Dim result as boolean
+   
+   on error goto makeOneAll_SpecialKO
+   result=True
+   pCursor = thisComponent.getText.createTextCursor()
+   &apos;pCursor = thisComponent.getCurrentController.getViewCursor()
+   gotoStart(pCursor)
+   pFound = Find_Core(pCursor, re, strStyle)
+   Do Until IsNull(pFound)
+   	  pCursor.gotoRange(pFound,false)
+   	  result = make_Special(pCursor, re)
+      if result then
+          pCursor.CollapsetoEnd
+   		  pFound = Find_Core(pCursor, re, strStyle)
+      else
+      	  exit do
+      end if
+   loop
+   makeOneAll_Special=result   
+   on error goto 0
+   exit function
+   
+   makeOneAll_SpecialKO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in makeOneAll_Special !&quot;)
+   makeOneAll_Special = False
+   On Error Goto 0   
+End Function
+Function make_Special(oCursor, re as RegEx) as boolean
+    dim v
+    select case re.key
+    	Case &quot;RE_SPECIAL_00001&quot;
+    		ocursor.string=&quot;&quot;
+    		make_Special=True
+    	Case &quot;RE_SPECIAL_00002&quot;
+    		oCursor.BreakType = com.sun.star.style.BreakType.NONE
+    		make_Special=True
+    	Case &quot;RE_SPECIAL_00003&quot;
+    		ocursor.string=&quot;&quot;
+    		make_Special=True
+    	Case &quot;RE_SPECIAL_00004&quot;
+    		ocursor.string=&quot;&quot;
+    		make_Special=True
+    	Case &quot;RE_SPECIAL_00005&quot;
+    		delete_bullet_dialog(oCursor)
+    		make_Special=True
+    	Case &quot;RE_SPECIAL_00006&quot;
+    		ocursor.setstring(chr(13))
+    		make_Special=True
+    	case else
+    		ErrorLog (&quot;┌ ▲ Error:  Key &quot; &amp; re.Key &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in  make_Special !&quot;)
+           	make_Special=false
+    end select
+end Function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   Page Breaks
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub counts_PageBreak_co(style as string)
+  Dim iCnt As Long
+  
+  Dim oCursor as Variant
+  Dim s As String
+  dim cPageBreaks as integer
+  dim lBlank as integer
+  dim lBlank_before_headiner as integer
+  dim lBlank_after_headiner as integer
+  dim cDialogList as integer
+  dim cStyle as string
+
+  on error goto counts_PageBreak_coKO
+  
+  oCursor = thisComponent.getText.createTextCursor()
+  oCursor.GoToStart(False)
+  
+  s=&quot;txt_paragraph&quot;
+  cPageBreaks=0
+  lBlank=0
+  lBlank_before_headiner=0
+  lBlank_after_headiner=0
+  cDialogList=0
+  
+  Do
+     If NOT oCursor.gotoEndOfParagraph(True) Then Exit Do
+     If oCursor.BreakType &lt;&gt; com.sun.star.style.BreakType.NONE Then
+        if trim(s)=&quot;&quot; then 
+       	  if style=&quot;&quot; or style = cstyle then lBlank = lBlank + 1
+        end if
+        cPageBreaks=cPageBreaks+1
+     End If
+     &apos;If oCursor.supportsService(&quot;com.sun.star.text.Paragraph&quot;) Then
+     	if lcase(left(cstyle,8))=&quot;heading &quot; then
+		    if trim(ocursor.string)=&quot;&quot; then 
+       	  		if style=&quot;&quot; or style = ocursor.ParaStyleName then lBlank_after_headiner = lBlank_after_headiner + 1
+        	end if
+		end if
+	 	if lcase(left(ocursor.ParaStyleName,8))=&quot;heading &quot; then
+		    if trim(s)=&quot;&quot; then 
+       	  		if style=&quot;&quot; or style = cstyle then lBlank_before_headiner = lBlank_before_headiner + 1
+        	end if
+		end if   		
+	 &apos;end if
+	 If oCursor.ListId &lt;&gt; &quot;&quot; then
+	 	if InStr(oCursor.ParaConditionalStyleName, &quot;Heading&quot;) = 0 Then
+	 		if ocursor.ListLabelString=&quot;&quot; then
+	 			if instr(ocursor.NumberingStyleName,&quot;WWNum&quot;)&gt;0 then
+	 				if style=&quot;&quot; or style = ocursor.ParaStyleName then cDialogList=cDialogList+1
+	 			end if
+	 			if len(ocursor.NumberingStyleName)&gt;10 then
+	 				if style=&quot;&quot; or style = ocursor.ParaStyleName then cDialogList=cDialogList+1
+	 			end if
+	 		end if	
+	 	end if
+	 end if
+	 cStyle=ocursor.ParaStyleName
+     s=ocursor.string
+  Loop Until NOT oCursor.gotoNextParagraph(False)
+  gCountSpecial.add lBlank, &quot;RE_SPECIAL_00001&quot;
+  gCountSpecial.add cPageBreaks, &quot;RE_SPECIAL_00002&quot;
+  gCountSpecial.add lBlank_before_headiner, &quot;RE_SPECIAL_00003&quot;
+  gCountSpecial.add lBlank_after_headiner, &quot;RE_SPECIAL_00004&quot;  
+  gCountSpecial.add cDialogList, &quot;RE_SPECIAL_00005&quot;  
+  on error goto 0
+  exit sub
+   
+  counts_PageBreak_coKO:
+  ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ incounts_PageBreak_co !&quot;)
+  On Error Goto 0   
+end sub
+
+function find_PageBreak_co(oCursor, key, style)
+  Dim s As String
+  dim r
+  dim cur
+  dim cStyle as string
+  
+  on error goto find_PageBreak_coKO
+  
+  cur = thisComponent.getText.createTextCursor()
+  cur.gotorange(oCursor.getEnd,false)
+  cur.CollapsetoEnd
+  
+  r=nothing
+  s=&quot;txt_paragraph&quot;
+  
+  Do while cur.gotoNextParagraph(False)
+     If NOT cur.gotoEndOfParagraph(True) Then Exit Do
+     If cur.BreakType &lt;&gt; com.sun.star.style.BreakType.NONE Then
+       if trim(s)=&quot;&quot; and key=&quot;RE_SPECIAL_00001&quot; then 
+         if style=&quot;&quot; or style = cstyle then
+         	cur.gotoPreviousParagraph(false)
+       	 	cur.gotoNextParagraph(True)
+       	 	r=cur
+       	 	exit do
+       	 end if
+       end if
+       if key=&quot;RE_SPECIAL_00002&quot; then 
+       	 cur.gotoStartOfParagraph(False)
+       	 cur.gotoEndOfParagraph(True)
+       	 r=cur
+       	 exit do
+       end if
+     End If
+     if key=&quot;RE_SPECIAL_00004&quot; then 
+     	if lcase(left(cstyle,8))=&quot;heading &quot; then
+		    if trim(cur.string)=&quot;&quot; then 
+       	  		if style=&quot;&quot; or style = cur.ParaStyleName then
+       	 			cur.gotoPreviousParagraph(false)
+       	 			cur.gotoEndOfParagraph(false)
+       	  			cur.gotoNextParagraph(True)
+       	 			r=cur
+       	 			exit do
+       	 		end if
+        	end if
+		end if
+	 end if
+	 if key=&quot;RE_SPECIAL_00003&quot; then 
+	 	if lcase(left(cur.ParaStyleName,8))=&quot;heading &quot; then
+		    if trim(s)=&quot;&quot; then 
+       	  		if style=&quot;&quot; or style = cstyle then
+       	  			cur.gotoPreviousParagraph(false)
+       	  			cur.gotoNextParagraph(True)
+       	 			&apos;cur.collapsetoend
+       	 			r=cur
+       	 			exit do
+       	  		end if
+        	end if
+		end if
+	 end if 
+	 if key=&quot;RE_SPECIAL_00005&quot; then
+		 If cur.ListId &lt;&gt; &quot;&quot; then
+		 	if InStr(cur.ParaConditionalStyleName, &quot;Heading&quot;) = 0 Then
+		 		if cur.ListLabelString=&quot;&quot; then
+		 			if instr(cur.NumberingStyleName,&quot;WWNum&quot;)&gt;0 then
+		 				if style=&quot;&quot; or style = cur.ParaStyleName then 
+		 					r=cur
+		 					exit do
+		 				end if
+		 			end if
+		 			if len(cur.NumberingStyleName)&gt;10 then
+		 				if style=&quot;&quot; or style = cur.ParaStyleName then 
+		 					r=cur
+		 					exit do
+		 				end if
+		 			end if
+		 		end if	
+		 	end if
+		 end if
+	 end if
+     
+     cStyle=cur.ParaStyleName
+     s=cur.string
+  Loop &apos;Until NOT cur.gotoNextParagraph(False)
+  find_PageBreak_co=r   
+  on error goto 0
+  exit function
+   
+  find_PageBreak_coKO:
+  ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in find_PageBreak_co !&quot;)
+  find_PageBreak_co = Null
+  On Error Goto 0   
+end function
+function find_Back_PageBreak_co(oCursor, key, style)
+  Dim s As String
+  dim r
+  dim cur
+  dim cStyle as string
+  dim LastIsBreakType as boolean
+  
+  on error goto find_Back_PageBreak_coKO
+  
+  cur = thisComponent.getText.createTextCursor()
+  cur.gotorange(oCursor.getEnd,false)
+  cur.CollapsetoEnd
+  
+  r=nothing
+  s=&quot;txt_paragraph&quot;
+  LastIsBreakType=False
+  Do while cur.gotoPreviousParagraph(False)
+     If NOT cur.gotoEndOfParagraph(True) Then Exit Do
+     
+     if LastIsBreakType then
+     	if trim(cur.string)=&quot;&quot; and key=&quot;RE_SPECIAL_00001&quot; then 
+          if style=&quot;&quot; or style = cur.ParaStyleName then
+          	cur.gotoStartOfParagraph(False)
+         	&apos;cur.gotoPreviousParagraph(false)
+       	 	cur.gotoNextParagraph(True)
+       	 	r=cur
+       	 	exit do
+       	  end if
+        end if
+     end if
+     
+     If cur.BreakType &lt;&gt; com.sun.star.style.BreakType.NONE Then
+        LastIsBreakType=True
+        if key=&quot;RE_SPECIAL_00002&quot; then 
+       	   cur.gotoStartOfParagraph(False)
+       	   cur.gotoEndOfParagraph(True)
+       	   r=cur
+       	 exit do
+       end if
+     else
+     	LastIsBreakType=False
+     end if       
+
+     if key=&quot;RE_SPECIAL_00003&quot; then 
+     	if lcase(left(cstyle,8))=&quot;heading &quot; then
+		    if trim(cur.string)=&quot;&quot; then 
+       	  		if style=&quot;&quot; or style = cur.ParaStyleName then
+       	 			&apos;cur.gotoPreviousParagraph(false)
+       	 			&apos;cur.gotoEndOfParagraph(false)
+       	 			
+       	  			cur.gotoNextParagraph(True)
+       	 			r=cur
+       	 			exit do
+       	 		end if
+        	end if
+		end if
+	 end if
+	 if key=&quot;RE_SPECIAL_00004&quot; then 
+	 	if lcase(left(cur.ParaStyleName,8))=&quot;heading &quot; then
+		    if trim(s)=&quot;&quot; then 
+       	  		if style=&quot;&quot; or style = cstyle then
+       	  			&apos;cur.gotoPreviousParagraph(false)
+       	  			cur.gotoEndOfParagraph(false)
+       	  			cur.gotoNextParagraph(True)
+       	 			&apos;cur.collapsetoend
+       	 			r=cur
+       	 			exit do
+       	  		end if
+        	end if
+		end if
+	 end if 
+	 
+	 if key=&quot;RE_SPECIAL_00005&quot; then
+		 If cur.ListId &lt;&gt; &quot;&quot; then
+		 	if InStr(cur.ParaConditionalStyleName, &quot;Heading&quot;) = 0 Then
+		 		if cur.ListLabelString=&quot;&quot; then
+		 			if instr(cur.NumberingStyleName,&quot;WWNum&quot;)&gt;0 then
+		 				if style=&quot;&quot; or style = cur.ParaStyleName then 
+		 					r=cur
+		 					exit do
+		 				end if
+		 			end if
+		 			if len(cur.NumberingStyleName)&gt;10 then
+		 				if style=&quot;&quot; or style = cur.ParaStyleName then 
+		 					r=cur
+		 					exit do
+		 				end if
+		 			end if
+		 		end if	
+		 	end if
+		 end if
+	 end if
+     
+     cStyle=cur.ParaStyleName
+     s=cur.string
+  Loop &apos;Until NOT cur.gotoNextParagraph(False)
+  find_Back_PageBreak_co=r   
+  on error goto 0
+  exit function
+   
+  find_Back_PageBreak_coKO:
+  ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in find_Back_PageBreak_co !&quot;)
+  On Error Goto 0   
+end function
+
+sub delete_bullet_dialog(oCursor)
+    rem ----------------------------------------------------------------------
+	rem define variables
+	dim document   as object
+	dim dispatcher as object
+	rem ----------------------------------------------------------------------
+	rem get access to the document
+	document   = ThisComponent.CurrentController.Frame
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	
+	rem ----------------------------------------------------------------------
+	dim args1(0) as new com.sun.star.beans.PropertyValue
+	args1(0).Name = &quot;On&quot;
+	args1(0).Value = false
+
+	dispatcher.executeDispatch(document, &quot;.uno:DefaultBullet&quot;, &quot;&quot;, 0, args1())
+	ocursor.string=&quot;— &quot; &amp; ocursor.string  
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   MultiBlankLines
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub counts_MultiBlankLines(style as string)
+  Dim iCnt As Long
+  
+  Dim oCursor as Variant
+  dim pcursor
+  Dim s As String
+  dim lMultiBlank as integer
+  dim pSearch
+  dim pFound
+  dim cline as integer	
+  dim contenutoenum
+  dim contenuto
+  dim lineavuota as boolean
+  on error goto counts_MultiBlankLinesKO
+  
+  
+  oCursor = thisComponent.getText.createTextCursor()
+  oCursor.GoToStart(False)
+  
+  s=&quot;txt_paragraph&quot;
+  lMultiBlank=0
+
+  pSearch = thisComponent.createSearchDescriptor
+  pSearch.SearchRegularExpression = True
+  pSearch.SearchCaseSensitive=False
+  pSearch.SearchString=&quot;^$&quot;
+  pSearch.SearchBackwards = False
+  pFound = thisComponent.findFirst(pSearch)
+  Do while not isNull(pFound)
+  	 cline=0
+     oCursor.gotoRange(pFound.getstart,false)   
+     if ocursor.ParaStyleName = style or style=&quot;&quot; then
+     	Do while oCursor.gotoNextParagraph(False)
+     	   oCursor.gotoEndOfParagraph(True)
+     	   if trim(ocursor.string)=&quot;&quot; and (ocursor.ParaStyleName = style or style=&quot;&quot;) then 
+       	      	cline=cline+1
+       	   else
+       	      exit do
+           end if
+		Loop 
+		if cline&gt;0 then 
+       	    lMultiBlank=lMultiBlank+1
+       	end if	
+     end if
+     pFound = thisComponent.findnext(oCursor.getend,pSearch)
+  Loop	
+  gCountSpecial.add lMultiBlank, &quot;RE_SPECIAL_00006&quot;
+  on error goto 0
+  exit sub
+   
+  counts_MultiBlankLinesKO:
+  ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in counts_MultiBlankLines !&quot;)
+  On Error Goto 0   
+end sub
+function find_MultiBlankLines(oCursor, key, style)
+    Dim cur as Variant
+  Dim r as Variant
+  Dim check as boolean
+  Dim pSearch as Variant
+  Dim pFound as Variant
+  dim cline as integer    
+ 
+  on error goto find_MultiBlankLinesKO
+ 
+  &apos;creo un textcursor 
+  cur = thisComponent.getText.createTextCursor()
+  &apos;sposto il cursore alla fine del cursore passato alla funzione
+  cur.gotorange(oCursor.getEnd,false)
+  cur.CollapsetoEnd
+  &apos;creo un secondo textcursor che servirà come risultato della funzione
+  r = thisComponent.getText.createTextCursor()
+  &apos;check diventerà vero nel caso si trovi gruppi di linee vuote
+  check=false
+  &apos;creo il searchdescriptor
+  pSearch = thisComponent.createSearchDescriptor
+  pSearch.SearchRegularExpression = True
+  pSearch.SearchCaseSensitive=False
+  pSearch.SearchString=&quot;^$&quot; &apos;regex per righe vuote
+  pSearch.SearchBackwards = False
+ 
+  &apos;eseguo la ricerca
+  pFound = thisComponent.findnext(cur.getend,pSearch)
+  Do while not isNull(pFound)
+     &apos;adesso che è stata trovata una linea vuota
+     &apos;imposto il contatore di linee vuote a 0
+      cline=0
+      &apos;sposto il cursore all&apos;inizio del range trovato
+     cur.gotoRange(pFound.getstart,false)
+     &apos;controllo se lo style del paragrafo sia o come quello passato con style o style sia vuoto
+     if cur.ParaStyleName = style or style=&quot;&quot; then
+        &apos;eseguo un ciclo che avanzerà di un paragrafo a volta
+        Do while cur.gotoNextParagraph(False)
+           &apos;seleziono il paragrafo
+           cur.gotoEndOfParagraph(True)
+           &apos;controllo che sia vuoto e che lo stile sia corrispondente o a quello passato o che style sia vuoto
+           if trim(cur.string)=&quot;&quot; and (cur.ParaStyleName = style or style=&quot;&quot;) then
+                &apos;se si aggiungo uno al contatore delle linee vuote
+                cline=cline+1
+             else
+                &apos;esco dal do loop che continua a ciclare i paragrafi sequenzialmente
+                exit do
+           end if
+        Loop
+        &apos;se il contatore delle linee vuote è maggiore di 0
+        &apos;ho trovato un gruppo di linee vuote
+        if cline&gt;0 then
+           &apos;uso il secondo textcursor(r) per creare un range da inviare come risposta alla function
+           r.gotoRange(pFound.getstart,false)
+           r.gotoRange(cur.getstart,true)
+           &apos;setto check vero perchè ho trovato un gruppo di linee vuote
+           check=true
+           &apos;esco dal do loop che continua a cercare righe vuote
+           exit do
+        end if   
+     end if
+     &apos;se sono qui non ho trovato gruppi di linee vuote e allora eseguo un&apos;altra ricerca dalla fine del cursore
+     pFound = thisComponent.findnext(cur.getend,pSearch)
+  Loop   
+ 
+  if check then
+     find_MultiBlankLines=r   
+  else
+     find_MultiBlankLines=nothing
+  end if
+  on error goto 0
+  exit function
+   
+  find_MultiBlankLinesKO:
+  ErrorLog (&quot;Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;in find_MultiBlankLines !&quot;)
+  find_MultiBlankLines=nothing
+  On Error Goto 0  
+end function
+function find_Back_MultiBlankLines(oCursor, key, style)
+  Dim cur as Variant
+  Dim oText
+  dim r
+  
+  on error goto find_Back_MultiBlankLinesKO
+  
+  oText=ThisComponent.Text 
+  cur = thisComponent.getText.createTextCursor()
+  cur.GotoStart(false)
+  r = nothing
+  cur=find_MultiBlankLines(cur, key, style)
+  Do while not isNull(cur)
+  	If oText.compareRegionEnds(cur,oCursor.start) &lt; 0 then
+    	exit do
+    end if
+    r=cur
+    cur=find_MultiBlankLines(cur, key, style)
+  loop
+  
+  find_Back_MultiBlankLines=r
+  on error goto 0
+  exit function
+   
+  find_Back_MultiBlankLinesKO:
+  ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in find_Back_MultiBlankLines !&quot;)
+  find_Back_MultiBlankLines=nothing
+  On Error Goto 0
+end function
+</script:module>

@@ -1,0 +1,33 @@
+2024/01/15-00:21:42.477 5d5 Recovering log #4
+2024/01/15-00:21:42.889 5d5 Delete type=0 #4
+2024/01/15-00:21:42.889 5d5 Delete type=3 #2
+2024/01/15-00:55:00.795 5d5 Level-0 table #9: started
+2024/01/15-00:55:01.005 5d5 Level-0 table #9: 1362570 bytes OK
+2024/01/15-00:55:01.051 5d5 Delete type=0 #7
+2024/01/15-00:55:37.319 5d4 Compacting 1@1 + 1@2 files
+2024/01/15-00:55:37.380 5d4 Generated table #10@1: 74 keys, 4216 bytes
+2024/01/15-00:55:37.380 5d4 Compacted 1@1 + 1@2 files => 4216 bytes
+2024/01/15-00:55:37.410 5d4 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/15-00:55:37.411 5d4 Delete type=2 #5
+2024/01/15-00:55:37.411 5d4 Delete type=2 #9
+2024/01/15-01:23:55.663 5d5 Level-0 table #12: started
+2024/01/15-01:23:55.767 5d5 Level-0 table #12: 1397894 bytes OK
+2024/01/15-01:23:55.824 5d5 Delete type=0 #8
+2024/01/15-01:24:33.834 5d5 Compacting 1@1 + 1@2 files
+2024/01/15-01:24:33.889 5d5 Generated table #13@1: 72 keys, 5298 bytes
+2024/01/15-01:24:33.889 5d5 Compacted 1@1 + 1@2 files => 5298 bytes
+2024/01/15-01:24:33.917 5d5 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/15-01:24:33.917 5d5 Delete type=2 #12
+2024/01/15-01:24:33.917 5d5 Delete type=2 #10
+2024/01/15-01:39:12.174 5d5 Level-0 table #15: started
+2024/01/15-01:39:12.232 5d5 Level-0 table #15: 721600 bytes OK
+2024/01/15-01:39:12.290 5d5 Delete type=0 #11
+2024/01/15-01:39:12.291 5d5 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2024/01/15-01:39:12.291 5d5 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x02\x01\x03\x01\x0d\x001\x007\x000\x005\x002\x007\x001\x009\x001\x008\x004\x007\x003' @ 79659 : 1
+2024/01/15-01:39:12.292 5d5 Compacting 1@1 + 1@2 files
+2024/01/15-01:39:12.324 5d5 Generated table #16@1: 73 keys, 5748 bytes
+2024/01/15-01:39:12.325 5d5 Compacted 1@1 + 1@2 files => 5748 bytes
+2024/01/15-01:39:12.353 5d5 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/15-01:39:12.354 5d5 Delete type=2 #13
+2024/01/15-01:39:12.354 5d5 Delete type=2 #15
+2024/01/15-01:39:12.355 5d5 Manual compaction at level-1 from '\x00\x02\x01\x03\x01\x0d\x001\x007\x000\x005\x002\x007\x001\x009\x001\x008\x004\x007\x003' @ 79659 : 1 .. (end); will stop at (end)

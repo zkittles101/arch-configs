@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="dlgOverwriteRegEx" dlg:left="256" dlg:top="0" dlg:width="243" dlg:height="269" dlg:closeable="true" dlg:moveable="true">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:font-height="10"/>
+  <dlg:style dlg:style-id="1" dlg:font-height="12" dlg:font-weight="150"/>
+  <dlg:style dlg:style-id="2" dlg:background-color="0xffffff" dlg:font-name="Courier New" dlg:font-stylename="Normale" dlg:font-family="modern"/>
+  <dlg:style dlg:style-id="3" dlg:background-color="0xffffff" dlg:font-name="Courier New" dlg:font-height="9" dlg:font-stylename="Normale" dlg:font-family="modern"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:text dlg:style-id="0" dlg:id="lblMessage1" dlg:tab-index="17" dlg:left="4" dlg:top="5" dlg:width="236" dlg:height="10" dlg:value="Key already present in your RegEx&apos;s List" dlg:align="center"/>
+  <dlg:text dlg:style-id="1" dlg:id="lblMessage2" dlg:tab-index="18" dlg:left="4" dlg:top="15" dlg:width="236" dlg:height="12" dlg:value="General" dlg:align="center"/>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="19" dlg:left="-258" dlg:top="193" dlg:width="249" dlg:height="0"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oKEY" dlg:tab-index="22" dlg:left="49" dlg:top="45" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oVSB" dlg:tab-index="31" dlg:left="49" dlg:top="55" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oFND" dlg:tab-index="30" dlg:left="49" dlg:top="75" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oTXT" dlg:tab-index="29" dlg:left="49" dlg:top="85" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oISR" dlg:tab-index="28" dlg:left="49" dlg:top="95" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="3" dlg:id="lbl_oSNS" dlg:tab-index="27" dlg:left="49" dlg:top="105" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oDUA" dlg:tab-index="26" dlg:left="49" dlg:top="115" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oLB1" dlg:tab-index="25" dlg:left="49" dlg:top="125" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oMD1" dlg:tab-index="24" dlg:left="49" dlg:top="135" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oRP1" dlg:tab-index="23" dlg:left="49" dlg:top="145" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oDR1" dlg:tab-index="33" dlg:left="49" dlg:top="155" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oLB2" dlg:tab-index="36" dlg:left="49" dlg:top="175" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oMD2" dlg:tab-index="35" dlg:left="49" dlg:top="185" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oRP2" dlg:tab-index="34" dlg:left="49" dlg:top="195" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oDR2" dlg:tab-index="38" dlg:left="49" dlg:top="205" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oSL2" dlg:tab-index="37" dlg:left="49" dlg:top="215" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nKEY" dlg:tab-index="39" dlg:left="145" dlg:top="45" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nVSB" dlg:tab-index="48" dlg:left="145" dlg:top="55" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nFND" dlg:tab-index="47" dlg:left="145" dlg:top="75" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nTXT" dlg:tab-index="46" dlg:left="145" dlg:top="85" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nISR" dlg:tab-index="45" dlg:left="145" dlg:top="95" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="3" dlg:id="lbl_nSNS" dlg:tab-index="44" dlg:left="145" dlg:top="105" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nDUA" dlg:tab-index="43" dlg:left="145" dlg:top="115" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nLB1" dlg:tab-index="42" dlg:left="145" dlg:top="125" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nMD1" dlg:tab-index="41" dlg:left="145" dlg:top="135" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nRP1" dlg:tab-index="40" dlg:left="145" dlg:top="145" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nDR1" dlg:tab-index="50" dlg:left="145" dlg:top="155" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nSL1" dlg:tab-index="49" dlg:left="145" dlg:top="165" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nLB2" dlg:tab-index="53" dlg:left="145" dlg:top="175" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nMD2" dlg:tab-index="52" dlg:left="145" dlg:top="185" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nRP2" dlg:tab-index="51" dlg:left="145" dlg:top="195" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nDR2" dlg:tab-index="55" dlg:left="145" dlg:top="205" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nSL2" dlg:tab-index="54" dlg:left="145" dlg:top="215" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_KEY" dlg:tab-index="0" dlg:left="6" dlg:top="45" dlg:width="42" dlg:height="9" dlg:value="Key:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_VSB" dlg:tab-index="9" dlg:left="6" dlg:top="55" dlg:width="42" dlg:height="9" dlg:value="Visible:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_FND" dlg:tab-index="8" dlg:left="6" dlg:top="75" dlg:width="42" dlg:height="9" dlg:value="Find:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_TXT" dlg:tab-index="7" dlg:left="6" dlg:top="85" dlg:width="42" dlg:height="9" dlg:value="Text:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_ISR" dlg:tab-index="6" dlg:left="6" dlg:top="95" dlg:width="42" dlg:height="9" dlg:value="Reg Exp:"/>
+  <dlg:text dlg:style-id="3" dlg:id="lbl_SNS" dlg:tab-index="5" dlg:left="6" dlg:top="105" dlg:width="42" dlg:height="9" dlg:value="Case Sens:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_DUA" dlg:tab-index="4" dlg:left="6" dlg:top="115" dlg:width="42" dlg:height="9" dlg:value="Dual Choise:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_LB1" dlg:tab-index="3" dlg:left="6" dlg:top="125" dlg:width="42" dlg:height="9" dlg:value="Label 1:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_MD1" dlg:tab-index="2" dlg:left="6" dlg:top="135" dlg:width="42" dlg:height="9" dlg:value="Mode 1:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_RP1" dlg:tab-index="1" dlg:left="6" dlg:top="145" dlg:width="42" dlg:height="9" dlg:value="Replace 1:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_DR1" dlg:tab-index="11" dlg:left="6" dlg:top="155" dlg:width="42" dlg:height="9" dlg:value="Direction 1:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oSL1" dlg:tab-index="32" dlg:left="49" dlg:top="165" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_SL1" dlg:tab-index="10" dlg:left="6" dlg:top="165" dlg:width="42" dlg:height="9" dlg:value="Selection 1:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_LB2" dlg:tab-index="14" dlg:left="6" dlg:top="175" dlg:width="42" dlg:height="9" dlg:value="Label 2:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_MD2" dlg:tab-index="13" dlg:left="6" dlg:top="185" dlg:width="42" dlg:height="9" dlg:value="Mode 2:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_RP2" dlg:tab-index="12" dlg:left="6" dlg:top="195" dlg:width="42" dlg:height="9" dlg:value="Replace 2:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_DR2" dlg:tab-index="16" dlg:left="6" dlg:top="205" dlg:width="42" dlg:height="9" dlg:value="Direction 2:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_SL2" dlg:tab-index="15" dlg:left="6" dlg:top="215" dlg:width="42" dlg:height="9" dlg:value="Selection 2:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_TYP" dlg:tab-index="56" dlg:left="6" dlg:top="65" dlg:width="42" dlg:height="9" dlg:value="Type:"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_oTYP" dlg:tab-index="57" dlg:left="49" dlg:top="65" dlg:width="95" dlg:height="9"/>
+  <dlg:text dlg:style-id="2" dlg:id="lbl_nTYP" dlg:tab-index="58" dlg:left="145" dlg:top="65" dlg:width="95" dlg:height="9"/>
+  <dlg:button dlg:id="cmdOverwrite" dlg:tab-index="59" dlg:left="6" dlg:top="230" dlg:width="56" dlg:height="16" dlg:value="Overwrite">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modCopyPasteRegEx.cmdOverwrite_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdNewKey" dlg:tab-index="60" dlg:left="65" dlg:top="230" dlg:width="60" dlg:height="16" dlg:value="Create New Key">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modCopyPasteRegEx.cmdNewKey_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdSkip" dlg:tab-index="61" dlg:left="128" dlg:top="230" dlg:width="56" dlg:height="16" dlg:value="Skip">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modCopyPasteRegEx.cmdSkip_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdStop" dlg:tab-index="62" dlg:left="203" dlg:top="230" dlg:width="38" dlg:height="16" dlg:value="Stop">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modCopyPasteRegEx.cmdStop_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:checkbox dlg:id="chkAll" dlg:tab-index="63" dlg:left="8" dlg:top="251" dlg:width="151" dlg:height="10" dlg:value="Use this action to current queque." dlg:checked="false"/>
+  <dlg:text dlg:id="lblNew" dlg:tab-index="21" dlg:left="145" dlg:top="36" dlg:width="95" dlg:height="8" dlg:value="New RegEx" dlg:align="center"/>
+  <dlg:text dlg:id="lblOld" dlg:tab-index="20" dlg:left="49" dlg:top="36" dlg:width="95" dlg:height="8" dlg:value="Old RegEx" dlg:align="center"/>
+ </dlg:bulletinboard>
+</dlg:window>

@@ -1,0 +1,3 @@
+[2022-08-12 16:00:47.841] [sharedprocess] [warning] No ptyHost heartbeat after 6 seconds
+[2022-08-12 16:00:47.845] [sharedprocess] [info] Starting worker process with pid 13331 (type: fileWatcher, window: 1).
+[2022-08-12 16:00:52.667] [sharedprocess] [info] Deleted from disk hookyqr.beautify /home/zkitty/.vscode-oss/extensions/hookyqr.beautify-1.4.11

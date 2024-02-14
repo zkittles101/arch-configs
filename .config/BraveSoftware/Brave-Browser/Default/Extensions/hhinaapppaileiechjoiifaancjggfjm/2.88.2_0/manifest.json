@@ -1,0 +1,47 @@
+{
+   "background": {
+      "scripts": [ "vendor/require.js", "core/background/requirejs-config.js", "core/background/main.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+         "19": "/icons/page_action_unsupported_19.png",
+         "38": "/icons/page_action_unsupported_38.png"
+      },
+      "default_popup": "/ui/popups/unsupported.html",
+      "default_title": "__MSG_pageActionUnsupported__"
+   },
+   "commands": {
+      "love-song": {
+         "description": "__MSG_hotkeyLoveSong__"
+      },
+      "toggle-connector": {
+         "description": "__MSG_hotkeyToggleConnector__"
+      },
+      "unlove-song": {
+         "description": "__MSG_hotkeyUnloveSong__"
+      }
+   },
+   "content_scripts": [ {
+      "js": [ "connectors/dummy.js" ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_extDescription__",
+   "differential_fingerprint": "1.b42c2b1d0fbbb6d5625e1e889592bc4528ec76c7cc63539abf0f6f375e3c646f",
+   "homepage_url": "https://web-scrobbler.com",
+   "icons": {
+      "128": "icons/icon_chrome_128.png",
+      "16": "icons/icon_generic_16.png",
+      "256": "icons/icon_chrome_256.png",
+      "48": "icons/icon_chrome_48.png",
+      "512": "icons/icon_chrome_512.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDPvRk2TRWcLqM9RsKXmxBHM6hFBHYhUUQfffv/RpRVum6le1VvH5Ld9oRGG5rrBaAt7DDs6IsYKk7TzZoaqq/1ajW+dZsxtvTVZ9ylnwmBZ1yNbe1vYz/2QYthS1lmVhDheLzZwN19eQ0FKkSlejeRZ4+eMcqLrcuf5ReKEDpCXwIDAQAB",
+   "manifest_version": 2,
+   "name": "Web Scrobbler",
+   "options_page": "ui/options/index.html",
+   "permissions": [ "contextMenus", "tabs", "notifications", "storage", "http://*/", "https://*/" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.88.2",
+   "web_accessible_resources": [ "connectors/deezer-dom-inject.js", "connectors/eggs-dom-inject.js", "connectors/musickit-dom-inject.js", "connectors/vk-dom-inject.js", "connectors/yandex-music-dom-inject.js", "connectors/sber-zvuk-dom-inject.js", "*.md" ]
+}

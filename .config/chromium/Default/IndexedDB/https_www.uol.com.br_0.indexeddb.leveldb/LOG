@@ -1,0 +1,6 @@
+2023/10/07-03:39:10.740 3442 Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_www.uol.com.br_0.indexeddb.leveldb since it was missing.
+2023/10/07-03:39:10.888 3442 Delete type=3 #1
+2023/10/07-03:40:51.222 3442 Level-0 table #5: started
+2023/10/07-03:40:51.392 3442 Level-0 table #5: 3320 bytes OK
+2023/10/07-03:40:51.688 3442 Delete type=0 #3
+2023/10/07-03:40:51.689 3442 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

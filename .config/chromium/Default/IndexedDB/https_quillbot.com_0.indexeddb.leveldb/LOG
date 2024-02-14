@@ -1,0 +1,28 @@
+2023/12/19-16:06:31.008 14ac Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_quillbot.com_0.indexeddb.leveldb since it was missing.
+2023/12/19-16:06:31.402 14ac Delete type=3 #1
+2023/12/19-16:06:32.440 14ac Level-0 table #5: started
+2023/12/19-16:06:32.608 14ac Level-0 table #5: 1435 bytes OK
+2023/12/19-16:06:32.674 14ac Delete type=0 #3
+2023/12/19-16:06:32.676 1463 Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/12/19-16:13:20.409 1463 Level-0 table #7: started
+2023/12/19-16:13:20.592 1463 Level-0 table #7: 237876 bytes OK
+2023/12/19-16:13:20.659 1463 Delete type=0 #4
+2023/12/19-16:13:20.673 1463 Manual compaction at level-0 from '\x00\x06\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x07\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/12/19-16:13:54.655 1464 Compacting 1@1 + 1@2 files
+2023/12/19-16:13:54.700 1464 Generated table #8@1: 324 keys, 160414 bytes
+2023/12/19-16:13:54.700 1464 Compacted 1@1 + 1@2 files => 160414 bytes
+2023/12/19-16:13:54.741 1464 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/12/19-16:13:54.742 1464 Delete type=2 #5
+2023/12/19-16:13:54.742 1464 Delete type=2 #7
+2023/12/19-16:30:30.145 1464 Level-0 table #10: started
+2023/12/19-16:30:30.213 1464 Level-0 table #10: 325709 bytes OK
+2023/12/19-16:30:30.272 1464 Delete type=0 #6
+2023/12/19-16:30:30.309 1464 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2023/12/19-16:30:30.309 1464 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x05\x0b\x02\x01\x0c\x00p\x00p\x00h\x00r\x00S\x00e\x00t\x00t\x00i\x00n\x00g\x00s' @ 1701 : 1
+2023/12/19-16:30:30.309 1464 Compacting 1@1 + 1@2 files
+2023/12/19-16:30:30.364 1464 Generated table #11@1: 534 keys, 391102 bytes
+2023/12/19-16:30:30.365 1464 Compacted 1@1 + 1@2 files => 391102 bytes
+2023/12/19-16:30:30.388 1464 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/12/19-16:30:30.389 1464 Delete type=2 #8
+2023/12/19-16:30:30.389 1464 Delete type=2 #10
+2023/12/19-16:30:30.389 1464 Manual compaction at level-1 from '\x00\x05\x0b\x02\x01\x0c\x00p\x00p\x00h\x00r\x00S\x00e\x00t\x00t\x00i\x00n\x00g\x00s' @ 1701 : 1 .. (end); will stop at (end)

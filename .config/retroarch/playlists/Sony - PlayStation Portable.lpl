@@ -1,0 +1,36 @@
+{
+  "version": "1.5",
+  "default_core_path": "",
+  "default_core_name": "",
+  "base_content_directory": "\u000bV",
+  "label_display_mode": 0,
+  "right_thumbnail_mode": 0,
+  "left_thumbnail_mode": 0,
+  "sort_mode": 0,
+  "items": [
+    {
+      "path": "/mnt/DaBox/Emulation/ROMs/PSP/0933 - Call of Duty - Roads to Victory (USA) (En,Ja,Fr,De,Es,It) (v1.03).iso",
+      "label": "Call of Duty - Roads to Victory (USA) (En,Ja,Fr,De,Es,It) (v1.03)",
+      "core_path": "DETECT",
+      "core_name": "DETECT",
+      "crc32": "ULUS-10218|serial",
+      "db_name": "Sony - PlayStation Portable.lpl"
+    },
+    {
+      "path": "/mnt/DaBox/Emulation/ROMs/PSP/0042 - Coded Arms (Asia) (En,Ja) (v1.01) [b].iso",
+      "label": "Coded Arms (Asia) (En,Ja) (v1.01)",
+      "core_path": "DETECT",
+      "core_name": "DETECT",
+      "crc32": "ULAS-42009|serial",
+      "db_name": "Sony - PlayStation Portable.lpl"
+    },
+    {
+      "path": "/mnt/DaBox/Emulation/ROMs/PSP/0712 - Grand Theft Auto - Vice City Stories (USA) (v1.03).iso",
+      "label": "Grand Theft Auto - Vice City Stories (USA) (v1.03)",
+      "core_path": "/usr/lib/libretro/ppsspp_libretro.so",
+      "core_name": "Sony - PlayStation Portable (PPSSPP)",
+      "crc32": "ULUS-10160|serial",
+      "db_name": "Sony - PlayStation Portable.lpl"
+    }
+  ]
+}

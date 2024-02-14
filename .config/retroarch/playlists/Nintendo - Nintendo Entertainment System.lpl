@@ -1,0 +1,19 @@
+{
+  "version": "1.5",
+  "default_core_path": "",
+  "default_core_name": "",
+  "label_display_mode": 0,
+  "right_thumbnail_mode": 0,
+  "left_thumbnail_mode": 0,
+  "sort_mode": 0,
+  "items": [
+    {
+      "path": "/mnt/DaBox/Emulation/ROMs/NES/Donkey Kong (World) (Rev 1)/Donkey Kong (World) (Rev 1).nes",
+      "label": "Donkey Kong (World) (Rev 1)",
+      "core_path": "/usr/lib/libretro/nestopia_libretro.so",
+      "core_name": "Nintendo - NES / Famicom (Nestopia UE)",
+      "crc32": "053014FF|crc",
+      "db_name": "Nintendo - Nintendo Entertainment System.lpl"
+    }
+  ]
+}

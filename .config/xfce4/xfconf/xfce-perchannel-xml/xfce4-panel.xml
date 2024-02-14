@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-panel" version="1.0">
+  <property name="configver" type="int" value="2"/>
+  <property name="panels" type="array">
+    <value type="int" value="3"/>
+    <property name="dark-mode" type="bool" value="true"/>
+    <property name="panel-3" type="empty">
+      <property name="position" type="string" value="p=6;x=683;y=14"/>
+      <property name="size" type="uint" value="27"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="enter-opacity" type="uint" value="91"/>
+      <property name="leave-opacity" type="uint" value="92"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="7"/>
+        <value type="int" value="8"/>
+        <value type="int" value="1"/>
+        <value type="int" value="9"/>
+        <value type="int" value="10"/>
+        <value type="int" value="5"/>
+        <value type="int" value="12"/>
+        <value type="int" value="4"/>
+        <value type="int" value="13"/>
+        <value type="int" value="2"/>
+        <value type="int" value="3"/>
+      </property>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="background-style" type="uint" value="0"/>
+      <property name="enable-struts" type="bool" value="false"/>
+    </property>
+  </property>
+  <property name="plugins" type="empty">
+    <property name="plugin-1" type="string" value="clock">
+      <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
+      <property name="mode" type="uint" value="2"/>
+      <property name="digital-layout" type="uint" value="0"/>
+      <property name="digital-date-font" type="string" value="JetBrainsMono Nerd Font Mono 13"/>
+      <property name="digital-time-font" type="string" value="Sans 10"/>
+    </property>
+    <property name="plugin-2" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      <property name="mpris-players" type="string" value="audacious;chromium.instance10005;chromium.instance1026;chromium.instance102762;chromium.instance10279;chromium.instance10972;chromium.instance11356;chromium.instance11364;chromium.instance1155;chromium.instance1162;chromium.instance11834;chromium.instance1265;chromium.instance1275;chromium.instance12770;chromium.instance12969;chromium.instance13045;chromium.instance1313;chromium.instance1316;chromium.instance13288;chromium.instance1345;chromium.instance1346;chromium.instance1355;chromium.instance1376;chromium.instance1379;chromium.instance1383;chromium.instance1443;chromium.instance1451;chromium.instance1459;chromium.instance1460;chromium.instance1558;chromium.instance1587;chromium.instance1590;chromium.instance16017;chromium.instance1692;chromium.instance17017;chromium.instance17279;chromium.instance1734;chromium.instance1745;chromium.instance1762;chromium.instance1773;chromium.instance1792;chromium.instance1824;chromium.instance18339;chromium.instance1844;chromium.instance1855;chromium.instance1903;chromium.instance1948;chromium.instance19791;chromium.instance20000;chromium.instance2013;chromium.instance2066;chromium.instance20686;chromium.instance2101;chromium.instance21722;chromium.instance21976;chromium.instance22535;chromium.instance2286;chromium.instance23342;chromium.instance2359;chromium.instance24161;chromium.instance24979;chromium.instance2641;chromium.instance2729;chromium.instance28062;chromium.instance28631;chromium.instance2892;chromium.instance3025;chromium.instance30358;chromium.instance30638;chromium.instance31097;chromium.instance31696;chromium.instance3321;chromium.instance3358;chromium.instance34393;chromium.instance35812;chromium.instance3775;chromium.instance3814;chromium.instance3932;chromium.instance3952;chromium.instance40770;chromium.instance41509;chromium.instance42729;chromium.instance44106;chromium.instance4525;chromium.instance47146;chromium.instance4876;chromium.instance49311;chromium.instance5005;chromium.instance5113;chromium.instance5131;chromium.instance53862;chromium.instance57466;chromium.instance5993;chromium.instance6454;chromium.instance64983;chromium.instance6643;chromium.instance6684;chromium.instance6813;chromium.instance6956;chromium.instance73364;chromium.instance7445;chromium.instance7577;chromium.instance7687;chromium.instance8769;chromium.instance93578;chromium.instance9368;chromium.instance9548;chromium.instance9715;chromium.instance9849;firefox.instance1081;firefox.instance1113;firefox.instance11595;firefox.instance1182;firefox.instance1210;firefox.instance1219;firefox.instance1221;firefox.instance123167;firefox.instance1232;firefox.instance12540;firefox.instance1275;firefox.instance1296;firefox.instance1304;firefox.instance1309;firefox.instance13409;firefox.instance1354;firefox.instance1366;firefox.instance1387;firefox.instance1389;firefox.instance1460;firefox.instance1477;firefox.instance1480;firefox.instance1510;firefox.instance1607;firefox.instance16075;firefox.instance1641;firefox.instance1660;firefox.instance1680;firefox.instance1744;firefox.instance17809;firefox.instance18099;firefox.instance1871;firefox.instance1881;firefox.instance18955;firefox.instance19046;firefox.instance19694;firefox.instance20044;firefox.instance2036;firefox.instance2077;firefox.instance2124;firefox.instance2190;firefox.instance22814;firefox.instance2285;firefox.instance2289;firefox.instance2346;firefox.instance2369;firefox.instance2404;firefox.instance25208;firefox.instance2678;firefox.instance2858;firefox.instance28840;firefox.instance29698;firefox.instance30998;firefox.instance3183;firefox.instance31982;firefox.instance3215;firefox.instance3484;firefox.instance3526;firefox.instance39165;firefox.instance3942;firefox.instance3944;firefox.instance4026;firefox.instance4030;firefox.instance4211;firefox.instance45690;firefox.instance4571;firefox.instance45901;firefox.instance4864;firefox.instance5072;firefox.instance52018;firefox.instance5279;firefox.instance5570;firefox.instance5843;firefox.instance6094;firefox.instance6308;firefox.instance66333;firefox.instance6888;firefox.instance71532;firefox.instance7488;firefox.instance79985;firefox.instance8233;firefox.instance8318;firefox.instance8887;firefox.instance904;firefox.instance931;firefox.instance9599;firefox.instance9692;Lollypop;spotify;tdesktop;vlc"/>
+      <property name="known-players" type="string" value="Audacious;Firefox Web Browser;floorp;Spotify"/>
+    </property>
+    <property name="plugin-4" type="string" value="systray">
+      <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (47%)"/>
+        <value type="string" value="redshift-gtk"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (82%)"/>
+        <value type="string" value="pulseaudio system tray"/>
+        <value type="string" value="pasystray"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (68%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (70%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (72%)"/>
+        <value type="string" value="audacious"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (76%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (69%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (78%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (77%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (66%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (65%)"/>
+        <value type="string" value="notes"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (63%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (71%)"/>
+        <value type="string" value="free download manager"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (73%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (81%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (100%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (87%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (80%)"/>
+        <value type="string" value="javaembeddedframe"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (79%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (88%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (74%)"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (75%)"/>
+        <value type="string" value="xfce4-power-manager"/>
+        <value type="string" value="thunar"/>
+        <value type="string" value="ibus-ui-gtk3"/>
+        <value type="string" value="wi-fi network connection “sintayehu” active: sintayehu (84%)"/>
+        <value type="string" value="shutter"/>
+        <value type="string" value="networkmanager applet"/>
+        <value type="string" value="ibus panel"/>
+      </property>
+      <property name="known-items" type="array">
+        <value type="string" value="spotify-client"/>
+        <value type="string" value="qBittorrent"/>
+        <value type="string" value="64Gram"/>
+        <value type="string" value="CopyQ_copyq"/>
+        <value type="string" value="copyq"/>
+        <value type="string" value="dropbox-client-9923"/>
+        <value type="string" value="Proton VPN Tray"/>
+        <value type="string" value="dropbox-client-14683"/>
+        <value type="string" value="dropbox-client-98083"/>
+        <value type="string" value="dropbox-client-2524"/>
+        <value type="string" value="aw-qt"/>
+        <value type="string" value="dropbox-client-23197"/>
+        <value type="string" value="dropbox-client-10051"/>
+        <value type="string" value="vlc"/>
+        <value type="string" value="dropbox-client-1171"/>
+        <value type="string" value="SimpleScreenRecorder"/>
+        <value type="string" value="redshift"/>
+        <value type="string" value="chrome_status_icon_1"/>
+        <value type="string" value="dropbox-client-8894"/>
+        <value type="string" value="dropbox-client-24931"/>
+        <value type="string" value="dropbox-client-24058"/>
+        <value type="string" value="Outline1"/>
+        <value type="string" value="KeePassXC"/>
+        <value type="string" value="Free Download Manager"/>
+        <value type="string" value="TelegramDesktop"/>
+        <value type="string" value="Audacious"/>
+      </property>
+    </property>
+    <property name="plugin-5" type="string" value="pager">
+      <property name="rows" type="uint" value="1"/>
+      <property name="miniature-view" type="bool" value="false"/>
+      <property name="numbering" type="bool" value="false"/>
+    </property>
+    <property name="plugin-7" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-8" type="string" value="separator"/>
+    <property name="plugin-9" type="string" value="separator"/>
+    <property name="plugin-10" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-12" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-13" type="string" value="power-manager-plugin"/>
+    <property name="plugin-3" type="string" value="netload"/>
+  </property>
+</channel>

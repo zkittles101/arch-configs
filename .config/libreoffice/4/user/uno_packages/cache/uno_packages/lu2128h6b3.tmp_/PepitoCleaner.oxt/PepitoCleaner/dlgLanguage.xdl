@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="dlgLanguage" dlg:left="251" dlg:top="67" dlg:width="198" dlg:height="235" dlg:closeable="true" dlg:moveable="true">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:border="simple"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="lblLanguageUsed" dlg:tab-index="7" dlg:left="2" dlg:top="4" dlg:width="194" dlg:height="9" dlg:value="Linguaggio Usato" dlg:align="center"/>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstLanguageUsed" dlg:tab-index="8" dlg:left="2" dlg:top="14" dlg:width="194" dlg:height="12" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditLanguage.lstLanguageUsed_change?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstLanguageVisualized" dlg:tab-index="2" dlg:left="2" dlg:top="178" dlg:width="194" dlg:height="12" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditLanguage.lstLanguageVisualized_change?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="0" dlg:id="lstOriginal" dlg:tab-index="0" dlg:left="2" dlg:top="43" dlg:width="194" dlg:height="116">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditLanguage.lstOrginal_change?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:text dlg:id="lblOriginalString" dlg:tab-index="1" dlg:left="2" dlg:top="33" dlg:width="194" dlg:height="9" dlg:value="Stringhe originali" dlg:align="center"/>
+  <dlg:text dlg:id="lblEditString" dlg:tab-index="9" dlg:left="2" dlg:top="167" dlg:width="194" dlg:height="9" dlg:value="Edit Stringa" dlg:align="center"/>
+  <dlg:button dlg:id="butCreateLanguage" dlg:tab-index="4" dlg:left="2" dlg:top="222" dlg:width="107" dlg:height="12" dlg:value="Create &apos;language_it&apos;">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditLanguage.butCreate_click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:textfield dlg:style-id="0" dlg:id="txtEdit" dlg:tab-index="3" dlg:left="2" dlg:top="193" dlg:width="173" dlg:height="20"/>
+  <dlg:button dlg:id="butOK" dlg:tab-index="5" dlg:left="177" dlg:top="193" dlg:width="20" dlg:height="20" dlg:value="OK">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditLanguage.butOk_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="butExit" dlg:tab-index="6" dlg:left="133" dlg:top="222" dlg:width="64" dlg:height="12" dlg:value="Exit">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditLanguage.butExit_click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+ </dlg:bulletinboard>
+</dlg:window>

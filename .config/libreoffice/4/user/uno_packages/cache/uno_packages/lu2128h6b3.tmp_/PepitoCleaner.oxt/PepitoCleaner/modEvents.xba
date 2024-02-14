@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modEvents" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+&apos;Type
+Type WordElement
+	Key as String
+    Count as integer
+    Txt as string
+    RE_Key as string
+End Type
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   Option
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Sub opt_butLanguages_Click(event as object)
+	gDlgMain.setVisible(false) 
+	initEditLanguage
+	gDlgMain.setVisible(true) 
+end sub
+Sub opt_butShowPath_Click(event as object)
+	dim s as string
+	s= gLang.item(&quot;dialog_option_0002&quot;).txt &amp; chr(13) &amp; &quot;&apos;&quot; &amp; extensionLocation() &amp; &quot;&apos;&quot;
+	MsgBox(s, 64 , gLang.item(&quot;dialog_option_0001&quot;).txt)
+end sub
+Sub opt_fontSize_Change(event as object)
+	if gBlockEvent then exit sub
+	virtual_fontSize_Change
+end sub
+Sub opt_cmbUseClipboard_Change(event as object)
+	if gBlockEvent then exit sub
+	virtual_useClipboard_Change
+end sub
+sub opt_goSite(event as object)
+	Dim sURL as String
+	Dim oSvc as Object
+	Dim OOLang As string
+	OOLang = GetLanguage
+	oSvc = createUnoService(&quot;com.sun.star.system.SystemShellExecute&quot;)
+	sURL = &quot;http://pepitoweb.altervista.it/pepito_cleaner/index.php?l=&quot; &amp; OOLang
+	oSvc.execute(sURL, &quot;&quot;, 0)
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   Header
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub hea_lstList_Change(event as object)
+	if gBlockEvent then exit sub
+	change_direction(&quot;next&quot;)
+	virtual_Find_Header_Click
+	showButtonSubMenu(flagButtonSubMenu)
+end sub
+sub hea_lstList_Click(event as object)
+	if gBlockEvent then exit sub
+	hea_lstList_Change(event)
+end sub
+sub hea_butExecute_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_Header_Execute_Click
+	showButtonSubMenu(flagButtonSubMenu)
+end sub
+sub sm_hea_style_Change(event as object)
+	if gBlockEvent then exit sub
+	virtual_Header_Style_Change
+	showDialog
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   Warning
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub war_cmbList_Change(event as object)
+	if gBlockEvent then exit sub
+	showDialog
+	&apos;popolate_war_lstList
+end sub
+sub war_lstList_Change(event as object)
+	if gBlockEvent then exit sub
+	change_direction(&quot;next&quot;)
+	virtual_Find_Warning_Click
+	showButtonSubMenu(flagButtonSubMenu)
+end sub
+sub war_lstList_Click(event as object)
+	if gBlockEvent then exit sub
+	war_lstList_Change(event)
+end sub
+sub sm_war_make_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_Make_Warning_Click(gdlgMain.getControl(&quot;sm_war_text&quot;).Text)
+end sub
+sub sm_war_ignore_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_AddDictionary_Warning_Click(&quot;IgnoreAllList&quot;)
+	showDialog
+end sub
+sub sm_war_dictionary_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_AddDictionary_Warning_Click(&quot;standard.dic&quot;)
+	showDialog
+end sub
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   Hyphenation
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub hyp_lstList_Change(event as object)
+	if gBlockEvent then exit sub
+	change_direction(&quot;next&quot;)
+	virtual_Find_Hyphenation_Click
+	showButtonSubMenu(flagButtonSubMenu)
+end sub
+sub hyp_lstList_Click(event as object)
+	if gBlockEvent then exit sub
+	hyp_lstList_Change(event)
+end sub
+sub sm_hyp_cancel_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_Make_Hyphenation_Click(&quot;&quot;)
+end sub
+sub sm_hyp_space_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_Make_Hyphenation_Click(&quot; &quot;)
+end sub
+sub sm_hyp_replace_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_Make_Hyphenation_Click(&quot;–&quot;)
+end sub
+sub sm_hyp_ignore_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_AddDictionary_Hyphenation_Click(&quot;IgnoreAllList&quot;)
+	showDialog
+end sub
+sub sm_hyp_dictionary_Click(event as object)
+	if gBlockEvent then exit sub
+	virtual_AddDictionary_Hyphenation_Click(&quot;standard.dic&quot;)
+	showDialog
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   Style
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub sty_lstList_Change(event as object)
+	if gBlockEvent then exit sub
+	virtual_FindStyle_Click
+	showButtonSubMenu(flagButtonSubMenu)
+end sub
+sub sty_lstList_Click(event as object)
+	if gBlockEvent then exit sub
+	sty_lstList_Change(event)
+end sub
+Sub sty_lstList_KeyDown(Event as object)
+    if ubound(gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemsPos)=0 then 
+       if lcase(Event.KeyChar)=&quot;n&quot; then
+          sm_sty_next_Click(event)
+       End if
+       if lcase(Event.KeyChar)=&quot;p&quot; then
+          sm_sty_prev_Click(event)
+       End if
+       if lcase(Event.KeyChar)=&quot;m&quot; then
+          sm_sty_make_Click(event)
+       End if
+       if lcase(Event.KeyChar)=&quot;z&quot; then
+          virtual_Undo_Click
+       End if
+    end if
+End Sub
+sub sm_sty_next_Click(event as object)
+	change_direction(&quot;next&quot;)
+	virtual_FindStyle_Click
+end sub
+sub sm_sty_prev_Click(event as object)
+	change_direction(&quot;prev&quot;)
+	virtual_FindStyle_Click
+end sub
+sub sm_sty_make_Click(event as object)
+	virtual_MakeStyle_Click
+end sub
+sub sm_sty_makeAll_Click(event as object)
+	change_direction(&quot;next&quot;)
+	virtual_MakeAllStyle_Click
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   FIND REGEX_GNERAL
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub fin_cmbStyle_Change(event as object)
+	if gBlockEvent then exit sub
+	showDialog
+end sub
+sub fin_lstList_Change(event as object)
+	if gBlockEvent then exit sub
+	virtual_Find_Click
+	showButtonSubMenu(flagButtonSubMenu)
+end sub
+Sub fin_lstList_KeyDown(Event as object)
+    if ubound(gdlgMain.getControl(&quot;fin_lstList&quot;).getSelectedItemsPos)=0 then 
+       if lcase(Event.KeyChar)=&quot;n&quot; then
+          sm_fin_next_Click(event)
+       End if
+       if lcase(Event.KeyChar)=&quot;p&quot; then
+          sm_fin_prev_Click(event)
+       End if
+       if lcase(Event.KeyChar)=&quot;m&quot; then
+          virtual_Make_Click(false)
+       End if
+       if lcase(Event.KeyChar)=&quot;,&quot; and gdlgMain.getControl(&quot;sm_fin_make2&quot;).isvisible then
+          virtual_Make_Click(true)
+       End if
+       if lcase(Event.KeyChar)=&quot;z&quot; then
+          virtual_Undo_Click
+       End if
+    end if
+End Sub
+sub sm_fin_Undo_Click(event as object)
+	virtual_Undo_Click
+end sub
+sub sm_fin_next_Click(event as object)
+	change_direction(&quot;next&quot;)
+	virtual_Find_Click
+end sub
+sub sm_fin_prev_Click(event as object)
+	change_direction(&quot;prev&quot;)
+	virtual_Find_Click
+end sub
+sub sm_fin_make_Click(event as object)
+	&apos;gDirection_LastFind=&quot;next&quot;
+	virtual_Make_Click(false)
+end sub
+sub sm_fin_make_dual_Click(event as object)
+	&apos;gDirection_LastFind=&quot;next&quot;
+	virtual_Make_Click(true)
+end sub
+sub sm_fin_makeAll_Click(event as object)
+	change_direction(&quot;next&quot;)
+	virtual_MakeAll_Click(false)
+end sub
+sub sm_fin_makeAll_Dual_Click(event as object)
+	change_direction(&quot;next&quot;)
+	virtual_MakeAll_Click(true)
+end sub
+sub fin_lstList_Click(event as object)
+	if gBlockEvent then exit sub
+	fin_lstList_Change(event)
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   RegEx
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub reg_cmbList_Change(event as object)
+	if popolateSelected_reg then
+		showButtonSubMenu(flagButtonSubMenu)
+	end if
+end sub
+Sub reg_lstList_Click(event as object)
+    showButtonSubMenu(flagButtonSubMenu)
+End Sub
+sub reg_save_Click(event as object)
+	regex_Save(true)
+End Sub
+Sub reg_paste_Click(event as object)
+	gDlgMain.setVisible(false) 
+	if initPasteRegEx then
+	   PasteRegEx(getPasteRegEx)
+	   gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(False)
+	   popolateSelected
+	   gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(True)
+	   showButtonSubMenu(flagButtonSubMenu)
+	end if
+	gDlgMain.setVisible(true) 
+end sub
+Sub reg_copy_Click(event as object)
+	dim r
+	dim n as integer
+	dim msg as string
+	dim pCollRE
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+		msg=DecodeMsgBox(gLang.item(&quot;dialog_cp_012&quot;).txt)
+		r=msgbox(msg,35,gLang.item(&quot;dialog_cp_003&quot;).txt)
+		select case r
+			case 6 &apos;yes
+				CopyAllRegExToClipboard(getRegExListString)
+			case 7 &apos;no
+				pCollRE=getRegExCollection
+				CopyRegExToClipboard(pCollRE(n+1),getRegExListString)
+			case else
+				
+		end select
+	else
+		CopyAllRegExToClipboard(getRegExListString)
+	end if
+end sub
+sub reg_restore_Click(event as object)
+	regex_Restore(True)
+End Sub
+Sub sm_reg_on_off_Click (event as object)
+	dim n as integer	
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+		regex_Toggle_VisibleInvisible(n)
+		gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(False)
+		popolateSelected
+		gdlgMain.getControl(&quot;reg_lstList&quot;).selectItemPos(n, True)
+		gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(True)
+		showButtonSubMenu(flagButtonSubMenu)
+	end if
+End Sub
+Sub sm_reg_up_down_Click (event as object)
+	dim n as integer
+	Dim pRegEx
+	
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+		pRegEx=getRegExCollection
+	    if instr(Event.Source.Model.Name,&quot;down&quot;)&gt;0 then
+	    	if n&lt;pRegEx.Count then regex_Up_or_Down(n,&quot;DOWN&quot;)
+	    	&apos;n=n+1
+	    else
+	    	if n&gt;0 then regex_Up_or_Down(n,&quot;UP&quot;)
+	    	n=n-2
+	    end if
+		gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(False)
+		popolateSelected
+		gdlgMain.getControl(&quot;reg_lstList&quot;).selectItemPos(n, True)
+		gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(True)
+		showButtonSubMenu(flagButtonSubMenu)
+	end if
+End Sub
+Sub sm_reg_edit_Click (event as object)
+	dim n as integer
+	dim r as boolean
+	dim re as RegEx
+	Dim pRegEx
+	
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+		pRegEx=getRegExCollection
+    	gDlgMain.setVisible(False)
+   		r=initEditRegEx(false,pRegEx(n+1))
+   		if r then
+   	    	re = getEditRegExResult
+   	    	regex_mod_RegEx(n,re)
+			popolateSelected
+			gdlgMain.getControl(&quot;reg_lstList&quot;).selectItemPos(n, True)
+			showButtonSubMenu(flagButtonSubMenu)
+   		end if
+   		gDlgMain.setVisible(true)  
+    end if
+end sub
+Sub sm_reg_remove_Click(event as object)
+	dim n as integer
+	dim key as string
+	Dim re as RegEx
+	Dim pRegEx
+	
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+		pRegEx=getRegExCollection
+		set re=pRegEx.Item(n+1)
+	    key=re.Key
+	    pRegEx.Remove(key)
+		gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(False)
+		popolateSelected
+		gdlgMain.getControl(&quot;reg_lstList&quot;).SetVisible(True)
+		showButtonSubMenu(flagButtonSubMenu)
+	end if
+end sub
+Sub sm_reg_add_Click (event as object)
+	dim n as integer
+	dim re as RegEx
+	dim r as boolean
+	dim pRegEx
+	
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	if n=-1 then
+		set re=newRegEx()
+		re.tipologia=1
+	else
+	    pRegEx=getRegExCollection
+	    re=pRegEx(n+1)
+	end if
+	if get_reg_cmbList_val &lt;&gt; &quot;general&quot; then
+	    re.tipologia=2
+	    if get_reg_cmbList_val = &quot;hyphenation&quot; then re.tipologia=3
+	end if
+	gDlgMain.setVisible(False)
+   	r=initEditRegEx(true,re)
+   	if r then
+   	    re = getEditRegExResult
+   	    regex_Add_RegEx(n,re)
+		popolateSelected
+		gdlgMain.getControl(&quot;reg_lstList&quot;).selectItemPos(n, True)
+		showButtonSubMenu(flagButtonSubMenu)
+   	end if
+   	gDlgMain.setVisible(true)  
+end sub
+
+Sub sm_reg_separator_Click (event as object)
+	dim n as integer
+	dim re as RegEx
+	dim r as boolean
+	dim pRegEx
+	
+	n=gdlgMain.getControl(&quot;reg_lstList&quot;).getSelectedItemPos()
+	set re=newRegEx()
+	re.key=Get_RandomKey(20,&quot;RE_SEPARATOR_&quot;)
+	re.tipologia=0
+	re.visible=True
+   	regex_Add_RegEx(n,re)
+	popolateSelected
+	gdlgMain.getControl(&quot;reg_lstList&quot;).selectItemPos(n, True)
+	showButtonSubMenu(flagButtonSubMenu)  
+end sub
+sub reg_cmdSiteRegEx_Click(event as object)
+	Dim sURL as String
+	Dim oSvc as Object
+	Dim OOLang As string
+	OOLang = GetLanguage
+	oSvc = createUnoService(&quot;com.sun.star.system.SystemShellExecute&quot;)
+	sURL = &quot;http://pepitoweb.altervista.it/pepito_cleaner/index.php?p=regex&amp;a=summary&amp;l=&quot; &amp; OOLang
+	oSvc.execute(sURL, &quot;&quot;, 0)
+end sub
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   GENERIC
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;+++ gen_Refresh Event ++++
+Sub gen_Refresh_Click
+   showDialog
+End Sub
+&apos;+++ Refind question on/off ++++
+sub buttonRefindQuestion(Event as object)
+    gPreference.QuestionEndPage=not gPreference.QuestionEndPage
+    showButtonSubMenu(flagButtonSubMenu)
+end sub
+&apos;+++ Buttonmenu Event ++++
+Sub buttonMenu_MouseIn(Event as Object)
+   dim Id as string
+   Id = Mid(Event.Source.Model.Name,5)	
+   
+   ToolTypeText(gLang.Item(gTabMenu.Item(Id).ToolTypeText).txt)
+End Sub
+
+Sub buttonMenu_MouseOut(Event as Object)
+   ToolTypeText(&quot;&quot;)
+End Sub
+
+Sub buttonMenu_Click(Event as Object)
+   dim Id as string
+   Id = Mid(Event.Source.Model.Name,5)
+   selectMenuButton(Id)
+End Sub
+&apos;+++ Generic ++++
+Sub generic_MouseIn(Event as Object)
+   dim re as regex
+   dim t as string
+   if left(Event.Source.Model.Name,11)=&quot;sm_fin_make&quot; then
+   	   re=getREinFindSelected
+   	   if right(Event.Source.Model.Name,1)=&quot;2&quot; then
+   	   	   t=re.Label_2
+   	   else
+   	   	   t=re.label_1
+   	   end if
+	   ToolTypeText(gLang.Item(&quot;default_tt_&quot; &amp; Event.Source.Model.Name).txt &amp; &quot;: &quot; &amp; t)
+   else
+	   ToolTypeText(gLang.Item(&quot;default_tt_&quot; &amp; Event.Source.Model.Name).txt)
+   end if
+End Sub
+Sub generic_Mouseout(Event as Object)
+   ToolTypeText(&quot;&quot;)
+End Sub
+
+
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   WINDOW
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;+++ window +++
+Sub window_windowActivated(oEv)
+End Sub
+Sub window_windowDeactivated(oEv)
+End Sub
+Sub window_windowOpened(oEv)
+End Sub
+
+Sub window_windowClosing(oEv)
+   gBoolExit=true
+End Sub
+
+Sub window_windowClosed(oEv)
+End Sub
+
+Sub window_windowMinimized(oEv)
+End Sub
+
+Sub window_windowNormalized(oEv)
+End Sub
+
+Sub window_disposing(oEv)
+End Sub
+</script:module>

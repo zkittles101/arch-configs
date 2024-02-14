@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modOptions" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function popolateSelected_opt as boolean
+	gBlockEvent=True
+	gDlgMain.getControl(&quot;opt_fontSize&quot;).Text=gPreference.FontSize
+	if gPreference.useClipboard then
+		gDlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).selectItemPos( 0, True )
+	else
+		gDlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).selectItemPos( 1, True )
+	end if
+	gBlockEvent=False
+end function
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Sub virtual_fontSize_Change
+	dim v as integer
+	v=int(gDlgMain.getControl(&quot;opt_fontSize&quot;).Text)
+	if v&lt;8 then v=8
+	if v&gt;100 then v=100
+	gPreference.FontSize=v
+	setFontSize
+End sub
+Sub virtual_useClipboard_Change
+	dim sel as integer
+	sel = gdlgMain.getControl(&quot;opt_cmbUseClipboard&quot;).getSelectedItemPos()
+	if sel=0 then
+		gPreference.useClipboard = true
+	else
+		gPreference.useClipboard = false
+	end if
+end sub
+</script:module>

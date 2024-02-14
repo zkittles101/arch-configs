@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modMain" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+
+&apos;Constants
+Public Const gVersion As String = &quot;0.1.17&quot; &apos;id Version ormai 0.1.17
+Public Const gMyAppName As String = &quot;PepitoCleaner&quot; &apos;this app name
+Public Const gVersionFilePreference as String = &quot;CT_Option 0.005&quot;
+Public Const gVersionFileLanguage as String = &quot;CT_Language 0.001&quot;
+Public Const gVersionFileRegEx as String = &quot;CT_RegEx 0.003&quot;
+Public Const gBoolDebug as boolean = True &apos;set Debug Mode
+
+
+&apos;Type
+type TabMenu
+	NameButton as string
+    ButtonImage as string
+    FlatImage as string
+    TagId as string
+    FlagShow as string
+    ToolTypeText as string
+    Index as Integer
+end type
+type Preference
+    MenuSelected as integer
+    LanguageChoise as string
+    QuestionEndPage as boolean
+    FontSize as integer
+    UseClipboard as boolean
+end type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+type Language
+	txt as string
+	key as string
+end type 
+type tUndo
+	IDMenu
+	IDObject
+end type
+
+&apos;Global Varibles
+Public gBoolExit as boolean  &apos;when value is &apos;true&apos; exit app
+Public gDlgMain as object    &apos;Dialog Main
+Public gTabMenu &apos;Menu button collection (TabMenu type)
+public gPreference as Preference &apos;Preference (preference type)
+public gLang &apos;Language String collection
+public gRegEx_General &apos;Reg Exp collection Find General
+Public gRegEx_Warning &apos;Reg Exp collection Find Warning
+Public gRegEx_Hyphenation &apos;Reg Exp collection Find Hyphenation
+Public gRegEx_Header &apos;Reg Exp collection Find Header
+public gStyleUsed &apos;matrix popolate by style in used
+public gStyleGeneral &apos;matrix popolate by style
+public gStyleHeader &apos;Collection popolate by style in used
+Public gActView &apos;Collection with redirect actual view list to item collection
+Public gDirection_LastFind as string &apos;last direction find &apos;prev&apos; o &apos;next&apos; -&gt;not implemented
+Public gExistStandardDic as Boolean 
+public gError as Boolean
+public gCountSpecial
+public searchflag_type as integer
+public gUndo
+
+public gBlockEvent as boolean &apos;flag for no raise event reponse
+
+
+Sub Main
+    loadSomeLibraries
+    splash_intro
+    gDlgMain.setVisible(true)
+	setInitialVariables
+    createDialogMain
+    defaultPreference
+    loadPreference
+	loadLanguage
+	popolateControlString
+	setFontSize
+	RegEx
+	hideAll
+	showDialog
+	
+    do 
+    	wait 300    
+    loop until gBoolExit
+    gDlgMain.setVisible(false)
+    savePreference
+End Sub
+
+Sub splash_intro
+	gDlgMain= LoadDialog_(gMyAppName, &quot;dlgMain&quot;)
+	&apos;gDlgMain=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgMain)
+    gDlgMain.Model.Title=gMyAppName &amp; &quot; v&quot; &amp; gVersion
+    hideAll
+    gDlgMain.getControl(&quot;wai_imgLogo&quot;).Model.PositionX=62
+    gDlgMain.getControl(&quot;wai_imgLogo&quot;).Model.PositionY=86
+    gDlgMain.getControl(&quot;wai_imgLogo&quot;).Model.Width=100
+    gDlgMain.getControl(&quot;wai_imgLogo&quot;).Model.Height=94
+    gDlgMain.getControl(&quot;wai_imgLogo&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/logo.png&quot;)
+    gDlgMain.getControl(&quot;opt_lblVersion&quot;).Model.PositionX = 14
+    gDlgMain.getControl(&quot;opt_lblVersion&quot;).Model.PositionY = 170
+    gDlgMain.getControl(&quot;opt_lblVersion&quot;).Model.Width = 170
+    gDlgMain.getControl(&quot;opt_lblVersion&quot;).Text=&quot;v &quot; &amp; gVersion
+    gDlgMain.getControl(&quot;wai_imgLogo&quot;).setvisible(True) 
+    gDlgMain.getControl(&quot;opt_lblVersion&quot;).setvisible(True) 
+End Sub
+
+</script:module>

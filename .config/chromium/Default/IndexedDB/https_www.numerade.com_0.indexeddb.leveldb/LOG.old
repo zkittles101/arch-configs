@@ -1,0 +1,6 @@
+2023/11/12-05:00:30.353 228d5 Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_www.numerade.com_0.indexeddb.leveldb since it was missing.
+2023/11/12-05:00:30.819 228d5 Delete type=3 #1
+2023/11/12-05:00:42.432 228d6 Level-0 table #5: started
+2023/11/12-05:00:42.471 228d6 Level-0 table #5: 2036 bytes OK
+2023/11/12-05:00:42.502 228d6 Delete type=0 #3
+2023/11/12-05:00:42.502 228d6 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

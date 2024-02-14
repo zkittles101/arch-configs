@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modStyle" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+type tUndo
+	IDMenu
+	IDObject
+end type
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Function countsMatchStyle(sty as object) as integer
+    Dim pSearch as Object
+    Dim pFound as Object
+    Dim matchCount
+    
+    on error goto countsMatchStyleKO
+    
+    pSearch = thisComponent.createSearchDescriptor
+    pSearch.SearchStyles=True
+    pSearch.SearchString=sty.displayname
+    pFound = thisComponent.findAll(pSearch)
+    matchCount = pFound.getCount()
+    countsMatchStyle = matchCount
+    on error goto 0
+    exit function
+   
+	countsMatchStyleKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in countsMatchStyle !&quot;)
+	countsMatchStyle=0
+    On Error Goto 0
+End function
+function FindStyle_general(style)
+	Dim refind as boolean
+	Dim pCursor as Object
+    Dim pFound as object
+    
+    on error goto FindStyle_generalKO
+    refind=True
+   	pCursor = thisComponent.getCurrentController.getViewCursor()
+    pFound=FindStyle(pCursor, style)
+   	
+   	if IsNull(pFound) then 
+   		if gPreference.QuestionEndPage then
+   			refind = QuestionEndPage
+   			gDlgMain.SetFocus()
+   		end if
+   		if refind then
+   		   if gDirection_LastFind=&quot;next&quot; then
+   		   	  gotoStart(pCursor)
+   		   else
+   		   	  gotoEnd(pCursor)
+   		   end if
+   		   pFound=FindStyle(pCursor, style)
+   		end if
+   	end if
+   	if isNull(pFound) then
+        FindStyle_general = False
+    else
+        pCursor.gotoRange(pFound,false)
+        FindStyle_general = True
+    end if
+    on error goto 0
+    exit function
+	
+	FindStyle_generalKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in FindStyle_general !&quot;)
+    FindStyle_general = False
+    On Error Goto 0
+End Function
+function MakeStyle_General(stylefrom, styleto)
+	dim pcursor
+	dim act
+	
+	on error goto MakeStyle_GeneralKO
+	pCursor=ThisComponent.CurrentController.ViewCursor
+	pCursor.ParaStyleName=styleto.DisplayName
+	set act = new tUndo
+    act.IDMenu=gTabMenu(gPreference.MenuSelected).TagId
+    act.IDObject=&quot;1&quot; &amp; StyleFrom.DisplayName &amp; &quot;|&quot; &amp; styleTo.DisplayName
+    add_undo(act)
+	MakeStyle_General=adjustCountStyle_lstList(stylefrom, styleto)
+	on error goto 0
+    exit function
+	
+	MakeStyle_GeneralKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in MakeStyle_General !&quot;)
+    MakeStyle_General=False
+    On Error Goto 0
+end function
+function FindStyle(ocursor, style)
+    Dim pSearch as object
+    Dim pFound as object
+    Dim pCursor
+   
+    on error goto FindStyleKO
+    pCursor=ThisComponent.CurrentController.ViewCursor
+    pSearch = thisComponent.createSearchDescriptor
+    pSearch.SearchStyles=True
+    pSearch.SearchString=style.displayname
+    if gDirection_LastFind=&quot;next&quot; then
+    	pSearch.SearchBackwards=false
+    else
+        &apos;pCursor.collapseToStart
+    	pSearch.SearchBackwards=true
+    end if 
+    
+    &apos;pCursor = thisComponent.getText.createTextCursorbyRange(oCursor.getend)
+    if gDirection_LastFind=&quot;next&quot; then
+    	pFound = thisComponent.findnext(pCursor.getend,pSearch)
+    else
+    	pFound = thisComponent.findnext(pCursor.getStart(),pSearch)
+    end if 
+	FindStyle=pFound
+	on error goto 0
+    exit function
+	
+	FindStyleKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in FindStyle !&quot;)
+    On Error Goto 0
+end function
+Function makeAllStyle_general(collStyleFrom, StyleTo) as boolean
+
+    Dim pOk as boolean  
+    Dim obar as Object
+    Dim StyleFrom
+    Dim n_wait as integer
+    
+    hideAll
+    showWait
+    obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	obar.setRange(0,collStyleFrom.Count)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00010&quot;).txt
+	n_wait=0
+			
+   	for each StyleFrom in collStyleFrom
+   		oBar.SetValue(n_wait) : n_wait=n_wait+1
+   		gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=StyleFrom.DisplayName
+   		if stylefrom.DisplayName&lt;&gt;styleto.DisplayName then
+    		pOk=makeOneAllStyle(styleFrom, styleTo)
+    	else
+    		pOk=true
+    	end if
+    	if not pOK then
+       		exit for
+    	end if
+   	next
+    makeAllStyle_general = pOK
+End Function
+function makeOneAllStyle(StyleFrom, styleTo) as boolean
+    Dim pReplace as object
+    Dim result as boolean
+    Dim act
+   
+    on error goto makeOneAllStyleKO
+    result=True
+	pReplace = thisComponent.createReplaceDescriptor
+	pReplace.SearchStyles=True
+    pReplace.SearchString = StyleFrom.DisplayName
+   	pReplace.ReplaceString = StyleTo.DisplayName
+    thisComponent.replaceAll(pReplace)
+    set act = new tUndo
+    act.IDMenu=gTabMenu(gPreference.MenuSelected).TagId
+    act.IDObject=&quot;2&quot; &amp; StyleFrom.DisplayName &amp; &quot;|&quot; &amp; styleTo.DisplayName
+    add_undo(act)
+    makeOneAllStyle=result   
+    on error goto 0
+    exit function
+   
+   makeOneAllStyleKO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in makeOneAllStyle !&quot;)
+   makeOneAllStyle = False
+   On Error Goto 0   
+End Function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function popolateSelected_sty as boolean
+	Dim oBar as object
+	Dim oList as object
+	Dim n as integer
+	dim oStyles, oStyle 
+	dim cycle as integer
+	dim s as string
+	Dim count as long
+	
+	
+	
+	obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00009&quot;).txt
+	gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=&quot;&quot;
+	oList=gdlgMain.getControl(&quot;sty_lstList&quot;)
+    oList.removeitems(0, oList.ItemCount)
+	n=0
+	set gActView = new collection
+	
+    oStyles=ThisComponent.StyleFamilies.getbyName(&quot;ParagraphStyles&quot;)
+    obar.setRange(0,oStyles.Count)
+    For cycle = 0 to oStyles.Count - 1
+       oBar.SetValue(n) : n=n+1
+       oStyle = oStyles(cycle)
+       gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=oStyle.DisplayName
+       if oStyle.isInUse() then
+		  count = countsMatchStyle(oStyle)
+		  if count&gt;0 then
+		  	s=&quot;&quot;
+			if len(str(count))&lt;6 then s = string(6-len(str(count)),&quot; &quot;)
+			s = s &amp; count &amp; &quot; &quot; &amp; oStyle.DisplayName
+    	  	gActView.add oStyle, oStyle.Name
+    	  	oList.addItem (s,  oList.ItemCount)
+    	  end if
+       end if
+    Next
+end function
+function adjustCountStyle_lstList(StyleFrom, StyleTo) as boolean
+    dim rn as integer
+    dim newList
+    dim obj as object
+    dim indexListFrom as integer
+    dim indexListTo as integer
+    dim countFrom as integer
+    dim countTo as integer
+    Dim s as string
+    
+    on error goto adjustCountStyle_lstListKO
+    gBlockEvent=True
+    obj = gDlgMain.getControl(&quot;sty_lstList&quot;)
+    for indexListFrom=1 to gActView.Count
+     	if gActView(indexListFrom).DisplayName=StyleFrom.DisplayName then
+    	    exit for
+    	end if
+    next
+    indexListFrom=indexListFrom-1
+    countFrom = countsMatchStyle(StyleFrom)
+    
+    for indexListTo=1 to gActView.Count
+     	if gActView(indexListTo).DisplayName=StyleTo.DisplayName then
+    	    exit for
+    	end if
+    next
+    if indexListTo&gt;gActView.Count then
+    	adjustCountStyle_lstList=false
+    	gBlockEvent=false
+    	exit function
+    end if
+    indexListTo=indexListTo-1
+    countTo = countsMatchStyle(StyleTo)
+    
+    adjustCountStyle_lstList=True
+    set newList = new Collection
+    for rn=0 to obj.getItemCount-1
+       if rn=indexListFrom then
+          if countFrom&gt;0 then 
+    	  	if len(str(countFrom))&lt;6 then s=string(6-len(str(countFrom)),&quot; &quot;)
+	      	newList.add (s &amp; countFrom &amp; &quot; &quot; &amp; StyleFrom.DisplayName)
+	      else
+	        adjustCountStyle_lstList=False
+	      end if
+	   elseif rn=indexListTo then
+	   	  if countTo&gt;0 then 
+    	  	if len(str(countTo))&lt;6 then s=string(6-len(str(countTo)),&quot; &quot;)
+	      	newList.add (s &amp; countTo &amp; &quot; &quot; &amp; StyleTo.DisplayName)
+	      else
+	        adjustCountStyle_lstList=False
+	      end if
+       else
+          newList.add obj.getItem(rn)
+       end if
+    next
+ 
+    obj.setvisible(false)
+    obj.removeitems(0, obj.ItemCount)
+    for each s in newList
+       obj.additem(s, obj.getItemCount)
+    next
+    obj.makeVisible(indexlistFrom)
+    obj.setvisible(true)
+    obj.selectItemPos(indexlistFrom,true)
+    gBlockEvent=False
+	exit function
+	
+	adjustCountStyle_lstListKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in adjustCountStyle_lstList !&quot;)
+	adjustCount_lstList=False
+    On Error Goto 0
+End function
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+sub virtual_FindStyle_Click
+	dim n as integer
+	dim style
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+       if ubound(gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemsPos)=0 then 
+       	   style = gActView(n+1)
+       	   if not FindStyle_general(style) then
+       	   	  showDialog	 
+       	   	  exit sub
+       	   end if
+       end if
+    end if
+end sub
+sub virtual_MakeStyle_Click
+	dim n as integer
+	dim styleto
+	dim stylefrom
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+        if ubound(gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemsPos)=0 then 
+       	    stylefrom = gActView(n+1)
+       	    styleto = LookupCollection(gStyleGeneral, gdlgMain.getControl(&quot;sm_sty_style&quot;).getSelectedItem)
+       	    if not isnull(styleto) then
+       	    	if stylefrom.DisplayName&lt;&gt;styleto.DisplayName then
+			      if not MakeStyle_general(stylefrom, styleto) then
+        	   	  	showDialog	 
+        	   	    exit sub
+				  else
+				  	if gUndo.Count=1 then showButtonSubMenu(flagButtonSubMenu)
+       	   	        virtual_FindStyle_Click
+       	   	      end if
+       	   	    end if
+       	   end if
+        end if
+    end if
+end sub
+sub virtual_MakeAllStyle_Click
+	dim n as integer
+	dim collStyleFrom
+	dim styleto
+	dim sel
+	
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+	   styleto = LookupCollection(gStyleGeneral, gdlgMain.getControl(&quot;sm_sty_style&quot;).getSelectedItem)
+	   set collStyleFrom = new collection
+	   sel=gdlgMain.getControl(&quot;sty_lstList&quot;).getSelectedItemsPos
+	   for n=0 to ubound(sel)
+   		  collStyleFrom.add gActView(sel(n)+1)
+       next n
+       MakeAllStyle_general(collStyleFrom, StyleTo)
+       showDialog
+    end if
+end sub
+</script:module>

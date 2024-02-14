@@ -1,0 +1,27 @@
+2023/12/30-19:58:01.602 74b Recovering log #11
+2023/12/30-19:58:01.602 74b Level-0 table #14: started
+2023/12/30-19:58:01.669 74b Level-0 table #14: 218 bytes OK
+2023/12/30-19:58:01.746 74b Delete type=0 #11
+2023/12/30-19:58:01.746 74b Delete type=3 #9
+2023/12/30-19:58:07.952 77d Level-0 table #17: started
+2023/12/30-19:58:08.055 77d Level-0 table #17: 483 bytes OK
+2023/12/30-19:58:08.265 77d Delete type=0 #15
+2023/12/30-19:58:08.266 74b Manual compaction at level-0 from '\x00\x06\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x07\x00\x00\x00' @ 0 : 0; will stop at '\x00\x00\x00\x002\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00' @ 153 : 0
+2023/12/30-19:58:08.266 74b Compacting 2@0 + 1@1 files
+2023/12/30-19:58:08.357 74b Generated table #18@0: 36 keys, 698 bytes
+2023/12/30-19:58:08.357 74b Compacted 2@0 + 1@1 files => 698 bytes
+2023/12/30-19:58:08.449 74b compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/12/30-19:58:08.449 74b Delete type=2 #17
+2023/12/30-19:58:08.450 74b Manual compaction at level-0 from '\x00\x00\x00\x002\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00' @ 153 : 0 .. '\x00\x07\x00\x00\x00' @ 0 : 0; will stop at (end)
+2023/12/30-19:58:17.493 77e Level-0 table #20: started
+2023/12/30-19:58:17.554 77e Level-0 table #20: 1049 bytes OK
+2023/12/30-19:58:17.605 77e Delete type=2 #14
+2023/12/30-19:58:17.606 77e Delete type=2 #12
+2023/12/30-19:58:17.606 77e Delete type=0 #16
+2023/12/30-19:58:17.606 74c Manual compaction at level-0 from '\x00\x07\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at '\x00\x07\x00\x00\x05' @ 175 : 1
+2023/12/30-19:58:17.606 74c Compacting 1@0 + 1@1 files
+2023/12/30-19:58:17.629 74c Generated table #21@0: 47 keys, 1130 bytes
+2023/12/30-19:58:17.629 74c Compacted 1@0 + 1@1 files => 1130 bytes
+2023/12/30-19:58:17.655 74c compacted to: files[ 0 1 1 0 0 0 0 ]
+2023/12/30-19:58:17.655 74c Delete type=2 #20
+2023/12/30-19:58:17.656 74c Manual compaction at level-0 from '\x00\x07\x00\x00\x05' @ 175 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at (end)

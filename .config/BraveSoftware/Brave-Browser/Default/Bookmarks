@@ -1,0 +1,219 @@
+{
+   "checksum": "10a57b5aeca6b782154a838cf5d58dba",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "children": [ {
+               "date_added": "13301961892308033",
+               "guid": "19aff101-0c8e-489e-b30f-d7f1947decc8",
+               "id": "120",
+               "name": "Invidious",
+               "type": "url",
+               "url": "https://yewtu.be/"
+            }, {
+               "date_added": "13301961892324908",
+               "guid": "d4b6d349-85bd-4554-a1a5-2be494eb5e34",
+               "id": "123",
+               "name": "Twitter",
+               "type": "url",
+               "url": "https://twitter.com/home"
+            }, {
+               "date_added": "13301961892352337",
+               "guid": "24393ace-7252-4d34-90a8-9f9e7649728a",
+               "id": "126",
+               "name": "Instagram",
+               "type": "url",
+               "url": "https://www.instagram.com/"
+            }, {
+               "date_added": "13301961892372864",
+               "guid": "330795f6-4243-4780-adec-d115f18fbda3",
+               "id": "130",
+               "name": "YouTube",
+               "type": "url",
+               "url": "https://www.youtube.com/"
+            } ],
+            "date_added": "13301961892297332",
+            "date_modified": "13301961892372864",
+            "guid": "1a0060f6-9b4b-462e-8f55-ec66f2d16b9e",
+            "id": "119",
+            "name": "Socials",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13301961892364772",
+               "guid": "3458bfde-e1a2-448e-ba57-5e8c2aee486d",
+               "id": "127",
+               "name": "Inbox (26) - eyobsintayehu45@gmail.com - Gmail",
+               "type": "url",
+               "url": "https://mail.google.com/mail/u/0/#inbox"
+            }, {
+               "date_added": "13301961892379334",
+               "guid": "34587942-dc69-4c90-a369-9c08f788a5f7",
+               "id": "132",
+               "name": "ProtonMail",
+               "type": "url",
+               "url": "https://mail.protonmail.com/u/0/inbox"
+            } ],
+            "date_added": "13301961892343733",
+            "date_modified": "13301961892379334",
+            "guid": "4bb82832-f50b-473c-822f-48191b23593c",
+            "id": "124",
+            "name": "Mail",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13301961892377676",
+               "guid": "d1ae001e-c548-41cd-a5f4-eeac986ec7a2",
+               "id": "131",
+               "name": "1337x",
+               "type": "url",
+               "url": "https://1337x.to/"
+            }, {
+               "date_added": "13301961892397414",
+               "guid": "eafe5f82-b1f6-451e-8e5a-e92fdbb23caa",
+               "id": "134",
+               "name": "RARBG Torrents , films , download",
+               "type": "url",
+               "url": "https://rarbgtorrents.org/torrents.php?r=73203534"
+            }, {
+               "date_added": "13301961892402635",
+               "guid": "0c527dcb-43d0-4844-ae4a-3778588e747b",
+               "id": "135",
+               "name": "zlib",
+               "type": "url",
+               "url": "https://et1lib.org/"
+            }, {
+               "date_added": "13301961892414175",
+               "guid": "4443ca2b-6039-4462-ad9e-02f8ecb82927",
+               "id": "136",
+               "name": "megathread - Piracy",
+               "type": "url",
+               "url": "https://www.reddit.com/r/Piracy/wiki/megathread"
+            }, {
+               "date_added": "13301961892418625",
+               "guid": "9abbf510-0185-4614-a135-79b08d6ba238",
+               "id": "137",
+               "name": "TGx:Home",
+               "type": "url",
+               "url": "https://torrentgalaxy.to/"
+            }, {
+               "date_added": "13301961892427589",
+               "guid": "0847f2e9-c750-4878-811e-d8f07b0633c8",
+               "id": "138",
+               "name": "RuTracker.org",
+               "type": "url",
+               "url": "https://rutracker.org/forum/index.php"
+            }, {
+               "date_added": "13301961892436536",
+               "guid": "9714953c-6475-4ae0-914d-e308f3673ff2",
+               "id": "139",
+               "name": "Library Genesis",
+               "type": "url",
+               "url": "https://libgen.fun/"
+            }, {
+               "date_added": "13301961892440862",
+               "guid": "72a0bf40-3e07-47f7-9047-44c81784fdaa",
+               "id": "140",
+               "name": "COMIX-LOAD | Fine Stuff",
+               "type": "url",
+               "url": "https://comix-load.in/"
+            } ],
+            "date_added": "13301961892365953",
+            "date_modified": "13301961892454822",
+            "guid": "4e2379cd-79b0-4cf6-a9f4-56780424f0dd",
+            "id": "128",
+            "name": "Piracy",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13301961892320482",
+               "guid": "20abf4c4-0a46-49b0-9232-5d4e3ac8cf6c",
+               "id": "122",
+               "name": "Collins Dictionary",
+               "type": "url",
+               "url": "https://www.collinsdictionary.com/dictionary/english"
+            }, {
+               "date_added": "13301961892349686",
+               "guid": "8abe967c-a619-4c1f-a3d5-f65d535bb752",
+               "id": "125",
+               "name": "TinyWow",
+               "type": "url",
+               "url": "https://tinywow.com/"
+            }, {
+               "date_added": "13301961892369652",
+               "guid": "cdded4c6-6fd4-4314-a1c9-4e8a48c0173e",
+               "id": "129",
+               "name": "Classes",
+               "type": "url",
+               "url": "https://classroom.google.com/u/1/h"
+            }, {
+               "date_added": "13302103097528416",
+               "guid": "852975e6-1f0c-498d-986e-f204d520517e",
+               "id": "149",
+               "name": "Academic Hub",
+               "type": "url",
+               "url": "https://www.notion.so/Academic-Hub-0468c0ad353d4b7cb29709b148accbfd"
+            }, {
+               "date_added": "13302103091736741",
+               "guid": "7b3646b5-2c4a-4a04-acde-bd6a373c6f00",
+               "id": "148",
+               "name": "College Hub Template - Updated for 2021",
+               "type": "url",
+               "url": "https://www.notion.so/mayeracademics/College-Hub-Template-Updated-for-2021-5001010604554c5cb8faa9f270f4f327"
+            }, {
+               "date_added": "13302014864730099",
+               "guid": "62de5e17-911e-4371-b827-ec35c0ff21d8",
+               "id": "144",
+               "name": "Notion ",
+               "type": "url",
+               "url": "https://www.notion.so/"
+            }, {
+               "date_added": "13301961892454822",
+               "guid": "c10b59c7-76fd-480b-a784-332f801c8bc6",
+               "id": "142",
+               "name": "Calender",
+               "type": "url",
+               "url": "https://calendar.google.com/calendar/u/1/r"
+            } ],
+            "date_added": "13301961892308867",
+            "date_modified": "13302103206484743",
+            "guid": "27d9ca29-8182-4c9a-80b1-93431b2dd3fb",
+            "id": "121",
+            "name": "School & Productivity",
+            "type": "folder"
+         }, {
+            "date_added": "13302032306423696",
+            "guid": "bd67b5cb-acc9-47ff-affb-3286a48d608f",
+            "id": "146",
+            "name": "Tidal",
+            "type": "url",
+            "url": "https://listen.tidal.com/"
+         } ],
+         "date_added": "13294932722458742",
+         "date_modified": "13302103209836082",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13294932722458756",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13294932722458760",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}

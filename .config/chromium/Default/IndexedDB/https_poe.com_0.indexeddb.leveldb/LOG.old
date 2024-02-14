@@ -1,0 +1,14 @@
+2023/11/27-13:56:06.185 580b8 Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_poe.com_0.indexeddb.leveldb since it was missing.
+2023/11/27-13:56:06.436 580b8 Delete type=3 #1
+2023/11/27-14:22:07.333 580b9 Level-0 table #5: started
+2023/11/27-14:22:07.478 580b9 Level-0 table #5: 1252367 bytes OK
+2023/11/27-14:22:07.522 580b9 Delete type=0 #3
+2023/11/27-15:06:12.428 580b9 Level-0 table #7: started
+2023/11/27-15:06:12.598 580b9 Level-0 table #7: 1264081 bytes OK
+2023/11/27-15:06:12.688 580b9 Delete type=0 #4
+2023/11/27-15:06:13.649 580b9 Compacting 1@1 + 1@2 files
+2023/11/27-15:06:13.783 580b9 Generated table #8@1: 5791 keys, 447366 bytes
+2023/11/27-15:06:13.783 580b9 Compacted 1@1 + 1@2 files => 447366 bytes
+2023/11/27-15:06:13.892 580b9 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/11/27-15:06:13.893 580b9 Delete type=2 #5
+2023/11/27-15:06:13.893 580b9 Delete type=2 #7

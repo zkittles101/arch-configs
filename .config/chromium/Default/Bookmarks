@@ -1,0 +1,329 @@
+{
+   "checksum": "c7ed39704752e7032beb46aae818fd4a",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "children": [ {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "58b80d16-6827-4c66-93e3-3c3023cfbd3d",
+               "id": "6",
+               "name": "Twitter",
+               "type": "url",
+               "url": "https://twitter.com/home"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "ffd0b967-d3d8-45ba-8ecd-08ae275b7f92",
+               "id": "7",
+               "name": "Instagram",
+               "type": "url",
+               "url": "https://www.instagram.com/"
+            }, {
+               "date_added": "13303320454000000",
+               "date_last_used": "0",
+               "guid": "470ad2fe-225c-45ba-a0b2-71d610765f80",
+               "id": "8",
+               "name": "Letterboxd",
+               "type": "url",
+               "url": "https://letterboxd.com/"
+            }, {
+               "date_added": "13304950813000000",
+               "date_last_used": "13346677425923717",
+               "guid": "80e8126a-cebf-4d2a-a8b9-33d11c662516",
+               "id": "9",
+               "name": "YouTube",
+               "type": "url",
+               "url": "https://www.youtube.com/"
+            }, {
+               "date_added": "13305978833000000",
+               "date_last_used": "0",
+               "guid": "fc5896a6-df7d-4650-8763-5f0cde231bd7",
+               "id": "10",
+               "name": "Invidious ",
+               "type": "url",
+               "url": "https://inv.riverside.rocks/"
+            } ],
+            "date_added": "13340575937847756",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "b22fe991-d5c2-4dcd-b5ac-dd97e3501df8",
+            "id": "5",
+            "name": "Socials",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "e91ca011-30ab-439b-9f9c-9f36036f9037",
+               "id": "12",
+               "name": "Mail 1",
+               "type": "url",
+               "url": "https://mail.google.com/mail/u/0/#inbox"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "136c666f-0b4b-49fe-8875-c7d15d1bed48",
+               "id": "13",
+               "name": "ProtonMail",
+               "type": "url",
+               "url": "https://mail.protonmail.com/u/0/inbox"
+            }, {
+               "date_added": "13303320315000000",
+               "date_last_used": "0",
+               "guid": "cd6c67d3-02ec-4fe7-9caf-bc4e78f72dc0",
+               "id": "14",
+               "name": "Mail 2",
+               "type": "url",
+               "url": "https://mail.google.com/mail/u/1/#inbox"
+            } ],
+            "date_added": "13340575937871095",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "701528ed-4ac3-4db4-b1a5-2e46f9f4f973",
+            "id": "11",
+            "name": "Mail",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "e614fb86-57f9-4574-866e-2a1ba36d90fb",
+               "id": "16",
+               "name": "1337x",
+               "type": "url",
+               "url": "https://1337x.to/"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "738852bc-91dd-4f9b-ae38-de64618796ff",
+               "id": "17",
+               "name": "RARBG Torrents , films , download",
+               "type": "url",
+               "url": "https://rarbgtorrents.org/torrents.php?r=73203534"
+            }, {
+               "date_added": "13326756549000000",
+               "date_last_used": "0",
+               "guid": "d0e9e688-7c89-462d-841e-c2f3e9d6524c",
+               "id": "18",
+               "name": "Bypass Study.com restrictions",
+               "type": "url",
+               "url": "javascript:(function(){var style = document.createElement('style'); style.innerHTML = '#articleMain:after{content:none}';%20document.head.append(style);%20var%20style%20=%20document.createElement('style');%20style.innerHTML%20=%20'.hidden{visibility:%20visible%20!important;%20display:%20inline%20!important}';%20document.head.append(style);%20document.getElementById('videoPaywall').setAttribute('data-video-popup-display-video-percent',%20'100');%20document.getElementById('videoPaywall').setAttribute('style',%20'visibility:%20hidden%20!important;%20display:%20none%20!important');try{document.getElementsByClassName('paywall-inner')[1].remove()}catch(e){}})()"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "886d77eb-d862-4c52-8b4b-00644ddd75a5",
+               "id": "19",
+               "name": "zlib",
+               "type": "url",
+               "url": "https://et1lib.org/"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "6c8b78e1-790d-44ac-87d3-8d5838b238de",
+               "id": "20",
+               "name": "megathread - Piracy",
+               "type": "url",
+               "url": "https://www.reddit.com/r/Piracy/wiki/megathread"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "e6a61e10-c804-49c3-9ae3-982231224284",
+               "id": "21",
+               "name": "TGx:Home",
+               "type": "url",
+               "url": "https://torrentgalaxy.to/"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "5e155713-820c-4866-ba3d-5f5ed31502ad",
+               "id": "22",
+               "name": "RuTracker.org",
+               "type": "url",
+               "url": "https://rutracker.org/forum/index.php"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "870ca85e-c787-4a27-9d7c-d0356d27f3ac",
+               "id": "23",
+               "name": "Library Genesis",
+               "type": "url",
+               "url": "https://libgen.fun/"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "533f16ea-4744-4338-9029-1695025e0d42",
+               "id": "24",
+               "name": "COMIX-LOAD | Fine Stuff",
+               "type": "url",
+               "url": "https://comix-load.in/"
+            }, {
+               "date_added": "13304251450000000",
+               "date_last_used": "0",
+               "guid": "a8313e58-a4e9-4447-959b-931003edbbbd",
+               "id": "25",
+               "name": "Instagram Downloader ",
+               "type": "url",
+               "url": "https://www.save-insta.com/"
+            } ],
+            "date_added": "13340575937872194",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "04185d62-c528-401f-8fc2-4d07f6bce9cc",
+            "id": "15",
+            "name": "Piracy",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "b9decee9-9782-4a3f-95c1-631c4e995d0f",
+               "id": "27",
+               "name": "Collins Dictionary",
+               "type": "url",
+               "url": "https://www.collinsdictionary.com/dictionary/english"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "082c3291-31b3-4694-86f7-c9123f937e63",
+               "id": "28",
+               "name": "TinyWow",
+               "type": "url",
+               "url": "https://tinywow.com/"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "eb57f1b3-5d81-4cc8-84f2-4ca944fc1c0a",
+               "id": "29",
+               "name": "Classes",
+               "type": "url",
+               "url": "https://classroom.google.com/u/1/h"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "bb7b08c7-ff01-468e-b0ac-2947c5a47038",
+               "id": "30",
+               "name": "Academic Hub",
+               "type": "url",
+               "url": "https://www.notion.so/Academic-Hub-0468c0ad353d4b7cb29709b148accbfd"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "33848290-5b0a-4dfa-976c-16b54a91d3b5",
+               "id": "31",
+               "name": "College Hub Template - Updated for 2021",
+               "type": "url",
+               "url": "https://www.notion.so/mayeracademics/College-Hub-Template-Updated-for-2021-5001010604554c5cb8faa9f270f4f327"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "fc75ae70-7171-4bf0-b507-e68d1ae8f453",
+               "id": "32",
+               "name": "Notion ",
+               "type": "url",
+               "url": "https://www.notion.so/"
+            }, {
+               "date_added": "13302612593000000",
+               "date_last_used": "0",
+               "guid": "6b5480d1-7c31-4c53-a847-54a25deabe60",
+               "id": "33",
+               "name": "Calender",
+               "type": "url",
+               "url": "https://calendar.google.com/calendar/u/1/r"
+            }, {
+               "date_added": "13306074502000000",
+               "date_last_used": "0",
+               "guid": "27178949-9e4a-40c6-9668-989d4325b986",
+               "id": "34",
+               "name": "PhysicsLAB: MCAS 2008 Session 1",
+               "type": "url",
+               "url": "http://physicslab.org/Document.aspx?doctype=5&filename=Compilations_MCAS_MCAS_2008_session1.xml"
+            } ],
+            "date_added": "13340575937873809",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "ae6a29c2-af98-4394-b924-ace880af84c0",
+            "id": "26",
+            "name": "School & Productivity",
+            "type": "folder"
+         }, {
+            "children": [ {
+               "date_added": "13329664971000000",
+               "date_last_used": "0",
+               "guid": "5423cfb5-5294-4b40-bdc3-d7c66889389d",
+               "id": "36",
+               "name": "uaeu.ac.ae/en/admission/undergraduate-scholarships-for-international-students.shtml",
+               "type": "url",
+               "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships-for-international-students.shtml"
+            }, {
+               "date_added": "13317830826000000",
+               "date_last_used": "0",
+               "guid": "c0b70390-47b5-478d-b001-4fb09c6e2240",
+               "id": "37",
+               "name": "FIFA 12 Update 2022 [LINKS]",
+               "type": "url",
+               "url": "https://ricardofootballpaste.blogspot.com/2022/05/fifa-12-update-2022-links.html"
+            }, {
+               "date_added": "13317841459000000",
+               "date_last_used": "0",
+               "guid": "51118509-d3cf-41ba-9f90-9e92c1b10e04",
+               "id": "38",
+               "name": "FIFA 12 Pro Team Patch Season 2017/2018 NEXT SEASON - FIFA 12 - Edit - Balkan PES BOX",
+               "type": "url",
+               "url": "https://www.balkanpesbox.com/forum/index.php?/topic/3203-fifa-12-pro-team-patch-season-20172018-next-season/"
+            }, {
+               "date_added": "13340559476000000",
+               "date_last_used": "13340631913503040",
+               "guid": "2b5712bc-49fc-4210-9579-23c0391fef72",
+               "id": "39",
+               "name": "sxhkd - ArchWiki",
+               "type": "url",
+               "url": "https://wiki.archlinux.org/title/Sxhkd"
+            }, {
+               "date_added": "13330344997000000",
+               "date_last_used": "0",
+               "guid": "d2595a1b-f1ee-48f2-b28f-89f860660bd5",
+               "id": "40",
+               "name": "Date Converter - Ethiopian Calendar",
+               "type": "url",
+               "url": "https://ethiopian-calendar.netlify.app/"
+            } ],
+            "date_added": "13340575937876011",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "16314fc6-646c-4ffd-870b-ea050ec9f242",
+            "id": "35",
+            "name": "Saved For Later",
+            "type": "folder"
+         } ],
+         "date_added": "13340575720516372",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13340575720516376",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13340575720516380",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}

@@ -1,0 +1,6 @@
+{
+    "workbench.colorTheme": "Nord",
+    "files.autoSave": "onFocusChange",
+    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "never"
+}

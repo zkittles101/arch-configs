@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modCopyPasteRegEx" script:language="StarBasic">REM  *****  BASIC  *****
+option explicit
+dim dlg_result
+dim dlg_re
+dim dlg_temp
+dim action_for_queque as string
+Global sTxtCString As String
+
+const PCRegExPasteFormat = &quot;PC_P_RE v1&quot;
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+
+Function initPasteRegEx()
+   dim t as string
+   dlg_result=False
+   dlg_re=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgPasteRegEx)
+   t=&quot;&quot;
+   if gPreference.useClipboard then
+   	  t=checkPCRegExPasteFormat(getTextClipBoard)
+   end if
+   if t&lt;&gt;&quot;&quot; then
+	  dlg_re.getControl(&quot;txtPaste&quot;).text=t
+   else
+   	  dlg_re.getControl(&quot;txtPaste&quot;).text=gLang.item(&quot;dialog_paste_001&quot;).txt
+   end if
+   dlg_re.getControl(&quot;cmdExit&quot;).setVisible(False)
+   dlg_re.getControl(&quot;cmdOK&quot;).setVisible(True)
+   dlg_re.getControl(&quot;cmdCancel&quot;).setVisible(True)
+   dlg_re.Execute()   
+   initPasteRegEx=dlg_result
+End function
+function isIdemRegEx(oRe as Regex,nRe as RegEx) as boolean
+	dim isIdemRegEx_result as boolean
+	isIdemRegEx_result=false
+	if oRe.Key=nRe.Key and oRe.Visible=nRe.Visible and oRe.Tipologia=nRe.Tipologia and oRe.Find=nRe.Find then
+		if oRe.TextString=nRe.TextString and oRe.isRegEx=nRe.isRegEx and oRe.CaseSensitive=nRe.CaseSensitive and oRe.Dual=nRe.Dual then
+			if oRe.Label_1=nRe.Label_1 and oRe.Mode_1=nRe.Mode_1 and oRe.Replace_1=nRe.Replace_1 and oRe.Direction_1=nRe.Direction_1 then
+				if oRe.Sel_1=nRe.Sel_1 and oRe.Label_2=nRe.Label_2 and oRe.Mode_2=nRe.Mode_2 and oRe.Replace_2=nRe.Replace_2 then
+					if oRe.Direction_2=nRe.Direction_2 and oRe.Sel_2=nRe.Sel_2 then
+						isIdemRegEx_result=true
+					end if
+				end if
+			end if
+		end if
+	end if
+	isIdemRegEx=isIdemRegEx_result
+end function
+function RegExAlreadyPresent(oRe as Regex,nRe as RegEx) as string
+   dim flag as string
+   dim o1, o2
+   dim c1, c2
+   
+   c1 = &amp;hbbbbbb
+   c2 = &amp;h000000
+   dlg_result=&quot;&quot;
+   dlg_re=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgOverwriteRegEx)
+   
+   dlg_re.getControl(&quot;lblMessage1&quot;).text=gLang.item(&quot;dialog_overwrite_001&quot;).txt
+   dlg_re.getControl(&quot;lblOld&quot;).text=gLang.item(&quot;dialog_overwrite_002&quot;).txt
+   dlg_re.getControl(&quot;lblNew&quot;).text=gLang.item(&quot;dialog_overwrite_003&quot;).txt
+   dlg_re.getControl(&quot;cmdOverwrite&quot;).Label=gLang.item(&quot;dialog_overwrite_004&quot;).txt
+   dlg_re.getControl(&quot;cmdNewKey&quot;).Label=gLang.item(&quot;dialog_overwrite_005&quot;).txt
+   dlg_re.getControl(&quot;cmdSkip&quot;).Label=gLang.item(&quot;dialog_overwrite_006&quot;).txt
+   dlg_re.getControl(&quot;chkAll&quot;).Label=gLang.item(&quot;dialog_overwrite_007&quot;).txt
+   dlg_re.getControl(&quot;cmdStop&quot;).Label=gLang.item(&quot;dialog_overwrite_008&quot;).txt
+   &apos;key
+   dlg_re.getControl(&quot;lbl_oKEY&quot;).text=oRe.Key
+   dlg_re.getControl(&quot;lbl_nKEY&quot;).text=nRe.Key
+   if oRe.Key=nRe.Key then setTextColor(&quot;KEY&quot;,c1)
+   &apos;vsb
+   dlg_re.getControl(&quot;lbl_oVSB&quot;).text=oRe.Visible
+   dlg_re.getControl(&quot;lbl_nVSB&quot;).text=nRe.Visible
+   if oRe.Visible=nRe.Visible then setTextColor(&quot;VSB&quot;,c1)
+   &apos;typ
+   dlg_re.getControl(&quot;lbl_oTYP&quot;).text=oRe.Tipologia
+   dlg_re.getControl(&quot;lbl_nTYP&quot;).text=nRe.Tipologia
+   if oRe.Tipologia=nRe.Tipologia then setTextColor(&quot;TYP&quot;,c1)
+   &apos;fnd
+   dlg_re.getControl(&quot;lbl_oFND&quot;).text=travirgolette(oRe.Find)
+   dlg_re.getControl(&quot;lbl_nFND&quot;).text=travirgolette(nRe.Find)
+   if oRe.Find=nRe.Find then setTextColor(&quot;FND&quot;,c1)
+   &apos;txt
+   dlg_re.getControl(&quot;lbl_oTXT&quot;).text=oRe.TextString
+   dlg_re.getControl(&quot;lbl_nTXT&quot;).text=nRe.TextString
+   if oRe.TextString=nRe.TextString then setTextColor(&quot;TXT&quot;,c1)
+   &apos;isr
+   dlg_re.getControl(&quot;lbl_oISR&quot;).text=oRe.isRegEx
+   dlg_re.getControl(&quot;lbl_nISR&quot;).text=nRe.isRegEx
+   if oRe.isRegEx=nRe.isRegEx then setTextColor(&quot;ISR&quot;,c1)
+   &apos;sns
+   dlg_re.getControl(&quot;lbl_oSNS&quot;).text=oRe.CaseSensitive
+   dlg_re.getControl(&quot;lbl_nSNS&quot;).text=nRe.CaseSensitive
+   if oRe.CaseSensitive=nRe.CaseSensitive then setTextColor(&quot;SNS&quot;,c1)
+   &apos;dua
+   dlg_re.getControl(&quot;lbl_oDUA&quot;).text=oRe.Dual
+   dlg_re.getControl(&quot;lbl_nDUA&quot;).text=nRe.Dual
+   if oRe.Dual=nRe.Dual then setTextColor(&quot;DUA&quot;,c1)
+   &apos;lb1
+   dlg_re.getControl(&quot;lbl_oLB1&quot;).text=oRe.Label_1
+   dlg_re.getControl(&quot;lbl_nLB1&quot;).text=nRe.Label_1
+   if oRe.Label_1=nRe.Label_1 then setTextColor(&quot;LB1&quot;,c1)
+   &apos;md1
+   dlg_re.getControl(&quot;lbl_oMD1&quot;).text=oRe.Mode_1
+   dlg_re.getControl(&quot;lbl_nMD1&quot;).text=nRe.Mode_1
+   if oRe.Mode_1=nRe.Mode_1 then setTextColor(&quot;MD1&quot;,c1)
+   &apos;rp1
+   dlg_re.getControl(&quot;lbl_oRP1&quot;).text=travirgolette(oRe.Replace_1)
+   dlg_re.getControl(&quot;lbl_nRP1&quot;).text=travirgolette(nRe.Replace_1)
+   if oRe.Replace_1=nRe.Replace_1 then setTextColor(&quot;RP1&quot;,c1)
+   &apos;dr1
+   dlg_re.getControl(&quot;lbl_oDR1&quot;).text=oRe.Direction_1
+   dlg_re.getControl(&quot;lbl_nDR1&quot;).text=nRe.Direction_1
+   if oRe.Direction_1=nRe.Direction_1 then setTextColor(&quot;DR1&quot;,c1)
+   &apos;sl1
+   dlg_re.getControl(&quot;lbl_oSL1&quot;).text=oRe.Sel_1
+   dlg_re.getControl(&quot;lbl_nSL1&quot;).text=nRe.Sel_1
+   if oRe.Sel_1=nRe.Sel_1 then setTextColor(&quot;SL1&quot;,c1)
+   &apos;lb2
+   dlg_re.getControl(&quot;lbl_oLB2&quot;).text=oRe.Label_2
+   dlg_re.getControl(&quot;lbl_nLB2&quot;).text=nRe.Label_2
+   if oRe.Label_2=nRe.Label_2 then setTextColor(&quot;LB2&quot;,c1)
+   &apos;md2
+   dlg_re.getControl(&quot;lbl_oMD2&quot;).text=oRe.Mode_2
+   dlg_re.getControl(&quot;lbl_nMD2&quot;).text=nRe.Mode_2
+   if oRe.Mode_2=nRe.Mode_2 then setTextColor(&quot;MD2&quot;,c1)
+   &apos;rp2
+   dlg_re.getControl(&quot;lbl_oRP2&quot;).text=travirgolette(oRe.Replace_2)
+   dlg_re.getControl(&quot;lbl_nRP2&quot;).text=travirgolette(nRe.Replace_2)
+   if oRe.Replace_2=nRe.Replace_2 then setTextColor(&quot;RP2&quot;,c1)
+   &apos;dr2
+   dlg_re.getControl(&quot;lbl_oDR2&quot;).text=oRe.Direction_2
+   dlg_re.getControl(&quot;lbl_nDR2&quot;).text=nRe.Direction_2
+   if oRe.Direction_2=nRe.Direction_2 then setTextColor(&quot;DR2&quot;,c1)
+   &apos;sl2
+   dlg_re.getControl(&quot;lbl_oSL2&quot;).text=oRe.Sel_2
+   dlg_re.getControl(&quot;lbl_nSL2&quot;).text=nRe.Sel_2
+   if oRe.Sel_2=nRe.Sel_2 then setTextColor(&quot;SL2&quot;,c1)
+   dlg_re.Execute()   
+   RegExAlreadyPresent=dlg_result
+end function
+sub setTextColor(nomeObject as string ,colore as long)
+   dlg_re.getControl(&quot;lbl_&quot; &amp; nomeObject).model.TextColor=colore
+   dlg_re.getControl(&quot;lbl_o&quot; &amp; nomeObject).model.TextColor=colore
+   dlg_re.getControl(&quot;lbl_n&quot; &amp; nomeObject).model.TextColor=colore
+End sub
+
+function getPasteRegEx()
+   getPasteRegEx = dlg_re.getControl(&quot;txtPaste&quot;).text	
+end function
+
+Sub cmdPasteOK_Click(event as object)
+   dlg_result=True
+   dlg_re.endExecute()
+End sub
+Sub cmdPasteCancel_Click(event as object)
+   dlg_re.endExecute()
+End sub
+Sub cmdPasteExit_Click(event as object)
+   dlg_temp.endExecute()
+End sub
+
+Sub cmdOverwrite_Click(event as object)
+   if dlg_re.getcontrol(&quot;chkAll&quot;).getstate = 1 then
+  	  dlg_result=&quot;ALL_overwrite&quot;
+   else
+   	  dlg_result=&quot;overwrite&quot;
+   end if
+   dlg_re.endExecute()
+End sub
+Sub cmdNewKey_Click(event as object)
+   if dlg_re.getcontrol(&quot;chkAll&quot;).getstate = 1 then
+  	  dlg_result=&quot;ALL_newkey&quot;
+   else
+   	  dlg_result=&quot;newkey&quot;
+   end if
+   dlg_re.endExecute()
+End sub
+Sub cmdSkip_Click(event as object)
+   if dlg_re.getcontrol(&quot;chkAll&quot;).getstate = 1 then
+  	  dlg_result=&quot;ALL_skip&quot;
+   else
+   	  dlg_result=&quot;skip&quot;
+   end if
+   dlg_re.endExecute()
+End sub
+Sub cmdStop_Click(event as object)
+   dlg_result=&quot;interrupt&quot;
+   dlg_re.endExecute()
+End sub
+
+function checkPCRegExPasteFormat(str as string) as string
+  dim r as string
+  dim v as boolean
+  v=false
+  r=trim(str)
+  if left(str,len(PCRegExPasteFormat))=PCRegExPasteFormat then
+  	v=true
+  end if
+  
+  if v then
+  	checkPCRegExPasteFormat=r
+  else
+  	checkPCRegExPasteFormat=&quot;&quot;
+  end if
+end function
+function getTextClipBoard() as string
+  Dim oClip, oClipContents, oTypes
+  Dim oConverter, convertedString$
+  Dim i%, iPlainLoc%
+  
+  iPlainLoc = -1
+  convertedString=&quot;&quot;
+  
+  Dim s$ : s$ = &quot;com.sun.star.datatransfer.clipboard.SystemClipboard&quot;
+  oClip = createUnoService(s$)
+  oConverter = createUnoService(&quot;com.sun.star.script.Converter&quot;)
+  
+  &apos;Print &quot;Clipboard name = &quot; &amp; oClip.getName()
+  &apos;Print &quot;Implemantation name = &quot; &amp; oClip.getImplementationName()
+  oClipContents = oClip.getContents()
+  oTypes = oClipContents.getTransferDataFlavors()
+  
+  Dim msg$, iLoc%, outS
+  msg = &quot;&quot;
+  iLoc = -1
+  For i=LBound(oTypes) To UBound(oTypes)
+    If oTypes(i).MimeType = &quot;text/plain;charset=utf-16&quot; Then 
+      iPlainLoc = i
+      Exit For
+    End If
+    &apos;msg = msg &amp; &quot;Mime type = &quot; &amp; x(ii).MimeType &amp; &quot; normal = &quot; &amp; _
+    &apos;      x(ii).HumanPresentableName &amp; Chr$(10)
+  Next
+  If (iPlainLoc &gt;= 0) Then
+    convertedString = oConverter.convertToSimpleType( _
+         oClipContents.getTransferData(oTypes(iPlainLoc)), _
+         com.sun.star.uno.TypeClass.STRING)
+  End If
+  getTextClipBoard=convertedString
+  
+End function
+
+Sub PasteRegEx(strPaste as string)
+	Dim matPasteRegEx
+	dim element as string
+	dim countRegEx as integer
+	dim cAdded as integer
+	dim cOverwrited as integer
+	dim cSkipped as integer
+	dim cError as integer
+	dim interrupted as boolean
+	dim msgText as string
+	dim flagMessage as long
+	dim cAlready as integer
+	
+	action_for_queque=&quot;&quot;
+	countRegEx=0
+	cAdded=0
+	cOverwrited=0
+	cSkipped=0
+	cError=0
+	cAlready=0
+	interrupted=false
+	msgtext=&quot;&quot;
+	if checkPCRegExPasteFormat(strPaste)&lt;&gt;&quot;&quot; then
+		matPasteRegEX=splitPasteString(strPaste)
+		for each element in matPasteRegEX
+		    select case addRegExFromString(element)
+		    	case &quot;added&quot;
+		    		cAdded=cAdded+1
+		    	case &quot;overwrited&quot;
+   	  	 			cOverwrited=cOverwrited+1
+   	  	 		case &quot;skipped&quot;
+   	  	 			cSkipped=cSkipped+1
+   	  	 		case &quot;already_present&quot;
+   	  	 			cAlready=cAlready+1
+   	  	 		case &quot;interrupted&quot;
+   	  	 			interrupted=true
+   	  	 			exit for
+   	  	 		case &quot;error&quot;
+   	  	 			cError=cError+1
+   	  	 	end select	
+			countRegEx=countRegEx+1	
+		next 
+		if interrupted then
+			msgtext=msgText &amp; &quot;Paste process Interrupted!&quot; &amp; chr(10) &amp; chr(10)
+			flagMessage=16
+		else
+			msgtext=msgText &amp; &quot;Paste process just finish.&quot; &amp; chr(10) &amp; chr(10)
+			flagMessage=64
+		end if
+		msgText=msgText &amp; gLang.item(&quot;dialog_cp_004&quot;).txt &amp; countRegEx &amp; chr(10)
+		if cAlready&gt;0 then msgText=msgText &amp; gLang.item(&quot;dialog_cp_013&quot;).txt &amp; cAlready &amp; chr(10)
+		if cadded&gt;0 then msgText=msgText &amp; gLang.item(&quot;dialog_cp_005&quot;).txt &amp; cAdded &amp; chr(10)
+		if cOverwrited&gt;0 then msgText=msgText &amp; gLang.item(&quot;dialog_cp_006&quot;).txt &amp; cOverwrited &amp; chr(10)
+		if cSkipped&gt;0 then msgText=msgText &amp; gLang.item(&quot;dialog_cp_007&quot;).txt &amp; cSkipped &amp; chr(10)
+		if cError&gt;0 then msgText=msgText &amp; gLang.item(&quot;dialog_cp_008&quot;).txt &amp; cerror &amp; chr(10)	
+		msgtext=msgText &amp; chr(10) &amp; chr(10) &amp; gLang.item(&quot;dialog_cp_009&quot;).txt
+		msgbox(msgText, flagMessage, gLang.item(&quot;dialog_cp_010&quot;).txt)
+    else
+    	msgbox(gLang.item(&quot;dialog_cp_011&quot;).txt, 48, gLang.item(&quot;dialog_cp_010&quot;).txt)
+	end if
+end sub
+
+function addRegExFromString(str as string) as string
+    dim matElement
+    dim strElement as string
+    dim idElement as string
+    dim valElement as string
+    dim index as integer
+    dim nRE as RegEx
+    dim famRegEx as string
+    dim cRegEx
+    dim oRE as RegEx
+    dim rsp as string
+    dim action_selected as string
+    dim err_val as boolean
+    dim stringcheck as string
+
+	matElement=split(str,chr(10))
+	set nRE = newRegEx()
+	nRe.Visible=True
+	famRegEx=&quot;&quot;
+	action_selected=&quot;&quot;
+	for index=0 to ubound(matElement)
+		strElement=adjustStringRegEx(matElement(index))
+		if len(strElement)&gt;=4 then 
+			idElement=left(strElement,3)
+		else
+			idElement=&quot;&quot;
+		end if
+		if len(strElement)&gt;=5 then
+			valElement=adjustValElement(mid(strElement,5))
+		else
+			valElement=&quot;&quot;
+		end if
+		err_val=false
+		if idElement&lt;&gt;&quot;&quot; then
+			select case idElement
+                case &quot;FAM&quot;
+                	stringcheck=&quot;|general|header|warning|hyphenation|&quot;
+                	if instr(stringcheck, &quot;|&quot; &amp; valElement &amp; &quot;|&quot;)&gt;0 then
+                		famRegEx=valElement             	
+                	else
+                		err_val=true
+                	end if
+                case &quot;KEY&quot;
+                 	nRE.Key=valElement
+                case &quot;VSB&quot;
+                	stringcheck=&quot;|true|false|&quot;
+                	if instr(stringcheck, &quot;|&quot; &amp; valElement &amp; &quot;|&quot;)&gt;0 then
+                		nRE.Visible=valElement           	
+                	else
+                		err_val=true
+                	end if
+                case &quot;TYP&quot;
+                	stringcheck=&quot;|1|2|3|9|&quot;
+                	if instr(stringcheck, &quot;|&quot; &amp; valElement &amp; &quot;|&quot;)&gt;0 then
+                		nRE.Tipologia=valElement         	
+                	else
+                		err_val=true
+                	end if
+                case &quot;FND&quot;
+                 	nRE.Find=valElement
+                case &quot;TXT&quot;
+                 	nRE.TextString=valElement
+                case &quot;SNS&quot;
+                	stringcheck=&quot;|true|false|&quot;
+                	if instr(stringcheck, &quot;|&quot; &amp; valElement &amp; &quot;|&quot;)&gt;0 then
+                		nRE.CaseSensitive=valElement           	
+                	else
+                		err_val=true
+                	end if
+                case &quot;ISR&quot;
+                	stringcheck=&quot;|true|false|&quot;
+                	if instr(stringcheck, &quot;|&quot; &amp; valElement &amp; &quot;|&quot;)&gt;0 then
+                		nRE.isRegEx=valElement		           	
+                	else
+                		err_val=true
+                	end if	
+                case &quot;DUA&quot;
+                	stringcheck=&quot;|true|false|&quot;
+                	if instr(stringcheck, &quot;|&quot; &amp; valElement &amp; &quot;|&quot;)&gt;0 then
+                		nRE.Dual=valElement		           	
+                	else
+                		err_val=true
+                	end if	
+                case &quot;LB1&quot;
+                 	nRE.Label_1=valElement
+                case &quot;MD1&quot;
+                 	nRE.Mode_1=valElement
+                case &quot;RP1&quot;
+                 	nRE.Replace_1=valElement
+                case &quot;DR1&quot;
+                 	nRE.Direction_1=valElement
+                case &quot;SL1&quot;
+                 	nRE.Sel_1=valElement
+                case &quot;LB2&quot;
+                	nRE.Label_2=valElement
+                case &quot;MD2&quot;
+                 	nRE.Mode_2=valElement
+                case &quot;RP2&quot;
+                 	nRE.Replace_2=valElement
+                case &quot;DR2&quot;
+                 	nRE.Direction_2=valElement
+                case &quot;SL2&quot;
+                 	nRE.Sel_2=valElement
+			    case else
+				 	if idElement&lt;&gt;&quot;&quot; then 
+				 	   ErrorLog (&quot;┌ ▲ Import RegEx Format Error:&quot; &amp; chr(13) &amp; &quot;│   Val &quot; &amp; idElement &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in addRegExFromString !&quot;)
+				 	end if
+			end Select	
+			if err_val then	
+				ErrorLog (&quot;┌ ▲ Import RegEx Value Error:&quot; &amp; chr(13) &amp; &quot;│   &quot; &amp; idElement &amp; &quot;: val &apos;&quot; &amp; valElement &amp; &quot;&apos; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in addRegExFromString !&quot;)
+			end if
+		end if
+	next
+    if famRegEx&lt;&gt;&quot;&quot; then
+    	cRegEx = getRegExCollectionByString(famRegEx)
+    	if isnull(cRegEx) then
+    		rsp=&quot;error&quot;
+    	else
+    	   do
+    		 oRE=LookupCollection(cRegEx, nRe.Key)
+   	  		 if isnull(oRe) then
+   	  			cRegEx.add nRE, nre.key
+   	  			rsp=&quot;added&quot;
+   	  			exit do
+   	  		 else
+   	  		    if isIdemRegEx(oRe,nRE) then
+					rsp=&quot;already_present&quot;
+					exit do
+   	  		    end if
+   	  			if action_for_queque=&quot;&quot; then
+   	  			   action_selected=RegExAlreadyPresent(oRe,nRe)
+   	  			   if left(action_selected,4)=&quot;ALL_&quot; then
+   	  			   	  action_selected=mid(action_selected,5)
+				      action_for_queque=action_selected
+				   end if
+   	  			else
+				   action_selected=action_for_queque
+				end if
+				
+   	  	 		select case action_selected
+   	  	 			case &quot;overwrite&quot;
+   	  	 				copyRe(nRe,oRe)
+   	  	 				rsp=&quot;overwrited&quot;
+   	  	 				exit do
+   	  	 			case &quot;newkey&quot;
+   	  	 				nRe.Key=Get_RandomKey(20,&quot;RE_USER_&quot;)
+   	  	 			case &quot;skip&quot;
+   	  	 				rsp=&quot;skipped&quot;
+   	  	 				exit do
+   	  	 			case &quot;interrupt&quot;
+   	  	 				rsp=&quot;interrupted&quot;
+   	  	 				exit do
+   	  	 			case else
+   	  	 				rsp=&quot;error&quot;
+   	  	 				exit do
+   	  	 		end select
+   	  		 end if
+    	  loop
+       end if
+    else
+    	rsp=&quot;error&quot;
+    end if
+    addRegExFromString=rsp   
+end function
+
+Function splitPasteString(str as string)
+	dim c_r
+	dim p1 as integer
+	dim p2 as integer
+	set c_r=new collection
+	&apos;instr(1,strReplace,&quot;$&quot;)
+	p1=1
+	do while p1&lt;&gt;0
+		p1=instr(p1,str,&quot;&lt;RegEx&gt;&quot;)
+		if p1=0 then exit do
+		p2=instr(p1,str,&quot;&lt;/RegEx&gt;&quot;)
+		if p1=0 then exit do
+		c_r.add(trim(mid(str,p1+7,p2-(p1+7))))
+		p1=p2
+	loop
+	splitPasteString=c_r
+end Function
+
+function adjustStringRegEx(strToAdjust) as string
+	dim s as string
+	dim v as integer
+	dim lettere as string
+	
+	s=trim(strToAdjust)
+	lettere=&quot;qwertyuiopasdfghjklzxcvbnm1234567890&quot;&quot;&quot;
+	do
+		if len(s)=0 then exit do
+		v=instr(lettere,left(s,1))
+		if v=0 then s=mid(s,2)
+	loop while v=0
+	do
+		if len(s)=0 then exit do
+		v=instr(lettere,right(s,1))
+		if v=0 then s=mid(s,1,len(s)-1)
+	loop while v=0
+	adjustStringRegEx=s
+end Function
+function adjustValElement(strToAdjust) as string
+	dim s as string
+	s=strToAdjust
+	if left(s,1)=&quot;&quot;&quot;&quot; then
+		s=mid(s,2)
+		if right(s,1)=&quot;&quot;&quot;&quot; then s=mid(s,1,len(s)-1)
+	end if
+	adjustValElement=s
+end Function
+
+Sub CopyAllRegExToClipboard(family as string)
+	Dim pCollRE
+	Dim pRE
+	dim c as integer
+	dim txt as string
+	pCollRE=getRegExCollectionByString(family)
+	c=0
+	txt=PCRegExPasteFormat &amp; chr(10)
+	for each pRE in pCollRE
+		if c=0 then
+			txt=txt &amp; CopyRegExToString(pRE,family)
+		end if
+	next
+	if gPreference.useClipboard then
+		CopyToClipBoard(txt)
+		msgbox gLang.item(&quot;dialog_cp_002&quot;).txt, 64, gLang.item(&quot;dialog_cp_003&quot;).txt
+	else
+		CopyToDialogBox(txt)
+	end if
+End Sub
+
+Sub CopyRegExToClipboard(pRE as RegEx, Family as string)
+	dim txt as string
+	txt=PCRegExPasteFormat &amp; chr(10)
+	txt=txt &amp; CopyRegExToString(pRe, Family)
+	if gPreference.useClipboard then
+		CopyToClipBoard(txt)
+		msgbox gLang.item(&quot;dialog_cp_001&quot;).txt, 64, gLang.item(&quot;dialog_cp_003&quot;).txt
+	else
+		CopyToDialogBox(txt)
+	end if	
+End Sub
+
+Function CopyRegExToString(pRE as RegEx, Family as string) as string
+	dim r as string
+	dim cr as string
+	
+	cr=chr(10)
+	r = &quot;&lt;RegEx&gt;&quot; &amp; cr
+	r = r &amp; &quot;KEY=&quot; &amp; pRe.Key &amp; cr
+	r = r &amp; &quot;FAM=&quot; &amp; ucase(Family) &amp; cr
+	r = r &amp; &quot;VSB=&quot; &amp; pRe.Visible &amp; cr
+	r = r &amp; &quot;FND=&quot; &amp; travirgolette(pRe.Find) &amp; cr
+	r = r &amp; &quot;TXT=&quot; &amp; travirgolette(pRe.TextString) &amp; cr
+	r = r &amp; &quot;ISR=&quot; &amp; pRe.isRegEx &amp; cr
+	r = r &amp; &quot;SNS=&quot; &amp; pRe.CaseSensitive &amp; cr
+	r = r &amp; &quot;DUA=&quot; &amp; pRe.Dual &amp; cr
+	r = r &amp; &quot;TYP=&quot; &amp; pRe.Tipologia &amp; cr
+	r = r &amp; &quot;MD1=&quot; &amp; pRe.Mode_1 &amp; cr
+	r = r &amp; &quot;LB1=&quot; &amp; travirgolette(pRe.Label_1) &amp; cr
+	r = r &amp; &quot;RP1=&quot; &amp; travirgolette(pRe.Replace_1) &amp; cr
+	r = r &amp; &quot;DR1=&quot; &amp; pRe.Direction_1 &amp; cr
+	r = r &amp; &quot;SL1=&quot; &amp; pRe.Sel_1 &amp; cr
+	r = r &amp; &quot;MD2=&quot; &amp; pRe.Mode_2 &amp; cr
+	r = r &amp; &quot;LB2=&quot; &amp; travirgolette(pRe.Label_2) &amp; cr
+	r = r &amp; &quot;RP2=&quot; &amp; travirgolette(pRe.Replace_2) &amp; cr
+	r = r &amp; &quot;DR2=&quot; &amp; pRe.Direction_2 &amp; cr
+	r = r &amp; &quot;SL2=&quot; &amp; pRe.Sel_2 &amp; cr	
+	r = r &amp; &quot;&lt;/RegEx&gt;&quot; &amp; cr
+	CopyRegExToString=r
+End Function
+
+Function travirgolette(str as string) as string
+	travirgolette=&quot;&quot;&quot;&quot; &amp; str &amp; &quot;&quot;&quot;&quot;
+End Function
+
+Sub  CopyToClipBoard( sText )
+	Dim oClip, oTr
+    &apos; create SystemClipboard instance
+    oClip = CreateUnoService(&quot;com.sun.star.datatransfer.clipboard.SystemClipboard&quot;)
+    oTR = createUnoListener(&quot;Tr_&quot;, _
+       &quot;com.sun.star.datatransfer.XTransferable&quot;)
+    &apos; set data
+    oClip.setContents(oTR,Null)
+    sTxtCString = sText
+    &apos;oClip.flushClipboard() &apos; does not work
+End  Sub
+Sub  CopyToDialogBox( sText )
+    dim oSelection
+    dlg_temp=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgPasteRegEx)
+    dlg_temp.getControl(&quot;cmdExit&quot;).setVisible(True)
+    dlg_temp.getControl(&quot;cmdOK&quot;).setVisible(False)
+    dlg_temp.getControl(&quot;cmdCancel&quot;).setVisible(False)
+    dlg_temp.getControl(&quot;txtPaste&quot;).text=sText
+    oSelection = createUnoStruct( &quot;com.sun.star.awt.Selection&quot; )
+    With oSelection
+      .Min = 0
+      .Max = len(dlg_temp.getControl(&quot;txtPaste&quot;).text)
+    End With 
+    dlg_temp.getControl(&quot;txtPaste&quot;).setSelection(oselection)
+    dlg_temp.Execute()
+End  Sub
+
+Function  Tr_getTransferData(aFlavor as com.sun.star.datatransfer.DataFlavor)
+   If  (aFlavor.MimeType =&quot;text/plain;charset=utf-16&quot;)Then
+     Tr_getTransferData() = sTxtCString
+   End  If
+End  Function
+
+Function  Tr_getTransferDataFlavors()
+   Dim  aFlavor As new com.sun.star.datatransfer.DataFlavor
+   aFlavor.MimeType =&quot;text/plain;charset=utf-16&quot;
+   aFlavor.HumanPresentableName =&quot;Unicode-Text&quot;
+   Tr_getTransferDataFlavors() = array(aFlavor)
+End  Function
+
+Function  Tr_isDataFlavorSupported(aFlavor as com.sun.star.datatransfer.DataFlavor) as Boolean
+   If  aFlavor.MimeType =&quot;text/plain;charset=utf-16&quot;  Then
+     Tr_isDataFlavorSupported = true
+   Else
+     Tr_isDataFlavorSupported = false
+   End  If
+End  Function
+
+
+</script:module>

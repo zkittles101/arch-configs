@@ -1,0 +1,1908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modPrefernce" script:language="StarBasic">REM  *****  BASIC  *****
+option explicit
+
+&apos;Type
+type Preference
+    MenuSelected as integer
+    LanguageChoise as string
+    QuestionEndPage as boolean
+    FontSize as integer
+    UseClipboard as boolean
+end type
+
+&apos;Type
+Type RegExOld
+	Key as String
+	Visible as Boolean
+	Tipologia as Integer
+	RegEx_Find as String
+	RegEx_Replace as string
+	MoveDirection as String &apos;L Left R Right
+	MoveSel as Integer
+	TextString as String
+	CaseSensitive as Boolean
+End Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+
+&apos;type
+type Language
+	txt as string
+	key as string
+end type 
+
+Sub initLanguage(languageCollection)
+&apos;========== Standard messages (English) =======
+	dim l as Language
+	set l=new language
+	l.txt=&quot;General Find&quot;
+	l.key=&quot;default_menubut_find&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Hyphens Find&quot;
+	l.key=&quot;default_menubut_hypens&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Warning Find&quot;
+	l.key=&quot;default_menubut_warning&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Header Find&quot;
+	l.key=&quot;default_menubut_header&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Edit RegEx&quot;
+	l.key=&quot;default_menubut_regex&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Work with Style&quot;
+	l.key=&quot;default_menubut_style&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Options&quot;
+	l.key=&quot;default_menubut_options&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Debug Log&quot;
+	l.key=&quot;default_menubut_debug&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Select List to view&quot;
+	l.key=&quot;default_tt_reg_cmbList&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add a new RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_add&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add a Separator&quot;
+	l.key=&quot;default_tt_sm_reg_separator&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Remove Selected RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_remove&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Set &apos;On&apos; selected RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_on&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Set &apos;Off&apos; selected RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_off&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Move Up selected RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_up&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Move Down selected RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_down&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Edit selected RegEx&quot;
+	l.key=&quot;default_tt_sm_reg_edit&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Save RegEx&quot;
+	l.key=&quot;default_tt_reg_save&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Paste RegEx&quot;
+	l.key=&quot;default_tt_reg_paste&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Copy RegEx to Clipboard&quot;
+	l.key=&quot;default_tt_reg_copy&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Restore RegEx at default&apos;s value&quot;
+	l.key=&quot;default_tt_reg_restore&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Visit Pepito&apos;s Site for more RegEx&quot;
+	l.key=&quot;default_tt_reg_cmdSiteRegEx&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Select Style to limit Find&quot;
+	l.key=&quot;default_tt_fin_cmbStyle&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Next match&quot;
+	l.key=&quot;default_tt_sm_fin_next&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Previous match&quot;
+	l.key=&quot;default_tt_sm_fin_prev&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make this&quot;
+	l.key=&quot;default_tt_sm_fin_make&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make all&quot;
+	l.key=&quot;default_tt_sm_fin_makeAll&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make this&quot;
+	l.key=&quot;default_tt_sm_fin_make2&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make all&quot;
+	l.key=&quot;default_tt_sm_fin_makeAll2&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Undo Last Action&quot;
+	l.key=&quot;default_tt_sm_fin_undo&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Next match&quot;
+	l.key=&quot;default_tt_sm_sty_next&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Previous match&quot;
+	l.key=&quot;default_tt_sm_sty_prev&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Set style to selecteds items&quot;
+	l.key=&quot;default_tt_sm_sty_style&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make this with style selected&quot;
+	l.key=&quot;default_tt_sm_sty_make&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make all&quot;
+	l.key=&quot;default_tt_sm_sty_makeAll&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Undo Last Action&quot;
+	l.key=&quot;default_tt_sm_sty_undo&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Refresh&quot;
+	l.key=&quot;default_tt_gen_Refresh&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Cancel Hyphenation&quot;
+	l.key=&quot;default_tt_sm_hyp_cancel&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace Hyphenation with Space&quot;
+	l.key=&quot;default_tt_sm_hyp_space&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace Hyphenation with right Hyphenation&quot;
+	l.key=&quot;default_tt_sm_hyp_replace&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add Word to Ignore list&quot;
+	l.key=&quot;default_tt_sm_hyp_ignore&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add Word to standard.dic&quot;
+	l.key=&quot;default_tt_sm_hyp_dictionary&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Undo Last Action&quot;
+	l.key=&quot;default_tt_sm_hyp_undo&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Select warning List&quot;
+	l.key=&quot;default_tt_war_cmbList&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace Text&quot;
+	l.key=&quot;default_tt_sm_war_text&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace this Words&quot;
+	l.key=&quot;default_tt_sm_war_make&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add Word to Ignore list&quot;
+	l.key=&quot;default_tt_sm_war_ignore&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add Word to standard.dic&quot;
+	l.key=&quot;default_tt_sm_war_dictionary&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Undo Last Action&quot;
+	l.key=&quot;default_tt_sm_war_undo&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Select view type&quot;
+	l.key=&quot;default_tt_hea_cmbList&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Execute view&quot;
+	l.key=&quot;default_tt_hea_butExecute&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Set style to selecteds items&quot;
+	l.key=&quot;default_tt_sm_hea_style&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Undo Last Action&quot;
+	l.key=&quot;default_tt_sm_hea_undo&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Edit Languages Interface&quot;
+	l.key=&quot;default_tt_opt_butLanguages&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Show Path Extensions&quot;
+	l.key=&quot;default_tt_opt_butShowPath&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Question if it reached end of document&quot;
+	l.key=&quot;default_tt_sm_fin_qrefind_off&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Refind automatically to start of document&quot;
+	l.key=&quot;default_tt_sm_fin_qrefind_on&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Question if it reached end of document&quot;
+	l.key=&quot;default_tt_sm_sty_qrefind_off&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Refind automatically to start of document&quot;
+	l.key=&quot;default_tt_sm_sty_qrefind_on&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Question if it reached end of document&quot;
+	l.key=&quot;default_tt_sm_war_qrefind_off&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Refind automatically to start of document&quot;
+	l.key=&quot;default_tt_sm_war_qrefind_on&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Question if it reached end of document&quot;
+	l.key=&quot;default_tt_sm_hyp_qrefind_off&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Refind automatically to start of document&quot;
+	l.key=&quot;default_tt_sm_hyp_qrefind_on&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Visit Web Site&quot;
+	l.key=&quot;default_tt_opt_visitSite&quot;
+	languageCollection.add l, l.key
+		
+	&apos;string control object
+	set l=new language
+	l.txt=&quot;General RegEx List&quot;
+	l.key=&quot;default_regex_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Header RegEx List&quot;
+	l.key=&quot;default_regex_00002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Warning RegEx List&quot;
+	l.key=&quot;default_regex_00003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Hyphenation RegEx List&quot;
+	l.key=&quot;default_regex_00004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Search RegEx on PepitoWeb.altervista.org&quot;
+	l.key=&quot;default_regex_00005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;WAIT&quot;
+	l.key=&quot;default_wait_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Finding RegEx General&quot;
+	l.key=&quot;default_wait_00002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Making RegEx General&quot;
+	l.key=&quot;default_wait_00003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Hyphenations&quot;
+	l.key=&quot;default_wait_00004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make Hyphenations&quot;
+	l.key=&quot;default_wait_00005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Warning&quot;
+	l.key=&quot;default_wait_00006&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Make Warning&quot;
+	l.key=&quot;default_wait_00007&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;All Warning&quot;
+	l.key=&quot;default_war_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find Header&quot;
+	l.key=&quot;default_wait_00008&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Finding Style&quot;
+	l.key=&quot;default_wait_00009&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Making Style&quot;
+	l.key=&quot;default_wait_00010&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;All Style&quot;
+	l.key=&quot;default_find_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;All Header&quot;
+	l.key=&quot;default_hea_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Used Language&quot;
+	l.key=&quot;default_lang_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Original String&quot;
+	l.key=&quot;default_lang_00002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Edit Selected String in Lang Selected&quot;
+	l.key=&quot;default_lang_00003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Create &quot;
+	l.key=&quot;default_lang_00004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Show Extension Path&quot;
+	l.key=&quot;default_option_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Languages&quot;
+	l.key=&quot;default_option_00002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Yes&quot;
+	l.key=&quot;default_option_00003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;No&quot;
+	l.key=&quot;default_option_00004&quot;
+	languageCollection.add l, l.key
+	
+	
+	
+	&apos;string dialog box
+	set l=new language
+	l.txt=&quot;RegEx Saved&quot;
+	l.key=&quot;dialog_regex_0001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx Saved&quot; &amp; chr(13) &amp; &quot;See Debug log for more info.&quot;
+	l.key=&quot;dialog_regex_0002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx Restore&quot;
+	l.key=&quot;dialog_regex_0003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;I&apos;m going restore all standards RegEx at default value.&quot; &amp; chr(13) &amp; &quot;Do you want also delete Personal Regex?&quot;
+	l.key=&quot;dialog_regex_0004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx Edit&quot;
+	l.key=&quot;dialog_regex_0005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;No RegEx matched.&quot;
+	l.key=&quot;dialog_regex_0006&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Reg Exp not valid.&quot;
+	l.key=&quot;dialog_regex_0007&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Find RegEx General&quot;
+	l.key=&quot;dialog_find_0001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;End of page reached.&quot; &amp; chr(13) &amp; &quot;Do you want refind at start of page?&quot;
+	l.key=&quot;dialog_find_0002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Extension Path&quot;
+	l.key=&quot;dialog_option_0001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;You can find the extension directory at this path:&quot;
+	l.key=&quot;dialog_option_0002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Selected RegEx copied to cilpboard&quot;
+	l.key=&quot;dialog_cp_001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;All RegEx copied to cilpboard&quot;
+	l.key=&quot;dialog_cp_002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Copy RegEx&quot;
+	l.key=&quot;dialog_cp_003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx processed: &quot;
+	l.key=&quot;dialog_cp_004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx added: &quot;
+	l.key=&quot;dialog_cp_005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx overwrited: &quot;
+	l.key=&quot;dialog_cp_006&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx skipped: &quot;
+	l.key=&quot;dialog_cp_007&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx wronged: &quot;
+	l.key=&quot;dialog_cp_008&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;You must save if you want the change to be permanent.&quot;
+	l.key=&quot;dialog_cp_009&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Paste RegEx Result&quot;
+    l.key=&quot;dialog_cp_010&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Format not Valid&quot;
+	l.key=&quot;dialog_cp_011&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Do you want to copy all RegEx?&quot; &amp; chr(13) &amp; &quot;Yes, copy all the RegEx&quot; &amp; chr(13) &amp; &quot;No, copy only RegEx selected.&quot;
+	l.key=&quot;dialog_cp_012&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;RegEx already present: &quot;
+	l.key=&quot;dialog_cp_013&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Key already present in your RegEx&apos;s List&quot;
+	l.key=&quot;dialog_overwrite_001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Old RegEx&quot;
+	l.key=&quot;dialog_overwrite_002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;New RegEx&quot;
+	l.key=&quot;dialog_overwrite_003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Overwrite&quot;
+	l.key=&quot;dialog_overwrite_004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Create New Key&quot;
+	l.key=&quot;dialog_overwrite_005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Skip&quot;
+	l.key=&quot;dialog_overwrite_006&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Use this action to current queque.&quot;
+	l.key=&quot;dialog_overwrite_007&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Stop&quot;
+	l.key=&quot;dialog_overwrite_008&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Paste her your RegEx&quot;
+	l.key=&quot;dialog_paste_001&quot;
+	languageCollection.add l, l.key
+
+	&apos;default Reg Exp_General
+	set l=new language
+	l.txt=&quot;Line start with Smallcase&quot;
+	l.key=&quot;RE_DEFAULT_000001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Line end with comma&quot;
+	l.key=&quot;RE_DEFAULT_000002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Line start with punctuation (not «)&quot;
+	l.key=&quot;RE_DEFAULT_000003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Line end without punctuation&quot;
+	l.key=&quot;RE_DEFAULT_000004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Line end with -&quot;
+	l.key=&quot;RE_DEFAULT_000005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Empty Line&quot;
+	l.key=&quot;RE_DEFAULT_000006&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Line start with space&quot;
+	l.key=&quot;RE_DEFAULT_000007&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Line end with space&quot;
+	l.key=&quot;RE_DEFAULT_000008&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Space at dialogue start («)&quot;
+	l.key=&quot;RE_DEFAULT_000009&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Space at dialogue end (»)&quot;
+	l.key=&quot;RE_DEFAULT_000010&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Space at parenthesis start (&quot;
+	l.key=&quot;RE_DEFAULT_000011&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Space at parenthesis end )&quot;
+	l.key=&quot;RE_DEFAULT_000012&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Double Spaces&quot;
+	l.key=&quot;RE_DEFAULT_000013&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Space before punctuation (;,:.!?)&quot;
+	l.key=&quot;RE_DEFAULT_000014&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace ... with …&quot;
+	l.key=&quot;RE_DEFAULT_000016&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Broken Lines between dialogue (» «, ” “ or &quot;&quot; &quot;&quot;)&quot;
+	l.key=&quot;RE_DEFAULT_000017&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace Tabs with space&quot;
+	l.key=&quot;RE_DEFAULT_000015&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;End dialogue without open dialogue&quot;
+	l.key=&quot;RE_DEFAULT_000018&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Breakable Paragraph too Long&quot;
+	l.key=&quot;RE_DEFAULT_000019&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Remove optional hyphens&quot;
+	l.key=&quot;RE_DEFAULT_000020&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Blank line after Page break&quot;
+	l.key=&quot;RE_SPECIAL_00001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Page break&quot;
+	l.key=&quot;RE_SPECIAL_00002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Blank line before Heading&quot;
+	l.key=&quot;RE_SPECIAL_00003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Blank line after Heading&quot;
+	l.key=&quot;RE_SPECIAL_00004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Bulleted Dialogs&quot;
+	l.key=&quot;RE_SPECIAL_00005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Multi blank lines&quot;
+	l.key=&quot;RE_SPECIAL_00006&quot;
+	languageCollection.add l, l.key
+	&apos;label
+	set l=new language
+	l.txt=&quot;Join the Line Up with space&quot;
+	l.key=&quot;RE_DEFAULT_000001_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Join the Line Up without space&quot;
+	l.key=&quot;RE_DEFAULT_000001_L2&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Join the Line Down&quot;
+	l.key=&quot;RE_DEFAULT_000002_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Join the Line Up&quot;
+	l.key=&quot;RE_DEFAULT_000003_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Join the Line Down&quot;
+	l.key=&quot;RE_DEFAULT_000004_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete - and join the Line Down&quot;
+	l.key=&quot;RE_DEFAULT_000005_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Join the Line Down with -&quot;
+	l.key=&quot;RE_DEFAULT_000005_L2&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000006_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000007_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000008_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000009_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000010_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000011_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000012_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace with one space&quot;
+	l.key=&quot;RE_DEFAULT_000013_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000014_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace with …&quot;
+	l.key=&quot;RE_DEFAULT_000016_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Breaks&quot;
+	l.key=&quot;RE_DEFAULT_000017_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace with a space&quot;
+	l.key=&quot;RE_DEFAULT_000015_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Join the Line Up&quot;
+	l.key=&quot;RE_DEFAULT_000018_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Add «&quot;
+	l.key=&quot;RE_DEFAULT_000018_L2&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Breaks&quot;
+	l.key=&quot;RE_DEFAULT_000019_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_DEFAULT_000020_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_SPECIAL_00001_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_SPECIAL_00002_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_SPECIAL_00003_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_SPECIAL_00004_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Delete&quot;
+	l.key=&quot;RE_SPECIAL_00005_L1&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Replace with one Blank Line&quot;
+	l.key=&quot;RE_SPECIAL_00006_L1&quot;
+	languageCollection.add l, l.key
+		
+	&apos;default Reg Exp_Warning
+	set l=new language
+	l.txt=&quot;Word with lowercase and upcase or with number&quot;
+	l.key=&quot;RE_DEFAULT_W_0001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Dialogues and parentheses to be verified&quot;
+	l.key=&quot;RE_DEFAULT_W_0002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Punctuation warning&quot;
+	l.key=&quot;RE_DEFAULT_W_0003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Numbers&quot;
+	l.key=&quot;RE_DEFAULT_W_0004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Special characters&quot;
+	l.key=&quot;RE_DEFAULT_W_0005&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Interior accents&quot;
+	l.key=&quot;RE_DEFAULT_W_0006&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Capitalized words&quot;
+	l.key=&quot;RE_DEFAULT_W_0007&quot;
+	languageCollection.add l, l.key
+	
+	&apos;default Reg Exp_Hyphenation
+	set l=new language
+	l.txt=&quot;Classic Hyphenation&quot;
+	l.key=&quot;RE_DEFAULT_HY_001&quot;
+	languageCollection.add l, l.key
+	
+	&apos;default Reg Exp_Header
+	set l=new language
+	l.txt=&quot;Only Number&quot;
+	l.key=&quot;RE_DEFAULT_H_0001&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Introduzione, epilogo e ringraziamenti&quot;
+	l.key=&quot;RE_DEFAULT_H_0002&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Capitolo e Chapter&quot;
+	l.key=&quot;RE_DEFAULT_H_0003&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Parte *&quot;
+	l.key=&quot;RE_DEFAULT_H_0004&quot;
+	languageCollection.add l, l.key
+	set l=new language
+	l.txt=&quot;Roman Number&quot;
+	l.key=&quot;RE_DEFAULT_H_0005&quot;
+	languageCollection.add l, l.key
+End Sub
+
+Function loadPreference as Boolean
+   &apos;carica le prefernze
+   &apos;load preference
+   
+   Dim myTextFile As Object, sf As Object, fileStream As Object
+   Dim aLineOfText As String, myFilePath As String
+   loadPreference=false
+
+    &apos;myFilePath = convertToURL(fname)
+    myFilePath = extensionLocation &amp; &quot;/preference.txt&quot;
+    DebugLog(&quot;┌──── Preference&quot;)
+    DebugLog(&quot;│ Path -&gt; &quot; + myFilePath)
+    if FileExists(myFilePath) then
+       sf = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+       On Error Goto loadPreferenceKO
+       fileStream = sf.openFileRead(myFilePath)
+       myTextFile = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+       myTextFile.InputStream = fileStream
+       myTextFile.Encoding = &quot;UTF-8&quot;
+       if not myTextFile.IsEOF then aLineOfText=myTextFile.readLine
+       if aLineOfText = gVersionFilePreference then
+       	  DebugLog(&quot;│ ✔ File Preference Valid&quot;)
+          gPreference.MenuSelected = int(myTextFile.readLine)
+          gPreference.LanguageChoise = myTextFile.readLine
+          gPreference.QuestionEndPage = myTextFile.readLine
+          gPreference.FontSize = int(myTextFile.readLine)
+          gPreference.UseClipboard = myTextFile.readLine
+          loadPreference=true
+       else
+          DebugLog(&quot;│ ▲ File Preference not valid&quot;)
+          DebugLog(&quot;│ ▲ Version Required -&gt; &quot; + gVersionFilePreference)
+          DebugLog(&quot;│ ▲ Version File -&gt; &quot; + aLineOfText)
+       end if
+       fileStream.closeInput
+       myTextFile.closeInput
+    else
+       DebugLog(&quot;│ ▲ File Preference not exist&quot;)
+    end if
+    DebugLog(&quot;└──── Preference&quot;)
+    On Error Goto 0
+    Exit function
+
+    loadPreferenceKO:
+    
+    ErrorLog (&quot;│ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;│ ▲ in loadPreference !&quot;)
+    On Error Resume Next
+    fileStream.closeInput
+    myTextFile.closeInput
+    DebugLog(&quot;└──── Preference&quot;)
+    On Error Goto 0
+End Function
+
+Sub savePreference
+    Dim oOutputAccess As Object
+	Dim oOutputStream As Object
+	Dim vOutputData   As Variant
+	dim myFilePath As String
+	
+	myFilePath = extensionLocation &amp; &quot;/preference.txt&quot;
+	If FileExists(myFilePath) Then Kill(myFilePath)
+	oOutputAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oOutputStream = CreateUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+	vOutputData   = oOutputAccess.openFileWrite(myFilePath)
+	oOutputStream.setOutputStream(vOutputData)
+	oOutputStream.setEncoding(&quot;UTF-8&quot;)
+	oOutputStream.writeString (gVersionFilePreference &amp; chr(13))
+    oOutputStream.writeString (gPreference.MenuSelected &amp; chr(13))
+    oOutputStream.writeString (gPreference.LanguageChoise &amp; chr(13))
+    oOutputStream.writeString (gPreference.QuestionEndPage &amp; chr(13))
+    oOutputStream.writeString (gPreference.FontSize &amp; chr(13))
+    oOutputStream.writeString (gPreference.UseClipboard &amp; chr(13))
+    oOutputStream.writeString (&quot;&quot; &amp; chr(13))
+	oOutputStream.flush()
+	oOutputStream.closeOutput()
+End sub
+
+
+Sub defaultPreference
+    gPreference.MenuSelected = 1
+    gPreference.LanguageChoise = &quot;default&quot;
+    gPreference.QuestionEndPage = True
+    gPreference.FontSize=8
+    gPreference.UseClipboard = True
+End Sub
+
+Sub LoadLanguage
+	Dim myTextFile As Object, sf As Object, fileStream As Object
+    Dim aLineOfText As String, myFilePath As String, myFileName as string
+    Dim OOLang as string
+	dim matLine
+	OOLang = GetLanguage
+	if gPreference.LanguageChoise = &quot;default&quot; then
+		myFileName = &quot;language_&quot; &amp; OOLang &amp; &quot;.txt&quot;
+	else
+		myFileName = gPreference.LanguageChoise &amp; &quot;.txt&quot;
+	end if
+	myFilePath = extensionLocation &amp; &quot;/&quot; &amp; myFileName
+	DebugLog(&quot;┌──── Language&quot;)
+	DebugLog(&quot;│ Language System -&gt; &quot; + OOLang)
+	DebugLog(&quot;│ Preference -&gt; &quot; + gPreference.LanguageChoise)
+	DebugLog(&quot;│ Language File -&gt; &quot; + myFileName)
+	DebugLog(&quot;│ Path -&gt; &quot; + myFilePath)
+    if FileExists(myFilePath) then
+       sf = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+       On Error Goto initLanguageKO
+       fileStream = sf.openFileRead(myFilePath)
+       myTextFile = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+       myTextFile.InputStream = fileStream
+       myTextFile.Encoding = &quot;UTF-8&quot;
+       if not myTextFile.IsEOF then aLineOfText=myTextFile.readLine
+       if aLineOfText = gVersionFileLanguage then
+       	  DebugLog(&quot;│ ✔ File Language Valid&quot;)
+          Do while not myTextFile.IsEOF
+             aLineOfText =  myTextFile.readLine
+             &apos;if file end must delete last chr(13)
+             if myTextFile.IsEOF then aLineOfText=replace(aLineOfText,chr(13),&quot;&quot;)
+             if trim(aLineOfText&lt;&gt;&quot;&quot;) then 
+                 matLine = split(aLineOfText, &quot;|&quot;)
+                 gLang.item(matLine(0)).txt=matLine(1)
+             end if
+          Loop
+       else
+          DebugLog(&quot;│ ▲ File Language not valid&quot;)
+          DebugLog(&quot;│ ▲ Version Required -&gt; &quot; + gVersionFileLanguage)
+          DebugLog(&quot;│ ▲ Version File -&gt; &quot; + aLineOfText)
+       end if
+       fileStream.closeInput
+       myTextFile.closeInput
+    else
+       DebugLog(&quot;│ ▲ File Language not exist&quot;)
+    end if
+    DebugLog(&quot;└──── Language&quot;)
+    On Error Goto 0
+    Exit Sub
+
+    initLanguageKO:
+    ErrorLog (&quot;│ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;│ ▲ in LoadLanguage !&quot;)
+    On Error Resume Next
+    fileStream.closeInput
+    myTextFile.closeInput
+    DebugLog(&quot;└──── Language&quot;)
+    On Error Goto 0
+End Sub
+
+Sub RegEx
+	DebugLog(&quot;┌──── RegEx&quot;)
+	DebugLog(&quot;├── General&quot;)
+	if not (loadRegEx(&quot;general&quot;)) then
+		gRegEx_General=defaultRegEx_General
+	end if
+	DebugLog(&quot;│ ✔ &quot; &amp; gRegEx_General.Count &amp; &quot; RegEx_General in use&quot;)
+	
+	DebugLog(&quot;├── Warning&quot;)
+	if not (loadRegEx(&quot;warning&quot;)) then
+		gRegEx_Warning=defaultRegEx_Warning
+	end if
+	DebugLog(&quot;│ ✔ &quot; &amp; gRegEx_Warning.Count &amp; &quot; RegEx_Warning in use&quot;)
+	
+	DebugLog(&quot;├── Hyphenation&quot;)
+	if not (loadRegEx(&quot;hyphenation&quot;)) then
+		gRegEx_Hyphenation=defaultRegEx_Hyphenation
+	end if
+	DebugLog(&quot;│ ✔ &quot; &amp; gRegEx_Hyphenation.Count &amp; &quot; RegEx_Hyphenation in use&quot;)
+	
+	DebugLog(&quot;├── Header&quot;)
+	if not (loadRegEx(&quot;header&quot;)) then
+		gRegEx_Header=defaultRegEx_Header
+	end if
+	DebugLog(&quot;│ ✔ &quot; &amp; gRegEx_Header.Count &amp; &quot; RegEx_Header in use&quot;)
+
+	DebugLog(&quot;└──── RegEx&quot;)
+End Sub
+
+Function loadRegEx(re_type as string)
+	Dim myTextFile As Object, sf As Object, fileStream As Object
+    Dim aLineOfText As String, myFilePath As String
+    dim matLine
+    Dim pRegEx
+	Dim re as RegEx
+	Dim reold as RegExOld
+
+	pRegEx = getRegExCollectionByString(re_Type)
+	
+	myFilePath = extensionLocation &amp; &quot;/RegEx_&quot; &amp; re_type &amp; &quot;.txt&quot;	
+	DebugLog(&quot;│ Path -&gt; &quot; + myFilePath)
+    if FileExists(myFilePath) then
+       sf = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+       On Error Goto loadRegExKO
+       fileStream = sf.openFileRead(myFilePath)
+       myTextFile = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+       myTextFile.InputStream = fileStream
+       myTextFile.Encoding = &quot;UTF-8&quot;
+       if not myTextFile.IsEOF then aLineOfText=myTextFile.readLine
+       if aLineOfText = gVersionFileRegEx then
+       	  DebugLog(&quot;│ ✔ File RegEx Valid&quot;)
+          Do while not myTextFile.IsEOF
+             aLineOfText = myTextFile.readLine
+             &apos;if file end must delete last chr(13)
+             if myTextFile.IsEOF then aLineOfText=replace(aLineOfText,chr(13),&quot;&quot;)
+             if trim(aLineOfText)&lt;&gt;&quot;&quot; then
+                matLine=split(aLineOfText,&quot;|&quot;)
+                select case trim(matLine(0))
+                  case &quot;&lt;RegEx&gt;&quot;
+                 	set re = newRegEx()
+                  case &quot;&lt;/RegEx&gt;&quot;
+					pRegEx.Add re, re.Key
+                  case &quot;KEY&quot;
+                 	re.Key = matLine(1)
+                  case &quot;VSB&quot;
+                 	re.Visible = matLine(1)
+                  case &quot;TYP&quot;
+                 	re.Tipologia = matLine(1)
+                  case &quot;FND&quot;
+                 	re.Find = decode_RegEx(matLine(1))
+                  case &quot;TXT&quot;
+                 	re.TextString = decode_RegEx(matLine(1))	
+                  case &quot;SNS&quot;
+                    re.CaseSensitive = matLine(1)	
+                  case &quot;ISR&quot;
+                    re.isRegEx = matLine(1)	
+                  case &quot;DUA&quot;
+                    re.Dual = matLine(1)		
+                  case &quot;LB1&quot;
+                 	re.Label_1 = decode_RegEx(matLine(1))
+                  case &quot;MD1&quot;
+                 	re.Mode_1 = matLine(1)	
+                  case &quot;RP1&quot;
+                 	re.Replace_1 = decode_RegEx(matLine(1))
+                  case &quot;DR1&quot;
+                 	re.Direction_1 = matLine(1)
+                  case &quot;SL1&quot;
+                 	re.Sel_1 = matLine(1)
+                  case &quot;LB2&quot;
+                 	re.Label_2 = decode_RegEx(matLine(1))
+                  case &quot;MD2&quot;
+                 	re.Mode_2 = matLine(1)	
+                  case &quot;RP2&quot;
+                 	re.Replace_2 = decode_RegEx(matLine(1))
+                  case &quot;DR2&quot;
+                 	re.Direction_2 = matLine(1)
+                  case &quot;SL2&quot;
+                 	re.Sel_2 = matLine(1)
+				  case else
+				 	if matLine(0)&lt;&gt;&quot;&quot; then 
+				 	   DebugLog(&quot;│ ▲ val &quot; &amp; matLine(0) &amp; &quot; in RegEx_&quot; &amp; re_type &amp; &quot; not valid in loadRegEx.&quot;)
+				 	end if
+			    end Select
+			  end if
+          Loop
+          loadRegEx=True
+       elseif aLineOfText = &quot;CT_RegEx 0.002&quot; then
+       	  DebugLog(&quot;│ ✔ File RegEx Older Version 0.002 -&gt; Convert to &quot; &amp; gVersionFileRegEx)
+          Do while not myTextFile.IsEOF
+             aLineOfText = myTextFile.readLine
+             &apos;if file end must delete last chr(13)
+             if myTextFile.IsEOF then aLineOfText=replace(aLineOfText,chr(13),&quot;&quot;)
+             if trim(aLineOfText)&lt;&gt;&quot;&quot; then
+                matLine=split(aLineOfText,&quot;|&quot;)
+                select case trim(matLine(0))
+                  case &quot;&lt;RegEx&gt;&quot;
+                 	set reold = new RegExOld
+                  case &quot;&lt;/RegEx&gt;&quot;
+                  	set re = newRegEx()
+                  	updateRE(reold, re)
+					pRegEx.Add re, re.Key
+                  case &quot;KEY&quot;
+                 	reold.Key = matLine(1)
+                  case &quot;VSB&quot;
+                 	reold.Visible = matLine(1)
+                  case &quot;TYP&quot;
+                 	reold.Tipologia = matLine(1)
+                  case &quot;FND&quot;
+                 	reold.RegEx_Find = decode_RegEx(matLine(1))
+                  case &quot;RPL&quot;
+                 	reold.RegEx_Replace = decode_RegEx(matLine(1))
+                  case &quot;DRC&quot;
+                 	reold.MoveDirection = matLine(1)
+                  case &quot;MSL&quot;
+                 	reold.MoveSel = matLine(1)
+                  case &quot;TXT&quot;
+                 	reold.TextString = decode_RegEx(matLine(1))
+                  case &quot;SNS&quot;
+                    reold.CaseSensitive = matLine(1)
+				  case else
+				 	if matLine(0)&lt;&gt;&quot;&quot; then 
+				 	   DebugLog(&quot;│ ▲ val &quot; &amp; matLine(0) &amp; &quot; in RegEx_&quot; &amp; re_type &amp; &quot; not valid in loadRegEx.&quot;)
+				 	end if
+			    end Select
+			  end if
+          Loop
+          loadRegEx=True
+       else
+          DebugLog(&quot;│ ▲ File RegEx_&quot; &amp; re_type &amp; &quot; not valid&quot;)
+          DebugLog(&quot;│ ▲ Version Required -&gt; &quot; + gVersionFileRegEx)
+          DebugLog(&quot;│ ▲ Version File -&gt; &quot; + aLineOfText)
+          loadRegEx=False
+       end if
+       fileStream.closeInput
+       myTextFile.closeInput
+    else
+       DebugLog(&quot;│ ▲ File RegEx_&quot; &amp; re_type &amp; &quot; not exist&quot;)
+       loadRegEx=False
+    end if
+    On Error Goto 0
+    Exit Function
+
+    loadRegExKO:
+    ErrorLog (&quot;│ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;│ ▲ !  in loadRegEx&quot;)
+    On Error Resume Next
+    fileStream.closeInput
+    myTextFile.closeInput
+	loadRegEx=False
+    On Error Goto 0
+End Function
+
+function defaultRegEx_general()
+    Dim re as RegEx
+    dim coll_return
+    
+    DebugLog(&quot;│ Set deafault RegEx_General&quot;)
+	&apos;Set gRegEx_General = new Collection
+	Set coll_return = new Collection
+	
+	&apos;&quot;1§300§RCICLM01§1§^[a-zéèàòùì]§l§0§2&quot;
+	&apos;Righe che iniziano con la Minuscola
+	set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000001&quot;
+	re.Visible=True
+	re.Find=&quot;^([:lower:])&quot;
+	re.isRegEx=True
+	re.CaseSensitive=True
+	re.Dual=True
+	re.Tipologia=1
+	re.Mode_1=1
+	re.Replace_1=&quot; $1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=1	
+	re.Mode_2=1
+	re.Replace_2=&quot;$1&quot;
+	re.Direction_2=&quot;L&quot;
+	re.Sel_2=1	
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§301§RCFCLV01§1§,$§r§0§1&quot;
+    &apos;Righe che finiscono con la virgola
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_000002&quot;
+	re.Visible=True
+	re.Find=&quot;,$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=1
+	re.Replace_1=&quot;, &quot;
+	re.Direction_1=&quot;R&quot;
+	re.Sel_1=1	
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§302§RCICLP01§1§^[»,\?!\.]§l§0§2&quot;
+    &apos;Righe che iniziano con punteggiatura (non «)
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_000003&quot;
+	re.Visible=True
+	re.Find=&quot;^([»,\?!\.])&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=1
+	re.Replace_1=&quot; $1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=1	
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§303§RCFSP001§1§[^\.»\?”\:\!…,&quot;&quot;]$§r§0§1&quot;
+    &apos;Righe che finiscono senza punteggiatura
+    set re = newRegEx()	
+	re.Key=&quot;RE_DEFAULT_000004&quot;
+	re.Visible=True
+	re.Find=&quot;([^\.»\?”\:\!…,&quot;&quot;])$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=1
+	re.Replace_1=&quot;$1 &quot;
+	re.Direction_1=&quot;R&quot;
+	re.Sel_1=1	
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§304§RCFCIM01§1§-$§r§0§1&quot;
+    &apos;Righe che finiscono con -
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_000005&quot;
+	re.Visible=True
+	re.Find=&quot;-$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=True
+	re.Tipologia=1
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;R&quot;
+	re.Sel_1=1
+	re.Mode_2=1
+	re.Replace_2=&quot;-&quot;
+	re.Direction_2=&quot;R&quot;
+	re.Sel_2=1
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§305§RV000001§1§^$§l§0§2&quot;
+    &apos;Righe vuote
+    set re = newRegEx()	
+	re.Key=&quot;RE_DEFAULT_000006&quot;
+	re.Visible=True
+	re.Find=&quot;^$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§306§RCICLS01§2§^ +§&quot;
+    set re = newRegEx()
+    re.Key=&quot;RE_DEFAULT_000007&quot;
+	re.Visible=True
+	re.Find=&quot;^ +&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§307§RCFCLS01§2§ +$§&quot;
+    set re = newRegEx()
+    re.Key=&quot;RE_DEFAULT_000008&quot;
+	re.Visible=True
+	re.Find=&quot; +$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§308§SIF00001§2§(«) +§$1&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000009&quot;
+	re.Visible=True
+	re.Find=&quot;(«) +&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§309§SFF00001§2§ +(»)§$1&quot;
+    set re = newRegEx()
+    re.Key=&quot;RE_DEFAULT_000010&quot;
+	re.Visible=True
+	re.Find=&quot; +(»)&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§310§SIP00001§2§(\() +§$1&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000011&quot;
+	re.Visible=True
+	re.Find=&quot;(\() +&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§311§SFP00001§2§ +(\))§$1&quot;
+    set re = newRegEx()
+    re.Key=&quot;RE_DEFAULT_000012&quot;
+	re.Visible=True
+	re.Find=&quot; +(\))&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§312§DS000001§2§  +§ &quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000013&quot;
+	re.Visible=True
+	re.Find=&quot;  +&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot; &quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§313§TSPD0001§2§ ([;,:\.!\?])§$1&quot;
+    set re = newRegEx()
+    re.Key=&quot;RE_DEFAULT_000014&quot;
+	re.Visible=True
+	re.Find=&quot; +([;,:\.!\?])&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§316§STCGS001§2§\t§ &quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000015&quot;
+	re.Visible=True
+	re.Find=&quot;\t&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot; &quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§314§SPCP0001§3§\.\.\.§…&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000016&quot;
+	re.Visible=True
+	re.Find=&quot;\.\.\.&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;…&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§315§SLCDA001§3§([»&quot;&quot;][\.]*) +([«&quot;&quot;])§$1\n$2&quot; 
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000017&quot;
+	re.Visible=True
+	re.Find=&quot;([»&quot;&quot;”][\.]*) +([«&quot;&quot;“])&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1\n$2&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§317§DCFSA001§3§^([^«]+»)§«$1&quot; 
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_000018&quot;
+	re.Visible=True
+	re.Find=&quot;^([^«]+»)&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=True
+	re.Tipologia=1
+	re.Mode_1=1
+	re.Replace_1=&quot; $1&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=1
+	re.Mode_2=2
+	re.Replace_2=&quot;«$1&quot;
+	re.Direction_2=&quot;L&quot;
+	re.Sel_2=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;1§318§PTLS0001§3§^(.{1500,2500}.*\.) (.{1500,2500})§$1\n$2&quot;
+    set re = newRegEx()
+    re.Key=&quot;RE_DEFAULT_000019&quot;
+	re.Visible=True
+	re.Find=&quot;^(.{1500,2500}.*\.) (.{1500,2500})&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;$1\n$2&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;320§SLCDA005§2§\x00AD§0
+    set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_000020&quot;
+	re.Visible=True
+	re.Find=&quot;\xAD|\x00AD&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=1
+	re.Mode_1=2
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;blank line before breack page&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_SPECIAL_00001&quot;
+	re.Visible=True
+	re.Find=&quot;&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=9
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;page break&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_SPECIAL_00002&quot;
+	re.Visible=True
+	re.Find=&quot;&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=9
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;blank line before heading&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_SPECIAL_00003&quot;
+	re.Visible=True
+	re.Find=&quot;&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=9
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;blank line after heading&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_SPECIAL_00004&quot;
+	re.Visible=True
+	re.Find=&quot;&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=9
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;bulleted dialog&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_SPECIAL_00005&quot;
+	re.Visible=True
+	re.Find=&quot;&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=9
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;&quot;multi blank line&quot;
+    set re = newRegEx()
+  	re.Key=&quot;RE_SPECIAL_00006&quot;
+	re.Visible=True
+	re.Find=&quot;&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=9
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+   
+    &apos;get TextString
+    for each re in coll_return
+    	if re.tipologia&lt;&gt;0 then
+    		re.TextString = gLang.Item(re.Key).txt
+    		re.Label_1 = gLang.Item(re.Key &amp; &quot;_L1&quot;).txt
+    		if re.Dual then
+			   re.Label_2 = gLang.Item(re.Key &amp; &quot;_L2&quot;).txt
+    		end if
+    	else
+    	    re.TextString=&quot;&quot;
+    	end if
+    next 
+    defaultRegEx_general=coll_return
+End function
+
+function newRegEx() as RegEx
+	dim newRegExEmpty as RegEx
+	set newRegExEmpty = new RegEx
+	newRegExEmpty.Key=&quot;&quot;
+	newRegExEmpty.Visible=True
+	newRegExEmpty.Find=&quot;&quot;
+	newRegExEmpty.isRegEx=True
+	newRegExEmpty.CaseSensitive=False
+	newRegExEmpty.Dual=False
+	newRegExEmpty.Tipologia=1
+	newRegExEmpty.Mode_1=1
+	newRegExEmpty.Replace_1=&quot;&quot;
+	newRegExEmpty.Direction_1=&quot;L&quot;
+	newRegExEmpty.Sel_1=0	
+	newRegExEmpty.Mode_2=1
+	newRegExEmpty.Replace_2=&quot;&quot;
+	newRegExEmpty.Direction_2=&quot;L&quot;
+	newRegExEmpty.Sel_2=0
+	newRegExEmpty.Label_1 = &quot;&quot;
+	newRegExEmpty.Label_2 = &quot;&quot;
+	newRegEx = newRegExEmpty
+end function
+
+function defaultRegEx_warning()
+    Dim re as RegEx
+    Dim coll_return
+    
+    DebugLog(&quot;│ Set deafault RegEx_Warning&quot;)
+	&apos;Set gRegEx_warning = new Collection
+	Set coll_return = new Collection
+	
+	set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_W_0001&quot;
+	re.Visible=True
+	re.Find=&quot;[:alpha:]*[:digit:]+[:alpha:]+[:alnum:]*|[:alpha:]+[:digit:]+[:alnum:]*|[:upper:]*[:lower:]+[:upper:]+[:alnum:]*|[:upper:][:upper:]+[:lower:]+&quot;
+	re.isRegEx=True
+	re.CaseSensitive=True
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0	
+    coll_return.add re, re.Key
+    
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_W_0002&quot;
+	re.Visible=True
+	re.Find=&quot;«[^»]*$|^[^«]*»|“[^”]*$|^[^“]*”|\([^\)]*$|^[^\(]*\)|^«[:lower:]+|^— [:lower:]+|—[^\s]|[^\s]—|»[^\s|\.|,]&quot;
+	re.isRegEx=True
+	re.CaseSensitive=True
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_W_0003&quot;
+	re.Visible=True
+	re.Find=&quot;[\.|\?|!|,|;|:|…][^&quot;&quot;| |»|&apos;|\)|’|”]&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_W_0004&quot;
+	re.Visible=True
+	re.Find=&quot;[:digit:]+[:alnum:]*&quot;
+	re.isRegEx=True
+	re.CaseSensitive=True
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_W_0005&quot;
+	re.Visible=True
+	re.Find=&quot;[:alnum:]*[^0-9a-zàèéìòóù…&quot;&quot;!\?—–«»“”,;&apos;‘’:°\.\-\+\?\(\)\n\s][:alnum:]*&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_W_0006&quot;
+	re.Visible=True
+	re.Find=&quot;[:alnum:]*[àáèéìíòóùú][:alnum:]+&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_W_0007&quot;
+	re.Visible=True
+	re.Find=&quot;[:upper:][:upper:]+[:alnum:]*&quot;
+	re.isRegEx=True
+	re.CaseSensitive=true
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    
+    
+    
+    &apos;\&lt;inani\&gt;|\&lt;inondo\&gt;|\&lt;tessere\&gt;|\&lt;detta\&gt;|\&lt;noni\&gt;|\&lt;oliando\&gt;|\&lt;tonto\&gt;|\&lt;atto\&gt;|\&lt;atti\&gt;|\&lt;venturi\&gt;|\&lt;uh\&gt;|\&lt;mollo\&gt;|\&lt;clava\&gt;|\&lt;delta\&gt;|\&lt;soie\&gt;|\&lt;soia\&gt;|\&lt;ciliari\&gt;|\&lt;ciliare\&gt;|\&lt;lisciva\&gt;|\&lt;orinai\&gt;|\&lt;crestaie\&gt;|\&lt;m\&gt;|\&lt;porco\&gt;|\&lt;spettarle\&gt;|\&lt;dà\&gt;|\&lt;lare\&gt;|\&lt;cavai\&gt;|\&lt;lolle\&gt;|\&lt;torse\&gt;|\&lt;verme\&gt;|\&lt;fomiti\&gt;|\&lt;paria\&gt;|\&lt;parie\&gt;|\&lt;mente\&gt;|\&lt;armi\&gt;|\&lt;armo\&gt;|\&lt;ammali\&gt;|\&lt;cera\&gt;|\&lt;cerano\&gt;|\&lt;lando\&gt;|\&lt;landa\&gt;|\&lt;tuffa|\&lt;foghe\&gt;|\&lt;fi ghe\&gt;|\&lt;uri\&gt;|\&lt;rutt|\&lt;cosai|\&lt;ih|\&lt;dì|\&lt;mormoni\&gt;|\&lt;ameno\&gt;|\&lt;ina\&gt;|\&lt;annui\&gt;|\&lt;lutt|\&lt;dalia\&gt;|\&lt;dalie\&gt;|\&lt;dalio\&gt;|\&lt;delia\&gt;|\&lt;delie\&gt;|\&lt;delio\&gt;|\&lt;alia\&gt;|\&lt;alie\&gt;|\&lt;alio\&gt;|\&lt;tare\&gt;|\&lt;laida\&gt;|\&lt;tunica\&gt;|\&lt;lina\&gt;|\&lt;mori\&gt;|gii|\&lt;tomo\&gt;|\&lt;fil\&gt;|\&lt;lino\&gt;|\&lt;intono\&gt;|\&lt;pili\&gt;|\&lt;aito\&gt;|\&lt;aite\&gt;|\&lt;aita\&gt;|\&lt;aiti\&gt;|\&lt;iato\&gt;|\&lt;tenibile\&gt;|\&lt;tifa\&gt;|\&lt;perla\&gt;|\&lt;sì\&gt;|\&lt;bottinò\&gt;|
+    &apos;|\s[&apos;‘’´`]|[&apos;‘’´`]\s|[a-zàèéìòóù]-\s|\s-[a-zàèéìòóù]|\.\s[a-zàèéìòóù]
+    
+    &apos;get TextString
+    for each re in coll_return
+		re.TextString = gLang.Item(re.Key).txt
+    next  
+    defaultRegEx_warning=coll_return
+End function
+
+function defaultRegEx_Hyphenation()
+    Dim re as RegEx
+    Dim coll_return
+    
+    DebugLog(&quot;│ Set default RegEx_Hyphenation&quot;)
+	&apos;Set gRegEx_Hyphenation = new Collection
+	Set coll_return = new Collection
+
+	set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_HY_001&quot;
+	re.Visible=True
+	re.Find=&quot;([:alnum:]+)- *([:alnum:]+)&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=3
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;get TextString
+    for each re in coll_return
+		re.TextString = gLang.Item(re.Key).txt
+    next  
+    
+    defaultRegEx_Hyphenation=coll_return
+End Function
+
+Function defaultRegEx_Header()
+    Dim re as RegEx
+    Dim coll_return
+    
+    DebugLog(&quot;│ Set default RegEx_Header&quot;)
+	&apos;Set gRegEx_Header = new Collection
+	Set coll_return = new Collection
+	
+	&apos;^[0-9]+
+	set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_H_0001&quot;
+	re.Visible=True
+	re.Find=&quot;^[0-9]+&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;^X{0,1}L{0,1}X{0,4}I{0,1}X{0,1}V{0,1}I{0,3}\.*$
+	set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_H_0005&quot;
+	re.Visible=True
+	re.Find=&quot;^X{0,1}L{0,1}X{0,4}I{0,1}X{0,1}V{0,1}I{0,3}\.*$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+	&apos;^(introduzione|epilogo|ringraziamenti).*$
+	set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_H_0002&quot;
+	re.Visible=True
+	re.Find=&quot;^(introduzione|epilogo|ringraziamenti).*$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+	&apos;^(capitol|chapter).*$
+	set re = newRegEx()
+  	re.Key=&quot;RE_DEFAULT_H_0003&quot;
+	re.Visible=True
+	re.Find=&quot;^(capitol|chapter).*$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+	&apos;^parte.*$
+	set re = newRegEx()
+	re.Key=&quot;RE_DEFAULT_H_0004&quot;
+	re.Visible=True
+	re.Find=&quot;^parte.*$&quot;
+	re.isRegEx=True
+	re.CaseSensitive=False
+	re.Dual=False
+	re.Tipologia=2
+	re.Mode_1=1
+	re.Replace_1=&quot;&quot;
+	re.Direction_1=&quot;L&quot;
+	re.Sel_1=0
+    coll_return.add re, re.Key
+    
+    &apos;get TextString
+    for each re in coll_return
+    	re.TextString = gLang.Item(re.Key).txt
+    next  
+    defaultRegEx_Header=coll_return
+End Function
+Sub copyRe(fromRE as RegEx, toRe as RegEx)
+   with toRe
+      .Key = fromRE.Key
+	  .Visible = fromRE.Visible 
+	  .Find = fromRE.Find
+	  .isRegEx = fromRE.isRegEx
+	  .TextString = fromRE.TextString
+	  .CaseSensitive = fromRE.CaseSensitive
+	  .Dual=fromRE.Dual
+	  .Tipologia = fromRE.Tipologia
+	  .Label_1 = fromRE.Label_1
+	  .Mode_1 = fromRE.Mode_1
+	  .Replace_1 = fromRE.Replace_1
+	  .Direction_1 = fromRE.Direction_1
+	  .Sel_1 = fromRE.Sel_1
+	  .Label_2 = fromRE.Label_2
+	  .Mode_2 = fromRE.Mode_2
+	  .Replace_2 = fromRE.Replace_2
+	  .Direction_2 = fromRE.Direction_2
+	  .Sel_2 = fromRE.Sel_2
+   end with
+End sub
+Sub updateRE(old as RegExOld, newRE as RegExp, optional nKey as string)
+   with newRE
+      if isMissing(nKey) then
+   	  	.Key = old.Key
+   	  else
+   	  	.Key = nKey
+   	  end if
+	  .Visible = old.Visible 
+	  .Find = old.RegEx_Find
+	  .isRegEx = True
+	  .TextString = old.TextString
+	  .CaseSensitive = old.CaseSensitive
+	  .Dual=False
+	  .Label_1 = old.TextString
+	  &apos;old -&gt; new
+	  &apos; 0   -&gt; 0 Separator
+	  &apos; 1-2 -&gt; 1 General Find
+	  &apos; -1  -&gt; 2 Header, Warning Find
+	  &apos; -2  -&gt; 3 Hypenation Find
+	  &apos; 999 -&gt; 9 Special (only Visible and text)
+	  select case old.Tipologia
+	  	case 0
+	  		.Tipologia = 0
+	  	case 1,2
+	  		.Tipologia = 1
+	  		.Mode_1 = old.Tipologia
+			.Replace_1 = old.RegEx_Replace
+			.Direction_1 = old.MoveDirection
+			.Sel_1 = old.MoveSel
+	  	case -1
+	  		.Tipologia = 2
+	  	case -2
+	  		.Tipologia = 3
+	  	case 999
+	  		.Tipologia = 9
+	  end select
+   end with
+End Sub
+</script:module>

@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modRegEx" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Sub regex_Toggle_VisibleInvisible(num as integer)
+	Dim pRegEx	
+    pRegEx=getRegExCollection
+    pRegEx(num+1).Visible=not pRegEx(num+1).Visible
+End sub
+
+Sub regex_Add_RegEx(num as integer,nre as RegEx)
+	dim nRegEx, re
+	dim index as integer
+	Dim pRegEx
+	
+	pRegEx=getRegExCollection
+	set nRegEx = new Collection
+	
+	index=0
+	for each re in pRegEx
+		if index=num then
+		    nRegEx.add nre, nre.key
+		end if
+		nRegEx.add re, re.key
+		index=index+1
+	next
+	if num=-1 then
+	   nRegEx.add nre, nre.key
+	end if
+	setRegExCollection(nRegEx)
+end sub
+
+Sub regex_Mod_RegEx(num as integer,nre as RegEx)
+	dim nRegEx, re
+	dim index as integer
+	set nRegEx = new Collection
+	Dim pRegEx
+	
+	pRegEx=getRegExCollection
+	index=0
+	for each re in pRegEx
+		if index=num then		   
+			nRegEx.add nre, nre.key
+		else
+			nRegEx.add re, re.key
+		end if
+		index=index+1
+	next
+	setRegExCollection(nRegEx)
+End sub
+
+Sub regex_Up_or_Down(num as integer, way as string)
+	dim nRegEx, re, nre
+	dim index as integer, n1 as integer, n2 as integer
+	Dim pRegEx
+	
+	pRegEx=getRegExCollection
+	set nRegEx = new Collection
+	index=0
+	
+	num=num+1
+	if way=&quot;UP&quot; then
+		n1=num-1
+	else
+		n1=num+1
+	end if
+	
+	for each re in pRegEx
+		index=index+1
+		if index=num then
+			nRegEx.add pRegEx.item(n1), pRegEx.item(n1).key
+		elseif index=n1 then    
+			nRegEx.add pRegEx.item(num), pRegEx.item(num).key
+		else
+			nRegEx.add re, re.key
+		end if
+
+	next
+	setRegExCollection(nRegEx)
+End sub
+
+Function get_reg_cmbList_val
+    Dim sel_cmbList as string
+	Dim mat
+    mat=split(gdlgMain.getControl(&quot;reg_cmbList&quot;).model.tag,&quot;|&quot;)
+    get_reg_cmbList_val=mat(gdlgMain.getControl(&quot;reg_cmbList&quot;).getSelectedItemPos())
+end function
+Function getRegExListString() as string
+	Dim sel_cmbList as string
+	Dim mat
+	mat=split(gdlgMain.getControl(&quot;reg_cmbList&quot;).model.tag,&quot;|&quot;)
+    sel_cmbList=mat(gdlgMain.getControl(&quot;reg_cmbList&quot;).getSelectedItemPos())
+    getRegExListString=sel_cmbList
+End Function
+Function getRegExCollection
+    Dim sel_cmbList as string
+	Dim mat
+	Dim pRegEx	
+    mat=split(gdlgMain.getControl(&quot;reg_cmbList&quot;).model.tag,&quot;|&quot;)
+    sel_cmbList=mat(gdlgMain.getControl(&quot;reg_cmbList&quot;).getSelectedItemPos())
+    Select Case sel_cmbList
+    	Case &quot;general&quot;
+    		pRegEx = gRegEx_General
+    	Case &quot;header&quot;
+    	 	pRegEx = gRegEx_Header
+    	Case &quot;warning&quot;
+    	 	pRegEx = gRegEx_Warning
+    	Case &quot;hyphenation&quot;
+    	 	pRegEx = gRegEx_Hyphenation
+    	Case Else
+        	ErrorLog (&quot;┌ ▲ Error: Type &quot; &amp; sel_cmbList &amp; &quot; not implemented &quot; &amp; chr(13) &amp; &quot;└ ▲ in getRegExCollection !&quot;)
+    end select
+    getRegExCollection = pRegEx
+end function
+Function getRegExCollectionByString(str as string)
+	Dim pRegEx	
+    Select Case lcase(str)
+    	Case &quot;general&quot;
+    		pRegEx = gRegEx_General
+    	Case &quot;header&quot;
+    	 	pRegEx = gRegEx_Header
+    	Case &quot;warning&quot;
+    	 	pRegEx = gRegEx_Warning
+    	Case &quot;hyphenation&quot;
+    	 	pRegEx = gRegEx_Hyphenation
+    	Case Else
+        	ErrorLog (&quot;┌ ▲ Error: Type &quot; &amp; str &amp; &quot; not implemented &quot; &amp; chr(13) &amp; &quot;└ ▲ in getRegExCollectionByString.&quot;
+        	getRegExCollectionByString=nothing
+        	exit function
+    end select
+    getRegExCollectionByString = pRegEx
+end function
+Sub setRegExCollection(pRegEx)
+    Dim sel_cmbList as string
+	Dim mat
+    mat=split(gdlgMain.getControl(&quot;reg_cmbList&quot;).model.tag,&quot;|&quot;)
+    sel_cmbList=mat(gdlgMain.getControl(&quot;reg_cmbList&quot;).getSelectedItemPos())
+    Select Case sel_cmbList
+    	Case &quot;general&quot;
+    		gRegEx_General = pRegEx
+    	Case &quot;header&quot;
+    	 	gRegEx_Header = pRegEx
+    	Case &quot;warning&quot;
+    	 	gRegEx_Warning = pRegEx
+    	Case &quot;hyphenation&quot;
+    	 	gRegEx_Hyphenation = pRegEx
+    	Case Else
+        	ErrorLog (&quot;┌ ▲ Error: Type &quot; &amp; sel_cmbList &amp; &quot; not implemented &quot; &amp; chr(13) &amp; &quot;└ ▲ in setRegExCollection.&quot;
+    end select
+end Sub
+Sub regex_Save(optional withMsgBox as boolean)
+   dim str_msgbox
+   if isMissing(withMsgBox) then withMsgBox=False
+   DebugLog(&quot;┌──── Save RegEx&quot;)
+   DebugLog(&quot;├── General&quot;)
+   if regex_Save_RegEx(&quot;general&quot;) then
+      DebugLog(&quot;│ ✔ File RegEx Saved&quot;)
+   else
+   	  DebugLog(&quot;│ ▲ File RegEx not Saved&quot;)
+   end if
+   DebugLog(&quot;├── Header&quot;)
+   if regex_Save_RegEx(&quot;header&quot;) then
+      DebugLog(&quot;│ ✔ File RegEx Saved&quot;)
+   else
+   	  DebugLog(&quot;│ ▲ File RegEx not Saved&quot;)
+   end if
+   DebugLog(&quot;├── Warning&quot;)
+   if regex_Save_RegEx(&quot;warning&quot;) then
+      DebugLog(&quot;│ ✔ File RegEx Saved&quot;)
+   else
+   	  DebugLog(&quot;│ ▲ File RegEx not Saved&quot;)
+   end if
+   DebugLog(&quot;├── Hyphenation&quot;)
+   if regex_Save_RegEx(&quot;hyphenation&quot;) then
+      DebugLog(&quot;│ ✔ File RegEx Saved&quot;)
+   else
+   	  DebugLog(&quot;│ ▲ File RegEx not Saved&quot;)
+   end if
+   DebugLog(&quot;└──── RegEx&quot;)
+   if withMsgBox then MsgBox(decodemsgbox(gLang.item(&quot;dialog_regex_0002&quot;).txt) , 64 , gLang.item(&quot;dialog_regex_0001&quot;).txt)
+End sub
+
+sub regex_Restore(optional withDialog as boolean)
+   dim msgbox_result as integer
+   Dim gTempCollection
+   Dim reNew as RegEx
+   Dim reOld
+   if isMissing(withDialog) then withDialog=False
+   msgbox_result=6
+   if withDialog then 
+   		msgbox_result=MsgBox(DecodeMsgBox(gLang.item(&quot;dialog_regex_0004&quot;).txt) , 35 , gLang.item(&quot;dialog_regex_0003&quot;).txt)
+   end if
+   if msgbox_result=7 then
+   	  gTempCollection=defaultRegEx_General
+   	  restore_collection(gRegEx_General, gTempCollection)
+
+	  gTempCollection=defaultRegEx_Header
+   	  restore_collection(gRegEx_Header, gTempCollection)
+
+	  gTempCollection=defaultRegEx_Warning
+   	  restore_collection(gRegEx_Warning, gTempCollection)
+
+	  gTempCollection=defaultRegEx_Hyphenation
+   	  restore_collection(gRegEx_Hyphenation, gTempCollection)
+   	  regex_Save(False)
+   	  showDialog 
+   end if
+   if msgbox_result=6 then
+	  gRegEx_General=defaultRegEx_General
+   	  gRegEx_Header=defaultRegEx_Header
+   	  gRegEx_Warning=defaultRegEx_Warning
+   	  gRegEx_Hyphenation=defaultRegEx_Hyphenation  
+   	  regex_Save(False)
+   	  showDialog  
+   end if  
+end sub
+
+sub restore_collection(oldCollection, newCollection)
+	Dim reNew as RegEx
+    Dim reOld as RegEx
+	for each reNew in newCollection
+   	  	 reOld=LookupCollection(oldCollection, reNew.Key)
+   	  	 if isnull(reold) then
+   	  	 	set reOld=newRegEx()
+   	  	 end if
+   	  	 reOld.Key = reNew.Key
+		 reOld.Visible = reNew.Visible
+		 reOld.Find = reNew.Find
+		 reOld.TextString = reNew.TextString
+		 reOld.isRegEx = reNew.isRegEx
+		 reOld.CaseSensitive = reNew.CaseSensitive
+		 reOld.Dual = reNew.Dual
+		 reOld.Tipologia = reNew.Tipologia
+
+		 reOld.Mode_1 = reNew.Mode_1
+		 reOld.Label_1 = reNew.Label_1
+		 reOld.Replace_1 = reNew.Replace_1
+		 reOld.Direction_1 = reNew.Direction_1
+		 reOld.Sel_1 = reNew.Sel_1
+		 
+		 reOld.Mode_2 = reNew.Mode_2
+		 reOld.Label_2 = reNew.Label_2
+		 reOld.Replace_2 = reNew.Replace_2
+		 reOld.Direction_2 = reNew.Direction_2
+		 reOld.Sel_2 = reNew.Sel_2
+	next
+End sub
+
+Function regex_Save_RegEx(str_Type as string)
+    Dim oOutputAccess As Object
+	Dim oOutputStream As Object
+	Dim vOutputData   As Variant
+	dim myFilePath As String
+	Dim pRegEx
+	Dim re as RegEx
+	
+	on error goto regex_Save_RegExKO
+	pRegEx = getRegExCollectionByString(str_Type)
+	
+	oOutputAccess = CreateUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oOutputStream = CreateUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+	myFilePath = extensionLocation &amp; &quot;/RegEx_&quot; &amp; str_Type &amp; &quot;.txt&quot;	
+	DebugLog(&quot;│ Path -&gt; &quot; + myFilePath)
+	If FileExists(myFilePath) Then Kill(myFilePath)
+	vOutputData   = oOutputAccess.openFileWrite(myFilePath)
+	oOutputStream.setOutputStream(vOutputData)
+	oOutputStream.setEncoding(&quot;UTF-8&quot;)
+	
+	oOutputStream.writeString (gVersionFileRegEx &amp; chr(13))
+    
+    for each re in pRegEx
+        oOutputStream.writeString (&quot;&lt;RegEx&gt;&quot; &amp; chr(13))
+    	oOutputStream.writeString (&quot;KEY|&quot; &amp; re.Key &amp; chr(13))
+    	oOutputStream.writeString (&quot;VSB|&quot; &amp; re.Visible &amp; chr(13))
+    	oOutputStream.writeString (&quot;TYP|&quot; &amp; re.Tipologia &amp; chr(13))
+    	oOutputStream.writeString (&quot;FND|&quot; &amp; encode_RegEx(re.Find) &amp; chr(13))
+    	oOutputStream.writeString (&quot;TXT|&quot; &amp; encode_RegEx(re.TextString) &amp; chr(13))
+    	oOutputStream.writeString (&quot;ISR|&quot; &amp; re.isRegEx &amp; chr(13))
+    	oOutputStream.writeString (&quot;SNS|&quot; &amp; re.CaseSensitive &amp; chr(13))
+    	oOutputStream.writeString (&quot;DUA|&quot; &amp; re.Dual &amp; chr(13))
+    	
+		oOutputStream.writeString (&quot;LB1|&quot; &amp; encode_RegEx(re.Label_1) &amp; chr(13))
+		oOutputStream.writeString (&quot;MD1|&quot; &amp; re.Mode_1 &amp; chr(13))
+    	oOutputStream.writeString (&quot;RP1|&quot; &amp; encode_RegEx(re.Replace_1) &amp; chr(13))
+    	oOutputStream.writeString (&quot;DR1|&quot; &amp; re.Direction_1 &amp; chr(13))
+    	oOutputStream.writeString (&quot;SL1|&quot; &amp; re.Sel_1 &amp; chr(13))
+    	
+    	oOutputStream.writeString (&quot;LB2|&quot; &amp; encode_RegEx(re.Label_2) &amp; chr(13))
+		oOutputStream.writeString (&quot;MD2|&quot; &amp; re.Mode_2 &amp; chr(13))
+    	oOutputStream.writeString (&quot;RP2|&quot; &amp; encode_RegEx(re.Replace_2) &amp; chr(13))
+    	oOutputStream.writeString (&quot;DR2|&quot; &amp; re.Direction_2 &amp; chr(13))
+    	oOutputStream.writeString (&quot;SL2|&quot; &amp; re.Sel_2 &amp; chr(13))
+    	oOutputStream.writeString (&quot;&lt;/RegEx&gt;&quot; &amp; chr(13))
+    	oOutputStream.writeString (&quot;&quot; &amp; chr(13))
+    next
+    
+	oOutputStream.flush()
+	oOutputStream.closeOutput()
+	regex_Save_RegEx=True
+	On Error Goto 0
+    Exit Function
+
+regex_Save_RegExKO:
+	ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in regex_Save_RegEx.&quot;
+    On Error Resume Next
+    vOutputData.closeInput
+    oOutputStream.closeInput
+	loadRegEx=False
+    On Error Goto 0
+End Function
+
+Function encode_RegEx(str_RegEx)
+	dim s_r as string
+	s_r=str_RegEx
+	s_r=replace(s_r,chr(13),&quot;/n&quot;)
+	s_r=replace(s_r,&quot;|&quot;,&quot;&amp;#124;&quot;)
+	encode_RegEx=s_r
+End function
+
+Function decode_RegEx(str_RegEx)
+	dim s_r as string
+	s_r=str_RegEx
+	s_r=replace(s_r,&quot;&amp;#124;&quot;,&quot;|&quot;)
+	do while instr(s_r,&quot;&amp;#124;&quot;)&gt;1 &apos;possible bug
+       s_r=replace(s_r,&quot;&amp;#124;&quot;,&quot;|&quot;)
+    loop
+	decode_RegEx=s_r
+End function
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function popolateSelected_reg as boolean
+	dim mat
+    dim sel_cmbList as string
+    Dim obj as object
+    Dim re as RegEx
+    Dim s as string
+    
+    popolateSelected_reg=true
+    obj=gdlgMain.getControl(&quot;reg_cmbList&quot;)
+    if obj.model.tag=&quot;&quot; then
+       popolateSelected_reg=False
+       exit function 
+    end if
+    mat=split(obj.model.tag,&quot;|&quot;)
+    sel_cmbList=mat(obj.getSelectedItemPos())
+    obj=gdlgMain.getControl(&quot;reg_lstList&quot;)
+    obj.removeitems(0, obj.ItemCount)
+    Select Case sel_cmbList
+    	Case &quot;general&quot;
+    		for each re in gRegEx_General
+    			s=re.TextString
+    			if re.Visible then
+    				s= &quot; ✔ &quot; &amp; s
+    			else
+    				s= &quot;   &quot; &amp; s
+    			end if
+    			obj.addItem (s,  obj.ItemCount)
+    		next 
+    	Case &quot;header&quot;
+    	 	for each re in gRegEx_Header
+    			s=re.TextString
+    			if re.Visible then
+    				s= &quot; ✔ &quot; &amp; s
+    			else
+    				s= &quot;   &quot; &amp; s
+    			end if
+    			obj.addItem (s,  obj.ItemCount)
+    		next 
+    	Case &quot;warning&quot;
+    	 	for each re in gRegEx_Warning
+    			s=re.TextString
+    			if re.Visible then
+    				s= &quot; ✔ &quot; &amp; s
+    			else
+    				s= &quot;   &quot; &amp; s
+    			end if
+    			obj.addItem (s,  obj.ItemCount)
+    		next 
+    	Case &quot;hyphenation&quot;
+    	 	for each re in gRegEx_Hyphenation
+    			s=re.TextString
+    			if re.Visible then
+    				s= &quot; ✔ &quot; &amp; s
+    			else
+    				s= &quot;   &quot; &amp; s
+    			end if
+    			obj.addItem (s,  obj.ItemCount)
+    		next 
+    	Case Else
+    		ErrorLog (&quot;┌ ▲ Error: type &quot; &amp; sel_cmbList &amp; &quot; not implemented &quot; &amp; chr(13) &amp; &quot;└ ▲ in popolateSelected_reg.&quot;
+    end select
+End function
+</script:module>

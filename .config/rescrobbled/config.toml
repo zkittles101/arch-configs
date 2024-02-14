@@ -1,0 +1,10 @@
+ lastfm-key = "853d427900ad924f2c87bae5756d2f3b"
+ lastfm-secret = "83bb15f77dc1d588ff1e00771c40d95e"
+ enable-notifications = true
+ min-play-time = 3
+# player-whitelist = []
+# filter-script = ""
+# 
+# [[listenbrainz]]
+# url = ""
+# token = ""

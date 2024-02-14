@@ -1,0 +1,11 @@
+# GIMP gimp-text-tool options
+
+(foreground (color-rgb 0.21460998761865457 0.21866588795200276 0.3149814279818407))
+(palette "Color History")
+(font "Futura-Bold")
+(font-size 61)
+(hint-style none)
+(indent -3)
+(line-spacing -2)
+
+# end of gimp-text-tool options

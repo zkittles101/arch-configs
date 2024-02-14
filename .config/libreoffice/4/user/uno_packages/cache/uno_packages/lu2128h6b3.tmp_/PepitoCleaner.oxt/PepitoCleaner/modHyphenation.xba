@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modHyphenation" script:language="StarBasic">REM  *****  BASIC  *****
+Option Explicit
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+
+&apos;type
+Type WordElement
+	Key as String
+    Count as integer
+    Txt as string
+    RE_Key as string
+End Type
+type tUndo
+	IDMenu
+	IDObject
+end type
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   VARIOUS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function Make_Hyphenation(collWE, HypReplace as string) as Boolean
+   	Dim oBar as object
+   	Dim n_wait as integer
+   	Dim we as WordElement
+   	Dim pNewWord as string
+   	Dim pCursor
+   	Dim pReplace
+   	Dim act
+   	
+   	on error goto Make_HyphenationKO  
+    hideAll
+	showWait
+    obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	obar.setRange(0,collWE.Count)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00005&quot;).txt
+	n_wait=0
+
+    for each we in collWE
+    	oBar.SetValue(n_wait) : n_wait=n_wait+1
+   		gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=we.Txt
+    	pNewWord=replace(we.Txt,&quot; &quot;,&quot;&quot;)
+    	pNewWord=replace(pNewWord,&quot;-&quot;,HypReplace)
+   		&apos;pCursor = thisComponent.getText.createTextCursor()
+   		pCursor = thisComponent.getCurrentController.getViewCursor()
+		pReplace = thisComponent.createReplaceDescriptor
+    	pReplace.SearchRegularExpression = False
+    	pReplace.SearchCaseSensitive=True
+    	pReplace.SearchString = we.Txt
+    	pReplace.ReplaceString = pNewWord
+    	thisComponent.replaceAll(pReplace)
+    	set act = new tUndo
+        act.IDMenu=gTabMenu(gPreference.MenuSelected).TagId
+        act.IDObject=we.Key
+        add_undo(act)
+	next
+	Make_Hyphenation=true
+	on error goto 0
+    exit function
+	
+	Make_HyphenationKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Make_Hyphenation !&quot;)
+    Make_Hyphenation = False
+    On Error Goto 0
+End function
+function Find_Hyphenation_Word(strWord as string)
+	dim style as string
+	Dim refind as boolean
+	Dim pCursor as Object
+	Dim oCursor as Object
+    Dim pFound as object
+    
+    on error goto Find_Hyphenation_WordKO
+    refind=True
+   	pCursor = thisComponent.getCurrentController.getViewCursor()
+   	&apos;pCursor = thisComponent.getText.createTextCursorbyRange(oCursor.getend)
+    style=&quot;&quot;
+    
+    pFound = Find(pCursor, strWord, True, style)
+   	if IsNull(pFound) then 
+   		if gPreference.QuestionEndPage then
+   			refind = QuestionEndPage
+   			gDlgMain.SetFocus()
+   		end if
+   		if refind then
+   		   gotoStart(pCursor)
+   		   pFound = Find(pCursor, strWord, True, style)
+   		end if
+   	end if
+   	if isNull(pFound) then
+        Find_Hyphenation_Word = False
+    else
+        pCursor.gotoRange(pFound,false)
+        Find_Hyphenation_Word = True
+    end if
+    on error goto 0
+    exit function
+	
+	Find_Hyphenation_WordKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in Find_Hyphenation_Word !&quot;)
+    Find_Hyphenation_Word = False
+    On Error Goto 0
+End Function
+
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   DISPLAY
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+function popolateSelected_hyp as boolean
+	Dim oDicLists
+    Dim oDic 
+    Dim oIgnore 
+    Dim oList
+    Dim oBar
+    Dim re as RegEx
+    Dim pCursor
+    Dim n_wait as integer
+    Dim pText as string
+    Dim oWord
+    Dim collWord
+    Dim we as WordElement
+    Dim pFound
+    Dim nRegEx as integer
+    Dim pKey as string
+    Dim pSearch
+    Dim matchCount
+    Dim i
+    
+    on error goto popolateSelected_hypKO
+    set gActView=new collection
+    set collWord=new collection
+    &apos;initialize wait
+    obar=gDlgMain.getControl(&quot;wai_prgBar&quot;)
+	obar.setRange(0,0)
+	gDlgMain.getControl(&quot;wai_lblTitle&quot;).text = gLang(&quot;default_wait_00004&quot;).txt
+	gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=&quot;&quot;
+	n_wait=0
+    &apos;get dictionary
+    oDicLists = createUnoService (&quot;com.sun.star.linguistic2.DictionaryList&quot;) 
+	oDic = oDicLists.getDictionaryByName(&quot;standard.dic&quot;) 
+	if isnull(oDic) then 
+		gExistStandardDic=False
+	else
+		gExistStandardDic=True
+	end if
+	oIgnore = oDicLists.getDictionaryByName(&quot;IgnoreAllList&quot;) 
+	&apos;get listbox
+	oList=gdlgMain.getControl(&quot;hyp_lstList&quot;)
+    oList.removeitems(0, oList.ItemCount)
+    
+    pCursor = thisComponent.getText.createTextCursor()
+    pSearch = thisComponent.createSearchDescriptor
+    pSearch.SearchRegularExpression = True
+    obar.setRange(0,gRegEx_Hyphenation.Count)
+    nRegEx=0	
+    for each re in gRegEx_Hyphenation
+    	oBar.SetValue(n_wait) : n_wait=n_wait+1
+    	nRegEx=nRegEx+1		
+        if re.Visible then		
+    		pSearch.SearchCaseSensitive=re.CaseSensitive			
+    		pSearch.SearchString=re.Find			
+    		pFound = thisComponent.findAll(pSearch)			
+    		matchCount = pFound.getCount()			
+    		gDlgMain.getControl(&quot;wai_lblSubject&quot;).text=matchCount &amp; &quot; - &quot; &amp; re.TextString			
+       		if matchCount &gt;= 1 Then	
+          		For i = 0 To pFound.getCount - 1				
+             		pText = pFound.getByIndex(i).String	
+					&apos;oWord = Null
+					&apos;oWord = (&quot; &quot;)	
+					oWord = null
+					&apos;check dictionary      				
+      				if gExistStandardDic then oWord = oDic.getEntry(pText)										
+					&apos;if gExistStandardDic then oWord = oDic.getEntry(pText)				
+      				&apos;oWord = (pText)	
+					&apos;if isNull(oWord) then oWord = oIgnore.getEntry(pText)	
+					&apos;ErrorLog(oDic.getCount())
+       				if isNull(oWord) then &apos;word not find in dictionary					
+       					pKey=pText &amp; &quot;_&quot; &amp; nRegEx						
+       					pKey=AdjustKeyCase(pKey)						
+       					we=LookupCollection(collWord, pKey)						
+       					if isNull(we) then						
+       						set we = new WordElement							
+       						we.Count=1							
+       						we.Txt=ptext							
+       						we.RE_Key=re.key						
+       						we.Key=pKey						
+       						collWord.add we, pKey							
+       					else
+       						we.Count=we.Count+1						
+       					end if
+        			end if
+          		Next
+       		end if
+    	end if
+    next
+        
+    for each we in collWord
+    	pText=&quot;&quot;
+    	if len(str(we.Count))&lt;5 then pText = string(5-len(str(we.Count)),&quot; &quot;)
+		pText = pText &amp; we.Count &amp; &quot; &quot; &amp; we.Txt
+		oList.addItem (pText,  oList.ItemCount)
+		gActView.add we, we.Key
+    next
+    
+    popolateSelected_hyp=true
+    on error goto 0
+    exit function
+   
+	popolateSelected_hypKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in popolateSelected_hyp!&quot; &amp; Erl)
+	popolateSelected_hyp=False
+    On Error Goto 0
+end function
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+&apos;                                   EVENTS
+&apos;*********************************************************************************************
+&apos;*********************************************************************************************
+Sub virtual_AddDictionary_Hyphenation_Click(strDictionary as string)
+   Dim pSel
+   Dim n as integer
+   Dim strWord as string
+   Dim pTrovato as boolean
+   Dim oDicList
+   Dim oDic
+   Dim oWord
+   
+   on error goto virtual_AddDictionary_Hyphenation_ClickKO 
+   oDicList = createUnoService (&quot;com.sun.star.linguistic2.DictionaryList&quot;) 
+   oDic = oDicList.getDictionaryByName(strDictionary) 
+   
+   pSel = gDlgMain.getControl(&quot;hyp_lstList&quot;).getSelectedItemsPos()
+   for n=0 to ubound(pSel)
+      strWord = gActView(psel(n)+1).Txt
+      oWord = oDic.getEntry(strWord)
+      if isNull(oWord) then oDic.add(strWord, FALSE, &quot;&quot;)
+   next
+   on error goto 0
+   exit Sub
+   
+   virtual_AddDictionary_Hyphenation_ClickKO:
+   ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in virtual_AddDictionary_Hyphenation_Click !&quot;)
+   On Error Goto 0
+End sub
+sub virtual_Make_Hyphenation_Click(strNew as string)
+	dim n as integer
+	Dim we as WordElement
+	Dim sel
+	Dim collWe
+	dim nColl
+	dim strSel as string
+	dim pText
+	dim oList
+	dim newSel as integer
+
+	on error goto virtual_Make_Hyphenation_ClickKO 
+	n=gdlgMain.getControl(&quot;hyp_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+	   newSel=n
+	   set collWE = new collection
+       sel=gdlgMain.getControl(&quot;hyp_lstList&quot;).getSelectedItemsPos
+       strSel=&quot;_&quot;
+	   for n=0 to ubound(sel)
+	   	  we=gActView(sel(n)+1)
+       	  collWe.add we
+       	  strSel=strSel &amp; sel(n) &amp; &quot;_&quot;
+       next n
+       if Make_Hyphenation(collWe, strNew) then
+       	  set collWE = new collection
+       	  for n=0 to gdlgMain.getControl(&quot;hyp_lstList&quot;).getItemCount-1
+       	  	  pText=&quot;_&quot; &amp; n &amp; &quot;_&quot;
+	   	  	  if instr(strsel,ptext)=0 then
+	   	  	  	  we = gActView(n+1)
+	   	  	  	  collWe.add we, we.Key
+	   	  	  end if
+       	  next n
+       	  set gActView = CollWE
+       	  oList=gdlgMain.getControl(&quot;hyp_lstList&quot;)
+    	  oList.removeitems(0, oList.ItemCount)
+       	  for each we in gActView
+    		pText=&quot;&quot;
+    		if len(str(we.Count))&lt;5 then pText = string(5-len(str(we.Count)),&quot; &quot;)
+			pText = pText &amp; we.Count &amp; &quot; &quot; &amp; we.Txt
+			oList.addItem (pText,  oList.ItemCount)
+    	  next
+    	  if oList.ItemCount&gt;=1 then
+    	  	if newSel&gt;=oList.ItemCount then newSel=oList.ItemCount-1
+    	  	oList.selectItemPos(newSel, True)
+    	  end if
+       	  hideAll
+       	  showSelected
+       	  showButtonSubMenu(flagButtonSubMenu)
+       else
+       	  showDialog
+       end if
+    end if
+    on error goto 0
+    exit Sub
+   
+    virtual_Make_Hyphenation_ClickKO:
+    ErrorLog (&quot;┌ ▲ Error &quot; &amp; Err &amp; &quot;: &quot; &amp; Error$ &amp; chr(13) &amp; &quot;└ ▲ in virtual_Make_Hyphenation_Click !&quot;)
+    On Error Goto 0
+end sub
+sub virtual_Find_Hyphenation_Click
+	dim n as integer
+	dim we as WordElement
+	if gBlockEvent then exit sub
+	n=gdlgMain.getControl(&quot;hyp_lstList&quot;).getSelectedItemPos()
+	if n&lt;&gt;-1 then
+       if ubound(gdlgMain.getControl(&quot;hyp_lstList&quot;).getSelectedItemsPos)=0 then 
+       	   we=gActView(n+1)
+       	   if we.txt&lt;&gt;&quot;&quot; then
+       	      if not Find_Hyphenation_Word(we.Txt) then
+       	   	  	 showDialog	 
+       	   	     exit sub
+       	   	  end if
+       	   end if
+       end if
+    end if
+end sub
+</script:module>

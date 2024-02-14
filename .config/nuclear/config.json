@@ -1,0 +1,33 @@
+{
+	"lastFm": {
+		"lastFmAuthToken": "c5A6xpoTUCGfnTX6wHmf8_SGgZsQZtSn",
+		"lastFmScrobblingEnabled": true
+	},
+	"settings": {
+		"invidious.url": "https://invidious.snopyta.org",
+		"language": "en-US",
+		"devtools": true,
+		"compactQueueBar": true
+	},
+	"playLists": [],
+	"favorites": {
+		"tracks": [],
+		"artists": [],
+		"albums": []
+	},
+	"downloads": [],
+	"equalizer": {
+		"selected": "Default"
+	},
+	"last-thumb-clean-date": 1659693433900,
+	"nuclear": {
+		"identity": {}
+	},
+	"plugin": {
+		"selected": {
+			"metaProviders": "Discogs Metadata Provider",
+			"streamProviders": "Bandcamp",
+			"lyricsProviders": "Simple Lyrics Provider"
+		}
+	}
+}

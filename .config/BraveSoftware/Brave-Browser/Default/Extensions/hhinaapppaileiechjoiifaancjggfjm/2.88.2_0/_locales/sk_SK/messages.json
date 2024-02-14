@@ -1,0 +1,566 @@
+{
+   "aboutChangelog": {
+      "description": "'About' section text",
+      "message": "Popis zmien v aktuálnej verzii je dostupný \u003Ca id='latest-release' target='_blank' href='#'>tu\u003C/a>. Detailnejší popis zmien nájdete na \u003Ca target='_blank' href='https://github.com/web-scrobbler/web-scrobbler/releases'>tejto stránke\u003C/a>."
+   },
+   "aboutExtensionDesc": {
+      "description": "'About' section text",
+      "message": "Web Scrobbler je doplnok do prehliadača vytvorený pre ľudí, ktorí počúvajú hudbu online v prehliadači, a chceli by si udržiavať históriu prehrávania pomocou hudobných služieb, ako napríklad Last.fm, Libre.fm a ListenBrainz."
+   },
+   "accountsNotSignedIn": {
+      "description": "'Signed in' label",
+      "message": "Nie ste prihlásený."
+   },
+   "accountsProfile": {
+      "description": "'Signed in' label",
+      "message": "Profil"
+   },
+   "accountsSignIn": {
+      "description": "Button label",
+      "message": "Prihlásiť"
+   },
+   "accountsSignOut": {
+      "description": "Button label",
+      "message": "Odhlásiť"
+   },
+   "accountsSignedInAs": {
+      "description": "'Signed in' label",
+      "message": "Ste prihlásený ako $1."
+   },
+   "albumTooltip": {
+      "description": "Tooltip text",
+      "message": "Z albumu \"$1\""
+   },
+   "buttonCancel": {
+      "description": "Cancel button label",
+      "message": "Zrušiť"
+   },
+   "buttonClear": {
+      "description": "Clear button label",
+      "message": "Vyčistiť"
+   },
+   "buttonOk": {
+      "description": "OK button label",
+      "message": "OK"
+   },
+   "buttonReset": {
+      "description": "Reset button label",
+      "message": "Obnoviť"
+   },
+   "contactGitHubDesc": {
+      "description": "Description for GitHub section",
+      "message": "Nahlásiť problém a prispieť"
+   },
+   "contactPrivacyPolicyDesc": {
+      "description": "Description for privacy section",
+      "message": "Zobraziť zásady ochrany osobných údajov"
+   },
+   "contactTitle": {
+      "description": "'Contact' section",
+      "message": "Kontakt"
+   },
+   "contactTwitterDesc": {
+      "description": "Description for Twitter section",
+      "message": "Zostaňte v obraze, prípadne nám napíšte"
+   },
+   "contributorsText": {
+      "description": "'About' section text",
+      "message": "Úplný zoznam vývojárov môžete nájsť \u003Ca href=\"https://github.com/web-scrobbler/web-scrobbler/graphs/contributors\">priamo na Githube\u003C/a>"
+   },
+   "contributorsTitle": {
+      "description": "'Contributors' header",
+      "message": "Vývojári"
+   },
+   "customPatterns": {
+      "description": "'URL patterns' section",
+      "message": "URL vzory"
+   },
+   "customPatternsAdd": {
+      "description": "Add button",
+      "message": "Pridať vzor"
+   },
+   "customPatternsHint": {
+      "description": "Popup hint",
+      "message": "URL vzory ktoré má konektor brať pridajte dolu."
+   },
+   "disabledSiteButton": {
+      "description": "Button label",
+      "message": "Otvoriť stránku nastavení"
+   },
+   "disabledSiteDesc": {
+      "description": "The description of 'disabled' popup",
+      "message": "Doplnok nebude zaznamenávať hudbu z tejto stránky pokým ju nezapnete v nastaveniach doplnku."
+   },
+   "disabledSiteHeader": {
+      "description": "The header of 'disabled' popup",
+      "message": "Táto stránka je vypnutá"
+   },
+   "extDescription": {
+      "description": "Description of the extension",
+      "message": "Zaznamenajte vašu hudbu kdekoľvek na webe!"
+   },
+   "faqAnswer1a": {
+      "description": "Answer #1",
+      "message": "Kliknite na notifikáciu, ktorá sa ukáže pri prvom spustení doplnku. Následne musíte povoliť prístup k vašim účtom na podporovaných službách."
+   },
+   "faqAnswer1b": {
+      "description": "Answer #1",
+      "message": "Poznámka: V niektorých prípadoch sa notifikácia neukáže, napr. na Mac OS v prípade, že Chrome je zapnutý v režime celej obrazovky, potom doplnok otvorí novú kartu kde môžete nastaviť prístup ku vašim účtom."
+   },
+   "faqAnswer2a": {
+      "description": "Answer #2",
+      "message": "Kliknite pravým tlačidlom myši na zelenú ikonku doplnku v lište doplnkov. V zobrazenej ponuke môžete vypnúť konektor na aktuálnej stránke."
+   },
+   "faqAnswer2b": {
+      "description": "Answer #2",
+      "message": "V nastaveniach doplnku môžete pomocou zaškrtávacích políčok vypnúť daný konektor, prípadne pomocou políčka \"Prepnúť\" vypnúť činnosť doplnku úplne."
+   },
+   "faqAnswer3a": {
+      "description": "Answer #3",
+      "message": "Ak skladba nie je rozoznaná, objaví sa šedá ikonka s otáznikom v lište doplnkov. Kliknutím na túto ikonku sa zobrazí vyskakovacie okno, kde môžete vložiť správne údaje o skladbe."
+   },
+   "faqAnswer3b": {
+      "description": "Answer #3",
+      "message": "Takisto môžete v nastaveniach povoliť možnosť \"Vynútiť rozpoznanie skladby\" na zaznamenanie skladby napriek tomu, že skladba nebola overená službou Last.fm."
+   },
+   "faqAnswer4a": {
+      "description": "Answer #4",
+      "message": "Zdá sa, že hudba je umiestnená na neštandartnej adrese a doplnok nedokáže rozlíšiť, či sa jedná o Bandcamp."
+   },
+   "faqAnswer4b": {
+      "description": "Answer #4",
+      "message": "Problém sa dá vyriešiť nastavením neštandartných adries nasledovne:"
+   },
+   "faqAnswer4b1": {
+      "description": "Answer #4",
+      "message": "Otvorte stránku nastavení doplnku a následne kliknite na zložku \"Nastavenia\"."
+   },
+   "faqAnswer4b2": {
+      "description": "Answer #4",
+      "message": "Nájdite konektor Bandcamp v zozname podporovaných stránok."
+   },
+   "faqAnswer4b3": {
+      "description": "Answer #4",
+      "message": "Kliknite na ikonku ozubeného kolieska vedľa názvu konektora."
+   },
+   "faqAnswer4b4": {
+      "description": "Answer #4",
+      "message": "Pridajte URL vzor, ktorý vyhovuje neštandartnej adrese na Bandcamp a uložte zmeny."
+   },
+   "faqAnswer4c": {
+      "description": "Answer #4",
+      "message": "O URL vzoroch sa môžte dozvedieť viacej \u003Ca target='_blank' href='https://github.com/web-scrobbler/web-scrobbler/wiki/Custom-URL-patterns'>tu\u003C/a>."
+   },
+   "faqAnswer5": {
+      "description": "Answer #5",
+      "message": "Nahláste \u003Ca href=\"https://github.com/web-scrobbler/web-scrobbler/issues\" target=\"_blank\">nový problém\u003C/a> na GitHube s vašimi požiadavkami a my Vám povieme, či vieme pridať podporu pre stránku. Prípadne môžete prispieť do projektu pridaním podpory pre stránku vytvorením forku \u003Ca href=\"http://github.com/web-scrobbler/web-scrobbler\">GitHub repozitára\u003C/a> a zaslaním pull requestu."
+   },
+   "faqAnswer6": {
+      "description": "Answer #6",
+      "message": "Snáď, ak to dáva zmysel. Avšak, ak chcete aby sme pridali funkciu, ktorá je síce štýlová, ale zbytočná, tak budete pravdepodobne sklamaný."
+   },
+   "faqAnswer7": {
+      "description": "Answer #7",
+      "message": "Pôvodným autorom doplnku je David Šabata. Momentálne je doplnok vyvíjaný a udržiavaný Web Scrobbler tímom."
+   },
+   "faqQuestion1": {
+      "description": "Question #1",
+      "message": "Ako začať používať doplnok?"
+   },
+   "faqQuestion2": {
+      "description": "Question #2",
+      "message": "Ako dočasne vypnúť činnosť doplnku?"
+   },
+   "faqQuestion3": {
+      "description": "Question #3",
+      "message": "Skladba nebola rozpoznaná! Viete to opraviť?"
+   },
+   "faqQuestion4": {
+      "description": "Question #4",
+      "message": "Niektoré skladby na Bandcamp nie je možné zaznamenať. Dá sa to opraviť?"
+   },
+   "faqQuestion5": {
+      "description": "Question #5",
+      "message": "Pridáte podporu pre stránku ____?"
+   },
+   "faqQuestion6": {
+      "description": "Question #6",
+      "message": "Pridáte funkciu ____?"
+   },
+   "faqQuestion7": {
+      "description": "Question #7",
+      "message": "Kto je autorom doplnku?"
+   },
+   "faqTitle": {
+      "description": "'FAQ' section",
+      "message": "Často kladené otázky"
+   },
+   "getStartedHeader": {
+      "description": "The header of 'Get started' popup",
+      "message": "Začnite spustením hudby"
+   },
+   "getStartedSiteChanged": {
+      "description": "Description of why track is not recognized",
+      "message": "Vo väčšine prípadov to znamená, že sa nejakým spôsobom stránka zmenila. Zmena nemusí byť viditeľná používateľovi, ale je zásadná pre doplnok."
+   },
+   "getStartedSubheader": {
+      "description": "The subheader of 'Get started' popup",
+      "message": "Hudba už hrá?"
+   },
+   "getStartedSubmitIssue": {
+      "description": "Description of how to submit new issue",
+      "message": "Kód konektoru pre danú stránku je potrebné aktualizovať. Navštívte \u003Ca href=\"https://github.com/web-scrobbler/web-scrobbler/issues\" target=\"_blank\">zoznam problémov\u003C/a> a vyhľadajte, či nefunkčnosť konektoru už nie je nahlásená. Ak nie, tak môžete nahlásiť nový problém aj s popisom chyby, očakávaného správania a aktuálneho správania."
+   },
+   "hotkeyLoveSong": {
+      "description": "Hotkey label",
+      "message": "Pridať práve prehrávanú skladbu do obľúbených"
+   },
+   "hotkeyToggleConnector": {
+      "description": "Hotkey label",
+      "message": "Prepnúť zaznamenávanie pre aktuálnu stránku"
+   },
+   "hotkeyUnloveSong": {
+      "description": "Hotkey label",
+      "message": "Odstrániť práve prehrávanú skladbu z obľúbených"
+   },
+   "infoAlbumArtistPlaceholder": {
+      "description": "Placeholder of album artist input",
+      "message": "Autor obalu albumu (nepovinné)"
+   },
+   "infoAlbumPlaceholder": {
+      "description": "Placeholder of album input",
+      "message": "Album (nepovinné)"
+   },
+   "infoArtistPlaceholder": {
+      "description": "Placeholder of artist input",
+      "message": "Interpret"
+   },
+   "infoEditTitle": {
+      "description": "Title of edit button",
+      "message": "Upraviť metadáta skladby"
+   },
+   "infoEditUnableTitle": {
+      "description": "Title of edit button",
+      "message": "Túto skladbu nemôžete upraviť"
+   },
+   "infoLove": {
+      "description": "Label of love/unlove button",
+      "message": "Pridať do obľúbených"
+   },
+   "infoOpenAlbumArt": {
+      "description": "Title of album image",
+      "message": "Otvoriť obal albumu na novej karte"
+   },
+   "infoRevertTitle": {
+      "description": "Title of revert button",
+      "message": "Vrátiť zmeny"
+   },
+   "infoRevertUnableTitle": {
+      "description": "Title of revert button",
+      "message": "Túto skladbu nemôžete vrátiť späť"
+   },
+   "infoSkipTitle": {
+      "description": "Title of skip button",
+      "message": "Ignorovať práve hranú skladbu"
+   },
+   "infoSkipUnableTitle": {
+      "description": "Title of skip button",
+      "message": "Túto skladbu nemôžete vynechať"
+   },
+   "infoSkippedTitle": {
+      "description": "Title of unskip button",
+      "message": "Túto skladbu ste vynechali"
+   },
+   "infoSubmitTitle": {
+      "description": "Title of submit button",
+      "message": "Nahrať zmeny"
+   },
+   "infoSubmitUnableTitle": {
+      "description": "Title of submit button",
+      "message": "Nemôžete nahrať prázdne údaje o skladbe"
+   },
+   "infoSwapTitle": {
+      "description": "Title of swap button",
+      "message": "Vymeniť názov skladby s interpretom"
+   },
+   "infoSwapUnableTitle": {
+      "description": "Title of swap button",
+      "message": "Nemôžete vymeniť prázdne údaje o skladbe"
+   },
+   "infoTrackPlaceholder": {
+      "description": "Placeholder of track input",
+      "message": "Skladba"
+   },
+   "infoUnlove": {
+      "description": "Label of love/unlove button",
+      "message": "Odstrániť z obľúbených"
+   },
+   "infoViewAlbumPage": {
+      "description": "Placeholder of album input",
+      "message": "Otvoriť stránku albumu: $1"
+   },
+   "infoViewArtistPage": {
+      "description": "Placeholder of album input",
+      "message": "Otvoriť stránku interpreta: $1"
+   },
+   "infoViewTrackPage": {
+      "description": "Placeholder of album input",
+      "message": "Otvoriť stránku skladby: $1"
+   },
+   "infoYourScrobbles": {
+      "description": "Label for user play count",
+      "message": "Počet záznamov: $1"
+   },
+   "learnMoreLabel": {
+      "description": "Learn more label",
+      "message": "Dozvedieť sa viac"
+   },
+   "menuDisableConnector": {
+      "description": "Context menu item",
+      "message": "Zakázať $1 konektor"
+   },
+   "menuDisableUntilTabClosed": {
+      "description": "Context menu item",
+      "message": "Zakázať $1 konektor pokým karta nie je zatvorená"
+   },
+   "menuEnableConnector": {
+      "description": "Context menu item",
+      "message": "Povoliť $1 konektor"
+   },
+   "noItemsInCache": {
+      "description": "Popup hint",
+      "message": "Žiadne položky v pamäti."
+   },
+   "notificationAuthError": {
+      "description": "Notification title",
+      "message": "Overenie zlyhalo"
+   },
+   "notificationConnectAccounts": {
+      "description": "Notification title",
+      "message": "Prihlásiť účty"
+   },
+   "notificationConnectAccountsText": {
+      "description": "Notification text",
+      "message": "Kliknutím na notifikáciu prihlásite vaše účty."
+   },
+   "notificationNotRecognized": {
+      "description": "Notification title",
+      "message": "Skladba nebola rozpoznaná"
+   },
+   "notificationNotRecognizedText": {
+      "description": "Notification text",
+      "message": "Kliknite na ikonku v lište doplnkov a uložte správne údaje."
+   },
+   "notificationUnableSignIn": {
+      "description": "Notification text",
+      "message": "Prihlásanie do $1 zlyhalo. Skúste neskôr."
+   },
+   "optionForceRecognize": {
+      "description": "Option label",
+      "message": "Vynútiť rozpoznanie skladby"
+   },
+   "optionForceRecognizeTitle": {
+      "description": "Option title",
+      "message": "Vynúti rozpoznávanie neznámych skladieb"
+   },
+   "optionPercentDesc": {
+      "description": "Description of scrobble percent option",
+      "message": "Ak skladba hrala aspoň 4 minúty, tak bude zaznamenaná bezohľadu na nastavenú hodnotu."
+   },
+   "optionScrobblePercent": {
+      "description": "Option title",
+      "message": "Zaznamenaj od"
+   },
+   "optionScrobblePercentSuffix": {
+      "description": "Option title",
+      "message": "dĺžky skladby"
+   },
+   "optionScrobblePodcasts": {
+      "description": "Option label",
+      "message": "Zaznamenávať podcasty"
+   },
+   "optionScrobblePodcastsTitle": {
+      "description": "Option title",
+      "message": "Zaznamenáva diely podcastov"
+   },
+   "optionUnrecognizedNotifications": {
+      "description": "Option label",
+      "message": "Upozorniť na nerozpoznanú skladbu"
+   },
+   "optionUnrecognizedNotificationsTitle": {
+      "description": "Option title",
+      "message": "Ukáže notifikáciu ak doplnok nerozpoznal skladbu"
+   },
+   "optionUseNotifications": {
+      "description": "Option label",
+      "message": "Použiť notifikácie \"práve hrá\""
+   },
+   "optionUseNotificationsTitle": {
+      "description": "Option title",
+      "message": "Ukáže notifikáciu \"práve hrá\" z podporovaných stránok"
+   },
+   "optionYtDesc": {
+      "description": "Description of YouTube options",
+      "message": "Ak vypnete obe možnosti, doplnok bude zaznamenávať youtube videá zo všetkých kategórii."
+   },
+   "optionYtEntertainmentOnly": {
+      "description": "Option label",
+      "message": "Zaznamenávať videá z kategórie \"Zábava\""
+   },
+   "optionYtEntertainmentOnlyTitle": {
+      "description": "Option title",
+      "message": "Ignoruje videá, ktoré nie sú z kategórie \"Zábava\""
+   },
+   "optionYtMusicOnly": {
+      "description": "Option title",
+      "message": "Zaznamenávať videá z kategórie \"Hudba\""
+   },
+   "optionYtMusicOnlyTitle": {
+      "description": "Option label",
+      "message": "Ignoruje videá, ktoré nie sú z kategórie \"Hudba\""
+   },
+   "optionsAbout": {
+      "description": "'About' section",
+      "message": "O doplnku"
+   },
+   "optionsAccounts": {
+      "description": "'Accounts' section",
+      "message": "Účty"
+   },
+   "optionsCustomPatternsHint": {
+      "description": "Description of how to configure custom URL patterns",
+      "message": "Vlastné URL vzory pre konektor si môžete nastaviť kliknutím na ikonku ozubeného kolieska."
+   },
+   "optionsEditedTracks": {
+      "description": "'Edited tracks' header",
+      "message": "Upravené skladby"
+   },
+   "optionsEditedTracksDesc": {
+      "description": "Description of edited tracks",
+      "message": "Doplnok udržiava históriu upravených skladieb."
+   },
+   "optionsEditedTracksPopupTitle": {
+      "description": "'Edited tracks' header",
+      "message": "$1upravené skladby"
+   },
+   "optionsEnableDisableHint": {
+      "description": "Enable/disable hint",
+      "message": "Konektor povolíte/zakážete kliknutím na zaškrtávacie políčko."
+   },
+   "optionsExportEdited": {
+      "description": "Button to export edited tracks",
+      "message": "Exportovať"
+   },
+   "optionsGeneral": {
+      "description": "'General' section",
+      "message": "Všeobecné"
+   },
+   "optionsHidden": {
+      "description": "'Hidden' section",
+      "message": "Skryté"
+   },
+   "optionsImportEdited": {
+      "description": "Button to import edited tracks",
+      "message": "Importovať"
+   },
+   "optionsOptions": {
+      "description": "'Options' section",
+      "message": "Nastavenia"
+   },
+   "optionsSupportedWebsites": {
+      "description": "'Supported websites' header",
+      "message": "Podporované stránky"
+   },
+   "optionsTitle": {
+      "description": "Title of options page",
+      "message": "Web Scrobbler nastavenia"
+   },
+   "optionsToggle": {
+      "description": "Label of toggle button",
+      "message": "Prepnúť"
+   },
+   "optionsViewEdited": {
+      "description": "Button to view edited tracks",
+      "message": "Zobraziť"
+   },
+   "pageActionBase": {
+      "description": "`base` page action title",
+      "message": "Táto stránka podporuje zaznamenávanie."
+   },
+   "pageActionDisabled": {
+      "description": "`disabled` page action title",
+      "message": "Táto stránka podporuje zaznamenávanie, ale je vypnutá."
+   },
+   "pageActionError": {
+      "description": "`loading` page action title",
+      "message": "Nastala chyba služby. Pre viac informácii kliknite sem."
+   },
+   "pageActionIgnored": {
+      "description": "`ignored` page action title",
+      "message": "Ignorované $1"
+   },
+   "pageActionLoading": {
+      "description": "`loading` page action title",
+      "message": "Vyhľadáva sa$1"
+   },
+   "pageActionLoved": {
+      "description": "`unsupported` page action title",
+      "message": "Mali ste v obľúbených $1"
+   },
+   "pageActionRecognized": {
+      "description": "`recognized` page action title",
+      "message": "Práve hrá $1"
+   },
+   "pageActionScrobbled": {
+      "description": "`scrobbled` page action title",
+      "message": "Zaznamenané $1"
+   },
+   "pageActionSkipped": {
+      "description": "`skipped` page action title",
+      "message": "Vynechané $1"
+   },
+   "pageActionUnknown": {
+      "description": "`unknown` page action title",
+      "message": "Skladba nebola rozpoznaná. Kliknite a vložte správne údaje."
+   },
+   "pageActionUnloved": {
+      "description": "`unsupported` page action title",
+      "message": "Odstránili ste z obľúbených $1"
+   },
+   "pageActionUnsupported": {
+      "description": "`unsupported` page action title",
+      "message": "Web Scrobbler nepodporuje túto stránku."
+   },
+   "serviceErrorDesc": {
+      "description": "The description of service error",
+      "message": "Zdá sa že niekde nastala chyba počas zaznamenávania hudby. Otvorte prosím stránku nastavení doplnku a pokúste sa znovu pripojiť k službám. Ak to nepomohlo a stále vidíte túto správu, prosím vytvorte \u003Ca href=\"https://github.com/web-scrobbler/web-scrobbler/issues\" target=\"_blank\">nový problém\u003C/a> na GitHub stránke projektu."
+   },
+   "serviceErrorHeader": {
+      "description": "The header of 'error' popup",
+      "message": "Chyba služby"
+   },
+   "showSomeLoveText1": {
+      "description": "",
+      "message": "Narozdiel od iných doplnkov, tento neobsahuje žiadne blikajúce alebo skryté reklamy."
+   },
+   "showSomeLoveText2": {
+      "description": "",
+      "message": "Používanie doplnku je zadarmo, a vždy aj bude. Avšak, ak chcete podporiť vývoj doplnku, môžete použiť tlačidlo nižšie."
+   },
+   "showSomeLoveTitle": {
+      "description": "'Show some love' section",
+      "message": "Podporte ma"
+   },
+   "unsupportedWebsiteDesc": {
+      "description": "The description of 'unsupported' popup",
+      "message": "Web Scrobbler nepodporuje zaznamenávanie z tejto stránky."
+   },
+   "unsupportedWebsiteDesc2": {
+      "description": "The description of 'unsupported' popup",
+      "message": "Niektoré Google stránky podporované doplnkom (napr. Google Play Hudba, YouTube) môžu byť zablokované kvôli politike nastavení doplnku."
+   },
+   "unsupportedWebsiteHeader": {
+      "description": "The header of 'unsupported' popup",
+      "message": "Táto stránka nie je podporovaná"
+   }
+}

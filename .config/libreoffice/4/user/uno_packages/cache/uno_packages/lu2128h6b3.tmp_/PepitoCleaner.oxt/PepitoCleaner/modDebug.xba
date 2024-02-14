@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modDebug" script:language="StarBasic">type tUndo
+	IDMenu
+	IDObject
+end type
+
+Option explicit
+Public Sub DebugLog(txt as string)
+    dim oSelection
+    oSelection = createUnoStruct( &quot;com.sun.star.awt.Selection&quot; )
+    With oSelection
+      .Min = len(gdlgMain.getControl(&quot;deb_textDebug&quot;).text)
+      .Max = .Min
+    End With 
+    gdlgMain.getControl(&quot;deb_textDebug&quot;).setSelection(oselection)
+    gdlgMain.getControl(&quot;deb_textDebug&quot;).inserttext (oselection,txt &amp; chr(13)
+End Sub
+Public Sub ErrorLog(txt as string)
+	gError=true
+	gDlgMain.getControl(&quot;but_debugMenu&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/debug_error.png&quot;)
+	gDlgMain.getControl(&quot;img_debugMenu&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/debug_error.png&quot;)
+	DebugLog(txt)
+End sub
+Public Sub ErrorClear()
+	gError=False
+	gDlgMain.getControl(&quot;but_debugMenu&quot;).Model.ImageURL = gTabMenu.Item(&quot;debugMenu&quot;).ButtonImage
+	gDlgMain.getControl(&quot;img_debugMenu&quot;).Model.ImageURL = gTabMenu.Item(&quot;debugMenu&quot;).FlatImage
+End Sub
+
+Sub virtual_Undo_Click
+	dim IDMenu as string
+	Dim oFrame, Odisp
+	Dim pRight as boolean
+	oFrame = ThisComponent.CurrentController.Frame
+	oDisp = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	oDisp.executeDispatch(oFrame,&quot;.uno:Undo&quot;, &quot;&quot;, 0, Array())	
+	
+	if gUndo.Count&gt;0 then
+	  IDMenu=gUndo.item(gUndo.Count).IDMenu
+	  if IDMenu = gTabMenu(gPreference.MenuSelected).TagId then
+	  	 Select Case gTabMenu(gPreference.MenuSelected).TagId
+    		case &quot;fin&quot;
+    	    	pRight=fin_undo(gUndo.item(gUndo.Count).IDObject)
+			case &quot;sty&quot;
+    	   		pRight=sty_undo(gUndo.item(gUndo.Count).IDObject)
+			case &quot;hyp&quot;
+    			pRight=hyp_undo(gUndo.item(gUndo.Count).IDObject)
+			case &quot;war&quot;
+				pRight=war_undo(gUndo.item(gUndo.Count).IDObject)
+    		case &quot;hea&quot;
+    			pRight=hea_undo(gUndo.item(gUndo.Count).IDObject)
+    		case &quot;reg&quot;
+    			pRight=True
+        	Case Else
+				ErrorLog (&quot;┌ ▲ Error:  Type &quot; &amp; IDMenu &amp; &quot; not supported&quot; &amp; chr(13) &amp; &quot;└ ▲ in  virtual_Undo_Click !&quot;)
+   		 End Select	
+   		 gUndo.Remove(gUndo.Count)
+   	  	 if pRight then 
+   	  	 	if gTabMenu(gPreference.MenuSelected).TagId&lt;&gt;&quot;reg&quot; then showButtonSubMenu(flagButtonSubMenu)
+   	     else
+   	        showDialog
+   	     end if
+   	  else
+   	  	 gUndo.Remove(gUndo.Count)
+   	  	 showButtonSubMenu(flagButtonSubMenu)
+   	  end if  
+	end if
+End sub
+function fin_undo(IdObject as string) as boolean
+	Dim re
+	Dim oFrame, Odisp
+	
+	fin_undo=False
+    if idobject=&quot;RE_SPECIAL_00005&quot; then
+    	oFrame = ThisComponent.CurrentController.Frame
+		oDisp = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+		oDisp.executeDispatch(oFrame,&quot;.uno:Undo&quot;, &quot;&quot;, 0, Array())	
+    end if
+	for each re in gRegEx_General
+		if re.Key=IdObject then	
+			fin_undo=adjustCount_lstList(re, 1)
+			exit for
+		end if
+	next 	
+end function
+function hyp_undo(IdObject as string) as boolean
+	hyp_undo=False
+end function
+function war_undo(IdObject as string) as boolean
+	war_undo=False
+end function
+function sty_undo(IdObject as string) as boolean
+	Dim oFrame, Odisp
+	dim sTemp 
+	sty_undo=False
+	if left(IdObject,1)=&quot;1&quot; then
+		oFrame = ThisComponent.CurrentController.Frame
+		oDisp = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+		oDisp.executeDispatch(oFrame,&quot;.uno:Undo&quot;, &quot;&quot;, 0, Array())
+		sTemp=split(mid(idobject,2),&quot;|&quot;
+		sty_undo=adjustCountStyle_lstList(getStyle(sTemp(1)), getStyle(sTemp(0)))
+	end if
+end function
+function hea_undo(IdObject as string) as boolean
+	Dim oFrame, Odisp
+	oFrame = ThisComponent.CurrentController.Frame
+	oDisp = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	oDisp.executeDispatch(oFrame,&quot;.uno:Undo&quot;, &quot;&quot;, 0, Array())	
+	hea_undo=False
+end function
+sub add_undo(newUndo)
+	dim c as integer
+	dim max as integer
+	dim newCollUndo
+	dim newType
+	
+	max=1000
+	if gUndo.Count&gt;max then
+		set newCollUndo= new Collection
+		for c=max/2 to gUndo.Count
+			set newType=new tUndo
+			newType.IDMenu=gUndo(c).IDMenu
+			newType.IDObject=gUndo(c).IDObject
+			newCollUndo.add newType
+		next c 
+		gUndo=newCollUndo
+	end if
+	gUndo.add newUndo
+end sub
+</script:module>

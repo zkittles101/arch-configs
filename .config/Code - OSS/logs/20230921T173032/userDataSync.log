@@ -1,0 +1,10 @@
+2023-09-21 17:30:56.656 [info] Using settings sync service https://vscode-sync.trafficmanager.net/
+2023-09-21 17:30:56.656 [info] Auto Sync is enabled.
+2023-09-21 17:30:56.656 [info] Auto Sync: Suspended until auth token is available.
+2023-09-21 17:31:04.825 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/extensions
+2023-09-21 17:31:04.921 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/globalState
+2023-09-21 17:31:05.005 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/keybindings
+2023-09-21 17:31:05.018 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/profiles
+2023-09-21 17:31:05.028 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/settings
+2023-09-21 17:31:05.038 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/snippets
+2023-09-21 17:31:05.045 [info] Deleting non existing profile from backup /home/zkitty/.config/Code - OSS/User/sync/tasks

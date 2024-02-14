@@ -1,0 +1,28 @@
+{
+  "version": "1.5",
+  "default_core_path": "",
+  "default_core_name": "",
+  "base_content_directory": "?U",
+  "label_display_mode": 0,
+  "right_thumbnail_mode": 0,
+  "left_thumbnail_mode": 0,
+  "sort_mode": 0,
+  "items": [
+    {
+      "path": "/mnt/DaBox/Emulation/ROMs/N64/Donkey Kong 64 (U) [!].zip#Donkey Kong 64 (U) [!].z64",
+      "label": "Donkey Kong 64 (USA)",
+      "core_path": "/usr/lib/libretro/parallel_n64_libretro.so",
+      "core_name": "Nintendo - Nintendo 64 (ParaLLEl N64)",
+      "crc32": "D44B4FC6|crc",
+      "db_name": "Nintendo - Nintendo 64.lpl"
+    },
+    {
+      "path": "/mnt/DaBox/Emulation/ROMs/N64/007 - GoldenEye (USA).zip#007 - GoldenEye (USA).n64",
+      "label": "GoldenEye 007 (USA)",
+      "core_path": "/usr/lib/libretro/parallel_n64_libretro.so",
+      "core_name": "Nintendo - Nintendo 64 (ParaLLEl N64)",
+      "crc32": "8B70CB5B|crc",
+      "db_name": "Nintendo - Nintendo 64.lpl"
+    }
+  ]
+}

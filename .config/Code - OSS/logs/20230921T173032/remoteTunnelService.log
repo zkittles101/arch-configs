@@ -1,0 +1,4 @@
+2023-09-21 17:30:59.693 [info] Running tunnel CLI
+2023-09-21 17:30:59.706 [info] status Spawning: /usr/bin/code-tunnel tunnel status
+2023-09-21 17:30:59.707 [error] status error(undefined): + Error: spawn /usr/bin/code-tunnel ENOENT 
+2023-09-21 17:30:59.708 [error] undefined

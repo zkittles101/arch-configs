@@ -1,0 +1,24 @@
+2024/01/23-16:48:29.098 e10a2 Recovering log #55
+2024/01/23-16:48:29.098 e10a2 Level-0 table #57: started
+2024/01/23-16:48:29.098 e10a2 Level-0 table #57: 0 bytes OK
+2024/01/23-16:48:29.371 e10a2 Delete type=0 #55
+2024/01/23-16:48:29.372 e10a2 Delete type=3 #53
+2024/01/23-21:27:57.140 e10a3 Level-0 table #60: started
+2024/01/23-21:27:57.261 e10a3 Level-0 table #60: 209 bytes OK
+2024/01/23-21:27:57.315 e10a3 Delete type=0 #58
+2024/01/23-21:27:57.334 e10a3 Manual compaction at level-0 from (begin) .. (end); will stop at '\x00\x03\x03\x02\x01%\x004\x006\x009\x005\x00e\x009\x009\x00b\x00c\x007\x005\x000\x00f\x006\x003\x007\x005\x005\x00f\x00a\x00f\x003\x003\x00c\x00b\x003\x003\x001\x007\x00a\x009\x00d\x00_\x006\x00:\x000\x000' @ 1454 : 1
+2024/01/23-21:27:57.335 e10a3 Compacting 1@0 + 0@1 files
+2024/01/23-21:27:57.436 e10a3 Generated table #61@0: 105 keys, 74427 bytes
+2024/01/23-21:27:57.437 e10a3 Compacted 1@0 + 0@1 files => 74427 bytes
+2024/01/23-21:27:57.464 e10a3 compacted to: files[ 0 2 1 0 0 0 0 ]
+2024/01/23-21:27:57.465 e10a3 Delete type=2 #54
+2024/01/23-21:27:57.472 e10a3 Manual compaction at level-0 from '\x00\x03\x03\x02\x01%\x004\x006\x009\x005\x00e\x009\x009\x00b\x00c\x007\x005\x000\x00f\x006\x003\x007\x005\x005\x00f\x00a\x00f\x003\x003\x00c\x00b\x003\x003\x001\x007\x00a\x009\x00d\x00_\x006\x00:\x000\x000' @ 1454 : 1 .. (end); will stop at (end)
+2024/01/23-21:27:57.472 e10a3 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x03\x03\x02\x01%\x004\x006\x009\x005\x00e\x009\x009\x00b\x00c\x007\x005\x000\x00f\x006\x003\x007\x005\x005\x00f\x00a\x00f\x003\x003\x00c\x00b\x003\x003\x001\x007\x00a\x009\x00d\x00_\x006\x00:\x000\x000' @ 1562 : 1
+2024/01/23-21:27:57.472 e10a3 Compacting 2@1 + 1@2 files
+2024/01/23-21:27:57.520 e10a3 Generated table #62@1: 268 keys, 77172 bytes
+2024/01/23-21:27:57.521 e10a3 Compacted 2@1 + 1@2 files => 77172 bytes
+2024/01/23-21:27:57.547 e10a3 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/23-21:27:57.548 e10a3 Delete type=2 #60
+2024/01/23-21:27:57.548 e10a3 Delete type=2 #61
+2024/01/23-21:27:57.548 e10a3 Delete type=2 #50
+2024/01/23-21:27:57.556 e10a3 Manual compaction at level-1 from '\x00\x03\x03\x02\x01%\x004\x006\x009\x005\x00e\x009\x009\x00b\x00c\x007\x005\x000\x00f\x006\x003\x007\x005\x005\x00f\x00a\x00f\x003\x003\x00c\x00b\x003\x003\x001\x007\x00a\x009\x00d\x00_\x006\x00:\x000\x000' @ 1562 : 1 .. (end); will stop at (end)

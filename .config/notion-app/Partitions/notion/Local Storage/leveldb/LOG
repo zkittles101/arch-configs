@@ -1,0 +1,9 @@
+2022/08/01-05:39:34.646 9102 Reusing MANIFEST /home/zkitty/.config/notion-app/Partitions/notion/Local Storage/leveldb/MANIFEST-000001
+2022/08/01-05:39:34.713 9102 Recovering log #55
+2022/08/01-05:39:34.756 9102 Reusing old log /home/zkitty/.config/notion-app/Partitions/notion/Local Storage/leveldb/000055.log 
+2022/08/01-05:40:46.408 916b Level-0 table #59: started
+2022/08/01-05:40:46.469 916b Level-0 table #59: 11576 bytes OK
+2022/08/01-05:40:46.536 916b Delete type=0 #55
+2022/08/01-05:41:25.755 909e Level-0 table #61: started
+2022/08/01-05:41:26.115 909e Level-0 table #61: 111716 bytes OK
+2022/08/01-05:41:26.405 909e Delete type=0 #58

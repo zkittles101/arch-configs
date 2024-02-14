@@ -1,0 +1,13 @@
+[General]
+Default Identity=15751671
+
+[Identity #0]
+Default Domain=zkitty-tux
+Disable Fcc=false
+Identity=zkitty
+Image Location=
+Inline Signature=
+Name=zkitty
+Override Encryption Defaults=false
+Signature Enabled=false
+uoid=15751671

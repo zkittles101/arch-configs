@@ -1,0 +1,15 @@
+2023/12/06-02:16:58.425 d4f6 Recovering log #4
+2023/12/06-02:16:58.901 d4f6 Delete type=0 #4
+2023/12/06-02:16:58.901 d4f6 Delete type=3 #2
+2023/12/06-02:17:27.674 d4f7 Level-0 table #9: started
+2023/12/06-02:17:27.712 d4f7 Level-0 table #9: 209 bytes OK
+2023/12/06-02:17:27.813 d4f7 Delete type=0 #7
+2023/12/06-02:17:27.813 d4f7 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2023/12/06-02:17:27.824 d4f7 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x00\x00\x00\x06' @ 125 : 1
+2023/12/06-02:17:27.824 d4f7 Compacting 1@1 + 1@2 files
+2023/12/06-02:17:27.862 d4f7 Generated table #10@1: 37 keys, 985 bytes
+2023/12/06-02:17:27.862 d4f7 Compacted 1@1 + 1@2 files => 985 bytes
+2023/12/06-02:17:27.887 d4f7 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/12/06-02:17:27.888 d4f7 Delete type=2 #5
+2023/12/06-02:17:27.888 d4f7 Delete type=2 #9
+2023/12/06-02:17:27.888 d4f7 Manual compaction at level-1 from '\x00\x00\x00\x00\x06' @ 125 : 1 .. (end); will stop at (end)

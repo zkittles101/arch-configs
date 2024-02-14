@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
+<library:library xmlns:library="http://openoffice.org/2000/library" library:name="PepitoCleaner" library:readonly="false" library:passwordprotected="false">
+ <library:element library:name="modMain"/>
+ <library:element library:name="modFunction"/>
+ <library:element library:name="modEvents"/>
+ <library:element library:name="modDebug"/>
+ <library:element library:name="modEditLanguage"/>
+ <library:element library:name="modFind"/>
+ <library:element library:name="modEditRE"/>
+ <library:element library:name="modRegEx"/>
+ <library:element library:name="modOptions"/>
+ <library:element library:name="modHyphenation"/>
+ <library:element library:name="modWarning"/>
+ <library:element library:name="modHeader"/>
+ <library:element library:name="modPrefernce"/>
+ <library:element library:name="modStyle"/>
+ <library:element library:name="modCopyPasteRegEx"/>
+</library:library>

@@ -1,0 +1,11 @@
+2024/01/19-18:23:12.565 9223f Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_mail.proton.me_0.indexeddb.leveldb since it was missing.
+2024/01/19-18:23:12.786 9223f Delete type=3 #1
+2024/01/19-18:23:21.407 9223f Manual compaction at level-0 from '\x00\x01\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/01/19-18:23:24.348 92254 Level-0 table #5: started
+2024/01/19-18:23:24.390 92254 Level-0 table #5: 1010 bytes OK
+2024/01/19-18:23:24.457 92254 Delete type=0 #3
+2024/01/19-18:23:24.459 92253 Manual compaction at level-0 from '\x00\x02\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x03\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/01/19-18:23:24.491 92252 Level-0 table #7: started
+2024/01/19-18:23:24.524 92252 Level-0 table #7: 788 bytes OK
+2024/01/19-18:23:24.553 92252 Delete type=0 #4
+2024/01/19-18:23:24.554 9223f Manual compaction at level-0 from '\x00\x03\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x04\x00\x00\x00' @ 0 : 0; will stop at (end)

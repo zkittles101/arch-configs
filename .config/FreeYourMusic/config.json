@@ -1,0 +1,30 @@
+{
+	"deviceId": "9f442846-b0f3-455c-bcb2-19cb66518a01",
+	"license": {
+		"isValid": false,
+		"licenseKey": "",
+		"email": "",
+		"subscriptionExpiresAt": null,
+		"transactionVendor": 0,
+		"features": {
+			"hasAlbumsTransferEnabled": false,
+			"hasAutoSyncEnabled": false,
+			"hasSharingEnabled": false,
+			"hasSharingAnalyticsAccess": false,
+			"hasSharingEmbedAccess": false,
+			"disallowLikedPlaylists": false
+		},
+		"limits": {
+			"sharingServicesLimit": 0,
+			"songsLimit": 100,
+			"availableMusicServicesSource": null,
+			"availableMusicServicesDestination": null
+		},
+		"featureFlags": {}
+	},
+	"analyticsId": "df3a0f61-e6b6-4959-a765-bd4f556a0de9",
+	"realmJWTs": {
+		"9f442846-b0f3-455c-bcb2-19cb66518a01": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWFsbUlkIjoiMTNhYzgwODQtNjk3NS00MzQ0LWI3NGMtNDEyNzBiNjdiZTUwIiwicmVhbG1BcHBJZCI6ImxvY2FsIiwiaXNBZG1pbiI6ZmFsc2UsInNob3VsZE1pZ3JhdGUiOmZhbHNlLCJpYXQiOjE2NTc3MjEyODUsImV4cCI6MTY4OTI3ODg4NSwiYXVkIjoibG9jYWwiLCJzdWIiOiIxM2FjODA4NC02OTc1LTQzNDQtYjc0Yy00MTI3MGI2N2JlNTAifQ.CVuyrrnjO38Ac1U_SnlbZ7DHvyU4y9ZeQq2H3GCG-5gCbPrvDlj8jBOpF8fG6_5BahPPhnpxKdC803GTMzqcjn7fsQUahsmatDkzSaWaQesgf_6Y5kjYSuaHMEZEza52Y-defrA_xuu35687JnNN8Wb_SUPef70SYdQUcdz351fKWHbzvcGK5s1uKssrfM3byW3sMZiyWZuRmIp5U0HTosYh1kMcM2xYOcLk6FWHqHZXv3HHvtvWsoLjclrmV3iDlQIpcUz1w7p98sABeqacCpNnuhkuCIHh4-OP4W8j_NgkI1TDC2MfiRnvVbj7a2JZLMcIpLGyccvnO7j8lnQknA"
+	},
+	"onboardingTransfersFinishedStep1": true
+}

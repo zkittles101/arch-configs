@@ -1,0 +1,6 @@
+2023/10/01-22:22:24.431 101796 Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_twitter.com_0.indexeddb.leveldb since it was missing.
+2023/10/01-22:22:24.615 101796 Delete type=3 #1
+2023/10/01-22:29:45.412 101797 Level-0 table #5: started
+2023/10/01-22:29:45.480 101797 Level-0 table #5: 107348 bytes OK
+2023/10/01-22:29:45.533 101797 Delete type=0 #3
+2023/10/01-22:29:45.558 101797 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

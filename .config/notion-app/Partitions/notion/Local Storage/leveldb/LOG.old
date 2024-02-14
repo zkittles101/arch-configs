@@ -1,0 +1,27 @@
+2022/07/30-23:16:24.882 d82 Reusing MANIFEST /home/zkitty/.config/notion-app/Partitions/notion/Local Storage/leveldb/MANIFEST-000001
+2022/07/30-23:16:24.910 d82 Recovering log #42
+2022/07/30-23:16:24.968 d82 Reusing old log /home/zkitty/.config/notion-app/Partitions/notion/Local Storage/leveldb/000042.log 
+2022/07/30-23:17:02.531 d83 Level-0 table #47: started
+2022/07/30-23:17:02.579 d83 Level-0 table #47: 19603 bytes OK
+2022/07/30-23:17:02.635 d83 Delete type=0 #42
+2022/07/30-23:17:44.395 d1d Level-0 table #49: started
+2022/07/30-23:17:44.443 d1d Level-0 table #49: 111743 bytes OK
+2022/07/30-23:17:44.471 d1d Delete type=0 #46
+2022/07/30-23:23:36.232 d81 Level-0 table #51: started
+2022/07/30-23:23:36.284 d81 Level-0 table #51: 11495 bytes OK
+2022/07/30-23:23:36.372 d81 Delete type=0 #48
+2022/07/30-23:31:36.232 d81 Level-0 table #53: started
+2022/07/30-23:31:36.307 d81 Level-0 table #53: 17876 bytes OK
+2022/07/30-23:31:36.348 d81 Delete type=0 #50
+2022/07/30-23:31:36.349 d1d Compacting 4@0 + 1@1 files
+2022/07/30-23:31:36.391 d1d Generated table #54@0: 105 keys, 116519 bytes
+2022/07/30-23:31:36.391 d1d Compacted 4@0 + 1@1 files => 116519 bytes
+2022/07/30-23:31:36.449 d1d compacted to: files[ 0 1 1 0 0 0 0 ]
+2022/07/30-23:31:36.450 d1d Delete type=2 #44
+2022/07/30-23:31:36.450 d1d Delete type=2 #51
+2022/07/30-23:31:36.450 d1d Delete type=2 #49
+2022/07/30-23:31:36.450 d1d Delete type=2 #53
+2022/07/30-23:31:36.450 d1d Delete type=2 #47
+2022/07/30-23:34:36.232 e24 Level-0 table #56: started
+2022/07/30-23:34:36.281 e24 Level-0 table #56: 17693 bytes OK
+2022/07/30-23:34:36.310 e24 Delete type=0 #52

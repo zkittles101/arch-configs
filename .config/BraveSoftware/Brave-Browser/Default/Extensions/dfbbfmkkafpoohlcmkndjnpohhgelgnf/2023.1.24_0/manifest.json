@@ -1,0 +1,23 @@
+{
+   "author": "guihkx",
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "spotishush.js" ],
+      "matches": [ "https://open.spotify.com/*", "https://www.deezer.com/*", "https://listen.tidal.com/*", "https://app.idagio.com/*" ]
+   } ],
+   "default_locale": "en",
+   "description": "__MSG_ext_desc__",
+   "differential_fingerprint": "1.17af24052ca4e3db2410d4c731ee4ae62b5292d58f4817df2a5e5a3981aa0b79",
+   "icons": {
+      "128": "img/spotishush128.png",
+      "16": "img/spotishush16.png",
+      "48": "img/spotishush48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjQdZ+zPC5RgCqPL22MP/Qm+o4W8E6cfuqdeo8yu+hbb28OvO09CdKJM4RmBiTdNcKofQ/628Q8EcoAl+tKphU/CAvzepXWlkF1md8dQDcV8GCKxetCsTxIUo0sRMhVp/9JsLBd7LpMSIH+3ppOgxtjrJ7PUqG/0QR0ekE7kqWoPwjKm27uFvzNcJyy/NmVmUI27yNfntocgsgtR/Sy0SySOVsN11JULZM84kenOPdYpcLTtEdH/6rniKHNGZeQifWzKzRFQ53ob7RAr+uIhGpd3/jrF9vR/lcdK8tVkHXzHMVFi0bAIPLgKRLCzmGznaCms2a+IcC9YcVV19ZxlDcQIDAQAB",
+   "manifest_version": 3,
+   "name": "SpotiShush",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2023.1.24"
+}

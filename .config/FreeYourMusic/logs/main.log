@@ -1,0 +1,9 @@
+[2022-07-13 17:07:17.531] [info]  Is windows: false
+[2022-07-13 17:07:17.540] [info]  os.release(): 5.18.10-arch1-1
+[2022-07-13 17:07:17.543] [info]  Is dev: false
+[2022-07-13 17:07:17.934] [info]  Registered protocol: "fym with success: false"
+[2022-07-13 17:07:21.787] [info]  Web contents [object Object] created
+[2022-07-13 17:07:50.974] [info]  Checking for update
+[2022-07-13 17:07:51.449] [info]  Generated new staging user ID: 44edcdc4-c774-56f5-b293-3b5eaf564f34
+[2022-07-13 17:07:54.374] [info]  Update for version 7.0.0 is not available (latest version: 7.0.0, downgrade is disallowed).
+[2022-07-13 19:11:23.203] [info]  Web contents [object Object] created

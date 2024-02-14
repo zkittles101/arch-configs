@@ -1,0 +1,6 @@
+2024/01/09-00:36:23.523 58c Creating DB /home/zkitty/.config/chromium/Default/IndexedDB/https_singlelogin.re_0.indexeddb.leveldb since it was missing.
+2024/01/09-00:36:23.771 58c Delete type=3 #1
+2024/01/09-00:44:43.614 5b7 Level-0 table #5: started
+2024/01/09-00:44:43.671 5b7 Level-0 table #5: 3389 bytes OK
+2024/01/09-00:44:43.716 5b7 Delete type=0 #3
+2024/01/09-00:44:43.736 58d Manual compaction at level-0 from (begin) .. (end); will stop at (end)

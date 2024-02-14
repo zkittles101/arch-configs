@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modEditRE" script:language="StarBasic">option explicit
+&apos;Type
+Type RegEx
+	Key as String
+	Visible as Boolean
+	Find as String
+	TextString as String
+	isRegEx as Boolean
+	CaseSensitive as Boolean
+	Dual as Boolean
+	Tipologia as Integer
+	
+	Mode_1 as Integer
+	Label_1 as string
+	Replace_1 as string
+	Direction_1 as String &apos;L Left R Right
+	Sel_1 as Integer
+	
+	Mode_2 as Integer
+	Label_2 as string
+	Replace_2 as string
+	Direction_2 as String &apos;L Left R Right
+	Sel_2 as Integer	
+End Type
+
+dim dlg_re 
+dim newRE as RegEx
+dim dlg_result as boolean
+dim no_events_re as boolean
+
+function initEditRegEx(isNew as boolean, re as RegEx)
+   dlg_result=False
+   dlg_re=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgEditRE)
+   dlg_re.getControl(&quot;cmdFindRE&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/next_on.png&quot;)
+   dlg_re.getControl(&quot;cmdCopyRE&quot;).Model.ImageURL = (extensionLocation() &amp; &quot;/icons/copy.png&quot;)
+   set newRE = newRegEx()
+   if isNew then
+   	  dlg_re.Model.Title=&quot;New&quot;
+   	  newRE.Key=Get_RandomKey(20,&quot;RE_USER_&quot;)
+   else
+   	  dlg_re.Model.Title=&quot;Edit&quot;
+   	  newRE.Key=re.Key
+   end if
+   with newRE
+		.Visible = re.Visible
+		.Find = re.Find
+		.TextString = re.TextString
+		.isRegEx = re.isRegEx
+		.CaseSensitive = re.CaseSensitive
+		.Dual = re.Dual
+		.Tipologia = re.Tipologia
+	
+		.Mode_1 = re.Mode_1
+		.Label_1 = re.Label_1
+		.Replace_1 = re.Replace_1
+		.Direction_1 = re.Direction_1
+		.Sel_1 = re.Sel_1
+	
+		.Mode_2 = re.Mode_2
+		.Label_2 = re.Label_2
+		.Replace_2 = re.Replace_2
+		.Direction_2 = re.Direction_2
+		.Sel_2 = re.Sel_2	
+   end with
+   
+   
+   
+   popolate_combo
+   insert_val
+   layoutRE(popolate_flag_control)
+   check_val(true)
+   dlg_re.Execute()   
+   initEditRegEx=dlg_result
+End function
+sub Popolate_Combo
+	dim obj
+  
+	obj=dlg_re.getControl(&quot;valVISIBLE&quot;)
+	obj.addItem(&quot;Visible&quot;, obj.ItemCount)
+	obj.addItem(&quot;Not Visible&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valISRE&quot;)
+	obj.addItem(&quot;Yes&quot;, obj.ItemCount)
+	obj.addItem(&quot;No&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valCASE&quot;)
+	obj.addItem(&quot;Yes&quot;, obj.ItemCount)
+	obj.addItem(&quot;No&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valDUAL&quot;)
+	obj.addItem(&quot;Single&quot;, obj.ItemCount)
+	obj.addItem(&quot;Dual&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valMODE1&quot;)
+	obj.addItem(&quot;Line Modifier&quot;, obj.ItemCount)
+	obj.addItem(&quot;Replace&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valMODE2&quot;)
+	obj.addItem(&quot;Line Modifier&quot;, obj.ItemCount)
+	obj.addItem(&quot;Replace&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valDIRECTION1&quot;)
+	obj.addItem(&quot;Left&quot;, obj.ItemCount)
+	obj.addItem(&quot;Right&quot;, obj.ItemCount)
+	
+	obj=dlg_re.getControl(&quot;valDIRECTION2&quot;)
+	obj.addItem(&quot;Left&quot;, obj.ItemCount)
+	obj.addItem(&quot;Right&quot;, obj.ItemCount)
+End Sub
+Sub insert_val
+    no_events_re=true
+    dlg_re.getControl(&quot;valKEY&quot;).text=newRE.Key
+    
+	if newRE.Visible then
+      dlg_re.getControl(&quot;valVISIBLE&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valVISIBLE&quot;).selectItemPos(1, True)
+	end if
+	
+	dlg_re.getControl(&quot;valFIND&quot;).text=newRE.Find
+	
+	dlg_re.getControl(&quot;valTEXT&quot;).text=newRE.TextString
+	
+	if newRE.isRegEx then
+      dlg_re.getControl(&quot;valISRE&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valISRE&quot;).selectItemPos(1, True)
+	end if
+	
+	if newRE.CaseSensitive then
+      dlg_re.getControl(&quot;valCASE&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valCASE&quot;).selectItemPos(1, True)
+	end if
+	
+	if not(newRE.Dual) then
+      dlg_re.getControl(&quot;valDUAL&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valDUAL&quot;).selectItemPos(1, True)
+	end if
+	
+	dlg_re.getControl(&quot;valLABEL1&quot;).text=newRE.Label_1
+	
+	if newRE.Mode_1 = 1 then
+      dlg_re.getControl(&quot;valMODE1&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valMODE1&quot;).selectItemPos(1, True)
+	end if
+	
+	dlg_re.getControl(&quot;valREPLACE1&quot;).text=newRE.Replace_1
+	
+	if newRE.Direction_1 = &quot;L&quot; then
+      dlg_re.getControl(&quot;valDIRECTION1&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valDIRECTION1&quot;).selectItemPos(1, True)
+	end if
+	
+	dlg_re.getControl(&quot;valSEL1&quot;).text=newRE.Sel_1
+	
+	dlg_re.getControl(&quot;valLABEL2&quot;).text=newRE.Label_2
+	
+	if newRE.Mode_2 = 1 then
+      dlg_re.getControl(&quot;valMODE2&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valMODE2&quot;).selectItemPos(1, True)
+	end if
+	
+	dlg_re.getControl(&quot;valREPLACE2&quot;).text=newRE.Replace_2
+	
+	if newRE.Direction_2 = &quot;L&quot; then
+      dlg_re.getControl(&quot;valDIRECTION2&quot;).selectItemPos(0, True)
+	else
+      dlg_re.getControl(&quot;valDIRECTION2&quot;).selectItemPos(1, True)
+	end if
+	
+	dlg_re.getControl(&quot;valSEL2&quot;).text=newRE.Sel_2
+	no_events_re=false
+end sub
+
+function get_val() as boolean
+    dim v
+    newRE.Key = dlg_re.getControl(&quot;valKEY&quot;).text
+    
+    if dlg_re.getControl(&quot;valVISIBLE&quot;).getSelectedItemPos=0 then
+      newRE.Visible=true
+	else
+      newRE.Visible=false
+	end if
+	
+	newRE.Find = dlg_re.getControl(&quot;valFIND&quot;).text
+	
+	newRE.TextString = dlg_re.getControl(&quot;valTEXT&quot;).text
+	
+	if dlg_re.getControl(&quot;valISRE&quot;).getSelectedItemPos=0 then
+      newRE.isRegEx=True
+	else
+      newRE.isRegEx=False
+	end if
+	
+	if dlg_re.getControl(&quot;valCASE&quot;).getSelectedItemPos=0 then
+      newRE.CaseSensitive=True
+	else
+      newRE.CaseSensitive=False
+	end if
+	
+	if dlg_re.getControl(&quot;valDUAL&quot;).getSelectedItemPos=0 then
+      newRE.Dual=False
+	else
+      newRE.Dual=True
+	end if
+	
+	newRE.Label_1=dlg_re.getControl(&quot;valLABEL1&quot;).text
+	
+	if dlg_re.getControl(&quot;valMODE1&quot;).getSelectedItemPos=0 then
+      newRE.Mode_1 = 1
+	else
+      newRE.Mode_1 = 2
+	end if
+	
+	newRE.Replace_1 = dlg_re.getControl(&quot;valREPLACE1&quot;).text
+	
+	if dlg_re.getControl(&quot;valDIRECTION1&quot;).getSelectedItemPos=0 then
+      newRE.Direction_1 = &quot;L&quot;
+	else
+      newRE.Direction_1 = &quot;R&quot;
+	end if
+		
+	newRE.Sel_1 = dlg_re.getControl(&quot;valSEL1&quot;).text
+	
+	newRE.Label_2=dlg_re.getControl(&quot;valLABEL2&quot;).text
+	
+	if dlg_re.getControl(&quot;valMODE2&quot;).getSelectedItemPos=0 then
+      newRE.Mode_2 = 1
+	else
+      newRE.Mode_2 = 2
+	end if
+	
+	newRE.Replace_2 = dlg_re.getControl(&quot;valREPLACE2&quot;).text
+	
+	if dlg_re.getControl(&quot;valDIRECTION2&quot;).getSelectedItemPos=0 then
+      newRE.Direction_2 = &quot;L&quot;
+	else
+      newRE.Direction_2 = &quot;R&quot;
+	end if
+		
+	newRE.Sel_2 = dlg_re.getControl(&quot;valSEL2&quot;).text
+	get_val=True
+end Function
+
+Function check_val(onlyvisible as boolean, optional source as string) as boolean
+	Dim r_check_val as boolean
+	dim t as string
+	dim obj
+	dim col_ok, col_err
+	
+	col_ok=&amp;hffffff
+	col_err=&amp;hFF8888
+		
+	r_check_val=true
+	if isMissing(source) then source=&quot;&quot;
+	
+	if source=&quot;valFIND&quot; or source=&quot;&quot; then
+		obj=dlg_re.getControl(&quot;valFIND&quot;)
+		if obj.isvisible or onlyvisible=false then
+			t=obj.text
+			if check_text(t,1) then
+				obj.Model.BackgroundColor=col_ok
+				dlg_re.getControl(&quot;cmdFindRE&quot;).setVisible(True)
+			else
+				r_check_val=false
+			    obj.Model.BackgroundColor=col_err
+			    dlg_re.getControl(&quot;cmdFindRE&quot;).setVisible(False)
+			end if		
+		end if
+	end if
+	
+	if source=&quot;valTEXT&quot; or source=&quot;&quot; then
+		obj=dlg_re.getControl(&quot;valTEXT&quot;)
+		if obj.isvisible or onlyvisible=false then
+			t=obj.text
+			if check_text(t,5) then
+				obj.Model.BackgroundColor=col_ok
+			else
+				r_check_val=false
+			    obj.Model.BackgroundColor=col_err
+			end if		
+		end if
+	end if
+	
+	if source=&quot;valLABEL1&quot; or source=&quot;&quot; then
+		obj=dlg_re.getControl(&quot;valLABEL1&quot;)
+		if obj.isvisible or onlyvisible=false then
+			t=obj.text
+			if check_text(t,5) then
+				obj.Model.BackgroundColor=col_ok
+			else
+				r_check_val=false
+			    obj.Model.BackgroundColor=col_err
+			end if
+		end if
+	end if
+
+	if source=&quot;valSEL1&quot; or source=&quot;&quot; then
+		obj=dlg_re.getControl(&quot;valSEL1&quot;)
+		if obj.isvisible or onlyvisible=false then
+			t=obj.text
+			if check_num(t,0,100) then
+				obj.Model.BackgroundColor=col_ok
+			else
+				r_check_val=false
+			    obj.Model.BackgroundColor=col_err
+			end if		
+		end if
+	end if				
+
+	if source=&quot;valLABEL2&quot; or source=&quot;&quot; then
+		obj=dlg_re.getControl(&quot;valLABEL2&quot;)
+		if obj.isvisible or onlyvisible=false then
+			t=obj.text
+			if check_text(t,5) then
+				obj.Model.BackgroundColor=col_ok
+			else
+				r_check_val=false
+		    	obj.Model.BackgroundColor=col_err
+			end if		
+		end if
+	end if
+
+	if source=&quot;valSEL2&quot; or source=&quot;&quot; then
+		obj=dlg_re.getControl(&quot;valSEL2&quot;)
+		if obj.isvisible or onlyvisible=false then
+			t=obj.text
+			if check_num(t,0,100) then
+				obj.Model.BackgroundColor=col_ok
+			else
+				r_check_val=false
+			    obj.Model.BackgroundColor=col_err
+			end if		
+		end if
+	end if
+	dlg_re.getControl(&quot;cmdCopyRE&quot;).setVisible(r_check_val)
+	check_val=r_check_val
+end function
+function check_text(str as string, min as integer) as boolean
+	dim r_check_text as boolean
+	r_check_text=True
+	if len(str)&lt;min then r_check_text = false
+	check_text = r_check_text
+end function
+function check_num(str as string, min as integer, max as integer) as boolean
+	dim r_check_num as boolean
+	r_check_num=True
+	if isNumeric(str) then
+		if int(str)&lt;min or int(str)&gt;max then r_check_num=False
+		if instr(str,&quot;.&quot;)&gt;0 or instr(str,&quot;,&quot;)&gt;0 then r_check_num=False
+	else
+		r_check_num=False
+	end if
+	check_num = r_check_num
+end function
+sub layoutRE(flagControl as string)
+    dim ctrls
+    dim n as integer
+    Dim mat
+    Dim x as integer, y as integer, add as integer
+    Dim obj
+    Dim wadd as integer
+    Dim w as integer, h as integer
+    
+    ctrls=dlg_re.getControls()
+    For n = 0 to uBound(dlg_re.getControls())
+       ctrls(n).setvisible(false)  
+    next
+    check_val(false,&quot;valFIND&quot;)
+    dlg_re.getControl(&quot;cmdOK&quot;).setvisible(True)
+    dlg_re.getControl(&quot;cmdCancel&quot;).setvisible(True)
+    
+    mat=split(flagControl,&quot;_&quot;)
+    
+    x=2
+    y=2
+    w=dlg_re.Model.Width
+    h=dlg_re.Model.Height
+    add=10
+    wadd=51
+    for n=0 to ubound(mat)
+        if (trim(mat(n)))&lt;&gt;&quot;&quot; then
+           obj = dlg_re.getControl(&quot;lbl&quot; &amp; mat(n))
+           obj.model.PositionY=y
+           obj.model.PositionX=x
+           obj.setvisible(True)
+           obj = dlg_re.getControl(&quot;val&quot; &amp; mat(n))
+           obj.model.PositionY=y
+           obj.model.PositionX=x+wadd
+           obj.model.Width=w-(x+wadd+2)
+           obj.setvisible(True)
+           y=y+add
+        else
+           y=y+add/2
+        end if
+        
+    next
+    
+    obj = dlg_re.getControl(&quot;cmdFindRE&quot;)
+    obj.model.PositionY=y
+    obj.model.PositionX=x
+    obj = dlg_re.getControl(&quot;cmdCopyRE&quot;)
+    obj.model.PositionY=y
+    obj.model.PositionX=x + dlg_re.getControl(&quot;cmdFindRE&quot;).model.width
+    
+    obj = dlg_re.getControl(&quot;cmdCancel&quot;)
+    obj.model.PositionY=y
+    obj.model.PositionX=w - obj.Model.Width * 2 - 2
+    
+    y=y+add
+    obj = dlg_re.getControl(&quot;cmdOK&quot;)
+    obj.model.PositionY=y
+    obj.model.PositionX=w - obj.Model.Width - 2
+    
+    obj = dlg_re.getControl(&quot;cmdCancel&quot;)
+    obj.model.PositionY=y
+    obj.model.PositionX=w - obj.Model.Width * 2 - 2
+    
+    dlg_re.Model.Height=y+add + 4
+end sub 
+function popolate_flag_control as string
+   Dim str as String
+   &apos;0 Separator
+   &apos;1 General Find
+   &apos;2 Header, Warning Find
+   &apos;3 Hypenation Find
+   &apos;9 Special (only Visible and text)
+   str=&quot;KEY_VISIBLE_&quot;
+   Select Case newRE.Tipologia
+      case 0
+      	  
+      case 1
+      	 str=str &amp; &quot;TEXT_ _FIND_ISRE_CASE_ _DUAL_ _LABEL1_MODE1_REPLACE1_&quot;
+      	 if newRE.Mode_1 = 1 then
+      	 	str=str &amp; &quot;DIRECTION1_SEL1_&quot;
+      	 end if
+      	 if newRE.Dual then
+      	    str=str &amp; &quot; _LABEL2_MODE2_REPLACE2_&quot;	
+      	    if newRE.Mode_2 = 1 then
+      	 	   str=str &amp; &quot;DIRECTION2_SEL2_&quot;
+      	    end if
+      	 end if
+      case 2
+         str=str &amp; &quot;TEXT_ _FIND_CASE_&quot;
+      case 3
+         str=str &amp; &quot;TEXT_FIND_&quot;
+      case 9
+         str=str &amp; &quot;TEXT_ _LABEL1_&quot;	  
+   end Select
+   popolate_flag_control=str
+End function
+
+function getEditRegExResult
+	getEditRegExResult=newRE
+end function
+
+
+Sub cmdOKRE_Click(event as object)
+   if check_val(True) then
+   		if get_val then
+       	   dlg_result=True
+           dlg_re.endExecute()
+        end if
+   end if
+   if dlg_result=false then
+   	   msgbox(gLang.item(&quot;dialog_regex_0007&quot;).txt,48,&quot;Pepito Cleaner&quot;)
+   end if
+End sub
+Sub cmdCancelRE_Click(event as object)
+    dlg_re.endExecute()
+End sub
+Sub cmdCopyRE_Click(event as object)
+	if get_val then
+       	CopyRegExToClipboard(newRE,getRegExListString)	
+    else
+    	msgbox &quot;not valid&quot;
+    end if	
+end sub
+Sub cmdFindRE_Click(Event as object)
+	dim pCursor
+	dim pfound
+	dim pcasesensitive as boolean
+	dim pfind as string
+	dim pisregex as boolean
+	
+	pfind = dlg_re.getControl(&quot;valFIND&quot;).text
+	if dlg_re.getControl(&quot;valISRE&quot;).getSelectedItemPos=0 then
+      pisregex=True
+	else
+      pisregex=False
+	end if
+	if dlg_re.getControl(&quot;valCASE&quot;).getSelectedItemPos=0 then
+      pcasesensitive=True
+	else
+      pcasesensitive=False
+	end if
+	pCursor = thisComponent.getCurrentController.getViewCursor()
+	pfound=Find(pCursor, pfind, pcasesensitive, &quot;&quot;, pisregex)
+	
+	if IsNull(pfound) then 
+   		gotoStart(pCursor)
+   		pfound=Find(pCursor, pfind, pcasesensitive, &quot;&quot;, pisregex)
+   	end if
+   	
+   	if isNull(pFound) then
+        msgbox(gLang.item(&quot;dialog_regex_0006&quot;).txt,64,&quot;Pepito Cleaner&quot;)
+    else
+        pCursor.gotoRange(pFound,false)
+    end if
+End Sub
+Sub generic_event_RE(event as object)
+    dim check_refresh_layout as boolean
+    dim source as string
+    
+    check_refresh_layout=false
+	if no_events_re then exit sub
+	source = event.Source.Model.Name
+	
+	select case source
+		case &quot;valDUAL&quot;
+			if dlg_re.getControl(source).getSelectedItemPos=0 then
+	        	newRe.Dual = False
+	      	else
+	        	newRe.Dual = True
+	      	end if
+			check_refresh_layout=True
+		case &quot;valMODE1&quot;
+			if dlg_re.getControl(source).getSelectedItemPos=0 then
+	        	newRe.Mode_1 = 1
+	      	else
+	        	newRe.Mode_1 = 2
+	      	end if
+			check_refresh_layout=True
+		case &quot;valMODE2&quot;
+			if dlg_re.getControl(source).getSelectedItemPos=0 then
+	        	newRe.Mode_2 = 1
+	      	else
+	        	newRe.Mode_2 = 2
+	      	end if
+			check_refresh_layout=True
+		case &quot;valFIND&quot;
+			check_val(false,source)
+		case &quot;valTEXT&quot;
+			check_val(false,source)
+		case &quot;valLABEL1&quot;
+			check_val(false,source)
+		case &quot;valLABEL2&quot;
+			check_val(false,source)
+		case &quot;valSEL1&quot;
+			check_val(false,source)
+		case &quot;valSEL2&quot;
+			check_val(false,source)
+	end select
+	
+	if check_refresh_layout then
+		layoutRE(popolate_flag_control)
+	end if
+End Sub
+</script:module>

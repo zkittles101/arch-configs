@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="dlgEditRE" dlg:left="245" dlg:top="77" dlg:width="197" dlg:height="251" dlg:closeable="true" dlg:moveable="true">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:background-color="0xffffff" dlg:font-name="Courier New" dlg:font-stylename="Normale" dlg:font-family="modern"/>
+  <dlg:style dlg:style-id="1" dlg:background-color="0xffffff" dlg:font-name="Courier New" dlg:font-height="9" dlg:font-stylename="Normale" dlg:font-family="modern"/>
+  <dlg:style dlg:style-id="2" dlg:background-color="0xffffff" dlg:font-name="Courier New" dlg:font-stylename="Grassetto" dlg:font-family="modern" dlg:font-weight="150"/>
+  <dlg:style dlg:style-id="3" dlg:background-color="0xffffff" dlg:border="none" dlg:font-name="Courier New" dlg:font-stylename="Grassetto" dlg:font-family="modern" dlg:font-weight="150"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:text dlg:style-id="0" dlg:id="lblKEY" dlg:tab-index="0" dlg:left="2" dlg:top="1" dlg:width="50" dlg:height="9" dlg:value="Key:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblVISIBLE" dlg:tab-index="10" dlg:left="2" dlg:top="13" dlg:width="50" dlg:height="9" dlg:value="Visible:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblFIND" dlg:tab-index="9" dlg:left="2" dlg:top="25" dlg:width="50" dlg:height="9" dlg:value="Find:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblTEXT" dlg:tab-index="8" dlg:left="2" dlg:top="37" dlg:width="50" dlg:height="9" dlg:value="Text:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblISRE" dlg:tab-index="7" dlg:left="2" dlg:top="49" dlg:width="50" dlg:height="9" dlg:value="Reg Exp:"/>
+  <dlg:text dlg:style-id="1" dlg:id="lblCASE" dlg:tab-index="6" dlg:left="2" dlg:top="61" dlg:width="50" dlg:height="9" dlg:value="Case Sens:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblDUAL" dlg:tab-index="5" dlg:left="2" dlg:top="73" dlg:width="50" dlg:height="9" dlg:value="Dual Choise:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblLABEL1" dlg:tab-index="4" dlg:left="2" dlg:top="85" dlg:width="50" dlg:height="9" dlg:value="Label 1:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblMODE1" dlg:tab-index="3" dlg:left="2" dlg:top="97" dlg:width="50" dlg:height="9" dlg:value="Mode 1:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblREPLACE1" dlg:tab-index="2" dlg:left="2" dlg:top="109" dlg:width="50" dlg:height="9" dlg:value="Replace 1:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblDIRECTION1" dlg:tab-index="12" dlg:left="2" dlg:top="122" dlg:width="50" dlg:height="9" dlg:value="Direction 1:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblLABEL2" dlg:tab-index="15" dlg:left="2" dlg:top="146" dlg:width="50" dlg:height="9" dlg:value="Label 2:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblMODE2" dlg:tab-index="14" dlg:left="2" dlg:top="158" dlg:width="50" dlg:height="9" dlg:value="Mode 2:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblREPLACE2" dlg:tab-index="13" dlg:left="2" dlg:top="170" dlg:width="50" dlg:height="9" dlg:value="Replace 2:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblDIRECTION2" dlg:tab-index="17" dlg:left="2" dlg:top="183" dlg:width="50" dlg:height="9" dlg:value="Direction 2:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblSEL2" dlg:tab-index="16" dlg:left="2" dlg:top="195" dlg:width="50" dlg:height="9" dlg:value="Selection 2:"/>
+  <dlg:text dlg:style-id="0" dlg:id="lblSEL1" dlg:tab-index="11" dlg:left="2" dlg:top="134" dlg:width="50" dlg:height="9" dlg:value="Selection 1:"/>
+  <dlg:text dlg:style-id="2" dlg:id="valKEY" dlg:tab-index="18" dlg:left="54" dlg:top="1" dlg:width="138" dlg:height="9"/>
+  <dlg:menulist dlg:style-id="3" dlg:id="valVISIBLE" dlg:tab-index="19" dlg:left="54" dlg:top="13" dlg:width="138" dlg:height="9" dlg:spin="true"/>
+  <dlg:menulist dlg:style-id="3" dlg:id="valISRE" dlg:tab-index="20" dlg:left="54" dlg:top="49" dlg:width="138" dlg:height="9" dlg:spin="true"/>
+  <dlg:menulist dlg:style-id="3" dlg:id="valCASE" dlg:tab-index="21" dlg:left="54" dlg:top="61" dlg:width="138" dlg:height="9" dlg:spin="true"/>
+  <dlg:menulist dlg:style-id="3" dlg:id="valDUAL" dlg:tab-index="22" dlg:left="54" dlg:top="73" dlg:width="138" dlg:height="9" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="3" dlg:id="valMODE1" dlg:tab-index="23" dlg:left="56" dlg:top="95" dlg:width="138" dlg:height="9" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="3" dlg:id="valDIRECTION1" dlg:tab-index="26" dlg:left="56" dlg:top="119" dlg:width="138" dlg:height="9" dlg:spin="true"/>
+  <dlg:menulist dlg:style-id="3" dlg:id="valMODE2" dlg:tab-index="24" dlg:left="56" dlg:top="156" dlg:width="138" dlg:height="9" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:menulist>
+  <dlg:menulist dlg:style-id="3" dlg:id="valDIRECTION2" dlg:tab-index="25" dlg:left="58" dlg:top="182" dlg:width="138" dlg:height="9" dlg:spin="true"/>
+  <dlg:textfield dlg:style-id="3" dlg:id="valFIND" dlg:tab-index="27" dlg:left="56" dlg:top="25" dlg:width="138" dlg:height="9">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:style-id="3" dlg:id="valTEXT" dlg:tab-index="28" dlg:left="56" dlg:top="37" dlg:width="138" dlg:height="9">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:style-id="3" dlg:id="valLABEL1" dlg:tab-index="29" dlg:left="56" dlg:top="85" dlg:width="138" dlg:height="9">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:style-id="3" dlg:id="valREPLACE1" dlg:tab-index="30" dlg:left="56" dlg:top="107" dlg:width="138" dlg:height="9"/>
+  <dlg:textfield dlg:style-id="3" dlg:id="valSEL1" dlg:tab-index="31" dlg:left="56" dlg:top="132" dlg:width="138" dlg:height="9">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:style-id="3" dlg:id="valLABEL2" dlg:tab-index="32" dlg:left="56" dlg:top="146" dlg:width="138" dlg:height="9">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:textfield dlg:style-id="3" dlg:id="valREPLACE2" dlg:tab-index="33" dlg:left="56" dlg:top="170" dlg:width="138" dlg:height="9"/>
+  <dlg:textfield dlg:style-id="3" dlg:id="valSEL2" dlg:tab-index="34" dlg:left="58" dlg:top="194" dlg:width="138" dlg:height="9">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.generic_event_RE?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:textfield>
+  <dlg:button dlg:id="cmdOK" dlg:tab-index="1" dlg:left="158" dlg:top="235" dlg:width="37" dlg:height="12" dlg:value="OK">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.cmdOKRE_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdCancel" dlg:tab-index="35" dlg:left="119" dlg:top="235" dlg:width="37" dlg:height="12" dlg:value="Cancel">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.cmdCancelRE_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdFindRE" dlg:tab-index="36" dlg:left="2" dlg:top="208" dlg:width="20" dlg:height="20" dlg:tabstop="true" dlg:grab-focus="false">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.cmdFindRE_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="cmdCopyRE" dlg:tab-index="37" dlg:left="174" dlg:top="206" dlg:width="20" dlg:height="20" dlg:tabstop="true" dlg:grab-focus="false">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:PepitoCleaner.modEditRE.cmdCopyRE_Click?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+ </dlg:bulletinboard>
+</dlg:window>

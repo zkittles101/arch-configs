@@ -1,0 +1,29 @@
+2024/01/16-12:29:14.397 b8a Creating DB /home/zkitty/.config/chromium/Default/WebStorage/43/IndexedDB/indexeddb.leveldb since it was missing.
+2024/01/16-12:29:14.649 b8a Delete type=3 #1
+2024/01/16-12:29:21.289 b8b Level-0 table #5: started
+2024/01/16-12:29:21.356 b8b Level-0 table #5: 2642 bytes OK
+2024/01/16-12:29:21.473 b8b Delete type=0 #3
+2024/01/16-12:29:21.478 b57 Manual compaction at level-0 from '\x00\x02\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x03\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/01/16-12:29:22.149 b8b Level-0 table #7: started
+2024/01/16-12:29:22.275 b8b Level-0 table #7: 6372 bytes OK
+2024/01/16-12:29:22.402 b8b Delete type=0 #4
+2024/01/16-12:29:22.404 b89 Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
+2024/01/16-13:19:41.798 b58 Level-0 table #9: started
+2024/01/16-13:19:42.023 b58 Level-0 table #9: 18011 bytes OK
+2024/01/16-13:19:42.091 b58 Delete type=0 #6
+2024/01/16-13:19:42.184 b58 Manual compaction at level-0 from (begin) .. (end); will stop at '\x00\x05\x01\x1f\x04\x03\x01\x03\x00N\x00E\x00W\x03\x00\x00\x00\x00\x00\x00L@\x03\x00\x80i\x89\x1c\xd1xB\x00\x03\x00\x00\x00\x00\x00\x00\x14@' @ 597 : 1
+2024/01/16-13:19:42.186 b58 Compacting 1@0 + 1@1 files
+2024/01/16-13:19:42.259 b58 Generated table #10@0: 218 keys, 16528 bytes
+2024/01/16-13:19:42.259 b58 Compacted 1@0 + 1@1 files => 16528 bytes
+2024/01/16-13:19:42.281 b58 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/01/16-13:19:42.282 b58 Delete type=2 #9
+2024/01/16-13:19:42.282 b58 Delete type=2 #7
+2024/01/16-13:19:42.287 b58 Manual compaction at level-0 from '\x00\x05\x01\x1f\x04\x03\x01\x03\x00N\x00E\x00W\x03\x00\x00\x00\x00\x00\x00L@\x03\x00\x80i\x89\x1c\xd1xB\x00\x03\x00\x00\x00\x00\x00\x00\x14@' @ 597 : 1 .. (end); will stop at (end)
+2024/01/16-13:19:42.289 b8a Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x05\x01\x1f\x04\x03\x01\x03\x00N\x00E\x00W\x03\x00\x00\x00\x00\x00\x00L@\x03\x00\x80i\x89\x1c\xd1xB\x00\x03\x00\x00\x00\x00\x00\x00\x14@' @ 597 : 1
+2024/01/16-13:19:42.289 b8a Compacting 1@1 + 1@2 files
+2024/01/16-13:19:42.325 b8a Generated table #11@1: 88 keys, 14018 bytes
+2024/01/16-13:19:42.326 b8a Compacted 1@1 + 1@2 files => 14018 bytes
+2024/01/16-13:19:42.383 b8a compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/01/16-13:19:42.384 b8a Delete type=2 #5
+2024/01/16-13:19:42.384 b8a Delete type=2 #10
+2024/01/16-13:19:42.389 b58 Manual compaction at level-1 from '\x00\x05\x01\x1f\x04\x03\x01\x03\x00N\x00E\x00W\x03\x00\x00\x00\x00\x00\x00L@\x03\x00\x80i\x89\x1c\xd1xB\x00\x03\x00\x00\x00\x00\x00\x00\x14@' @ 597 : 1 .. (end); will stop at (end)

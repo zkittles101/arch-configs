@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="modEditRegExp" script:language="StarBasic">option explicit
+&apos;Type
+Type RegExp
+	Key as String
+	Visible as Boolean
+	Tipologia as Integer
+	RegExp_Find as String
+	RegExp_Replace as string
+	MoveDirection as String &apos;L Left R Right
+	MoveNum as Integer
+	MoveSel as Integer
+	TextString as String
+End Type
+
+dim dlg_re 
+dim pRE as RegExp
+dim dlg_result as boolean
+function initEditRegExp(isNew as boolean, re as RegExp)
+   dim obj
+   dlg_result=False
+   dlg_re=CreateUnoDialog(DialogLibraries.PepitoCleaner.dlgEditRegExp)
+   pRE = new RegExp
+   with pRE
+   	  .Key = re.Key
+	  .Visible = re.Visible
+	  .Tipologia = re.Tipologia
+	  .RegExp_Find = re.RegExp_Find
+	  .RegExp_Replace = re.RegExp_Replace
+	  .MoveDirection = re.MoveDirection
+	  .MoveNum = re.MoveNum
+	  .MoveSel = re.MoveSel
+	  .TextString = re.TextString
+   end with
+   
+   if pre.tipologia &lt;&gt; -1 then
+   	  obj=dlg_re.getControl(&quot;lst_valType&quot;)
+      obj.addItem(&quot;0 - Separetor&quot;, obj.ItemCount)
+      obj.addItem(&quot;1 - Line Modifier&quot;, obj.ItemCount)
+      obj.addItem(&quot;2 - Replace&quot;, obj.ItemCount)
+   end if
+   
+   obj=dlg_re.getControl(&quot;lst_valVisible&quot;)
+   obj.addItem(&quot;Visible&quot;, obj.ItemCount)
+   obj.addItem(&quot;Not Visible&quot;, obj.ItemCount)
+   
+   obj=dlg_re.getControl(&quot;lst_valMoveDirection&quot;)
+   obj.addItem(&quot;Left&quot;, obj.ItemCount)
+   obj.addItem(&quot;Right&quot;, obj.ItemCount)
+   
+   if isNew then
+   	  dlg_re.Model.Title=&quot;New Find RegExp&quot;
+   	  pRE.Key = Get_RandomKey(20,&quot;RE_USER_&quot;)
+   	  &apos;pRe.Tipologia = 0
+   	  &apos;pRe.Visible = True
+   	  &apos;pRe.MoveDirection=&quot;&quot;
+   else
+      dlg_re.Model.Title=&quot;Edit Find RegExp&quot;     
+   end if
+   dlg_re.getControl(&quot;lbl_valKey&quot;).text = pre.key
+   if pre.tipologia &lt;&gt; -1 then dlg_re.getControl(&quot;lst_valType&quot;).selectItemPos(pRe.Tipologia, True)
+   if pRe.Visible then
+      dlg_re.getControl(&quot;lst_valVisible&quot;).selectItemPos(0, True)
+   else
+      dlg_re.getControl(&quot;lst_valVisible&quot;).selectItemPos(1, True)
+   end if
+   if pRe.MoveDirection=&quot;L&quot; then
+      dlg_re.getControl(&quot;lst_valMoveDirection&quot;).selectItemPos(0, True)
+   else
+      dlg_re.getControl(&quot;lst_valMoveDirection&quot;).selectItemPos(1, True)
+   end if
+   dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).text = pRe.RegExp_Find
+   dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).text = pRe.RegExp_Replace
+   dlg_re.getControl(&quot;num_valMoveNum&quot;).text = pRe.MoveNum
+   dlg_re.getControl(&quot;num_valMoveSel&quot;).text = pRe.MoveSel
+   dlg_re.getControl(&quot;txt_valTextString&quot;).text = pRe.TextString
+   if pre.tipologia = -1 then
+         dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Find&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Replace&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveDirection&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lst_valMoveDirection&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveNum&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveNum2&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;num_valMoveNum&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveSel&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveSel2&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;num_valMoveSel&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_TextString&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;txt_valTextString&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lst_valType&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_Type&quot;).setVisible(False)
+   end if
+   dlg_re.Execute()   
+   initEditRegExp=dlg_result
+End function
+
+Sub cmdOK_Click(event as object)
+   if validate_regexp then
+       dlg_result=True
+       dlg_re.endExecute()
+   else
+   	   msgbox &quot;Reg Exp not valid&quot;
+   end if
+End sub
+
+Sub cmdCancel_Click(event as object)
+   dlg_re.endExecute()
+End sub
+
+sub lst_valType_Change(event as object)
+   dim v as integer
+   v = dlg_re.getControl(&quot;lst_valType&quot;).getSelectedItemPos
+   select case v
+      case 0
+      	 dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Find&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Replace&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveDirection&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lst_valMoveDirection&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveNum&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveNum2&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;num_valMoveNum&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveSel&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveSel2&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;num_valMoveSel&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_TextString&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;txt_valTextString&quot;).setVisible(False)
+      case 1
+      	 dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Find&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Replace&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_MoveDirection&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lst_valMoveDirection&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_MoveNum&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_MoveNum2&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;num_valMoveNum&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_MoveSel&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_MoveSel2&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;num_valMoveSel&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_TextString&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;txt_valTextString&quot;).setVisible(True)
+      case 2
+         dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).setVisible(True)
+         dlg_re.getControl(&quot;lbl_RegExp_Find&quot;).setVisible(True)
+         dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_RegExp_Replace&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;lbl_MoveDirection&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lst_valMoveDirection&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveNum&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveNum2&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;num_valMoveNum&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveSel&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_MoveSel2&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;num_valMoveSel&quot;).setVisible(False)
+      	 dlg_re.getControl(&quot;lbl_TextString&quot;).setVisible(True)
+      	 dlg_re.getControl(&quot;txt_valTextString&quot;).setVisible(True)
+   end select
+   
+end sub
+
+function getEditRegExpResult
+	getEditRegExpResult=pRE
+end function
+
+function validate_regexp
+	dim v as integer
+	dim response as boolean
+	
+	response=true
+    if dlg_re.getControl(&quot;lst_valVisible&quot;).getSelectedItemPos=0 then
+	   pRe.Visible = True
+	else
+	   pRe.Visible = False
+	end if
+	if pre.tipologia &lt;&gt; -1 then	pRe.Tipologia = dlg_re.getControl(&quot;lst_valType&quot;).getSelectedItemPos
+    select case pRe.Tipologia
+       case -1
+       	  if validate_text(&quot;txt_valRegExp_Find&quot;) then
+      	  	 pRe.RegExp_Find = dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).Text
+	         pRe.RegExp_Replace = dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).Text
+	      else
+	         response=False
+	      end if
+	      pRe.RegExp_Replace = &quot;&quot;
+	      pRe.MoveDirection = &quot;&quot;
+	      pRe.MoveNum = -1
+	  	  pRe.MoveSel = -1
+	  	  if validate_text(&quot;txt_valTextString&quot;) then
+	      	 pRe.TextString = dlg_re.getControl(&quot;txt_valTextString&quot;).Text
+	      else
+	         response=False
+	      end if
+       case 0
+          pRe.RegExp_Find = &quot;&quot;
+	      pRe.RegExp_Replace = &quot;&quot;
+	      pRe.MoveDirection = &quot;&quot;
+	      pRe.MoveNum = -1
+	  	  pRe.MoveSel = -1
+	      pRe.TextString = &quot;&quot;
+       case 1
+          if validate_text(&quot;txt_valRegExp_Find&quot;) then
+      	  	 pRe.RegExp_Find = dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).Text
+	         pRe.RegExp_Replace = dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).Text
+	      else
+	         response=False
+	      end if
+	      if dlg_re.getControl(&quot;lst_valMoveDirection&quot;).getSelectedItemPos=0 then
+	         pRe.MoveDirection = &quot;L&quot;
+	      else
+	         pRe.MoveDirection = &quot;R&quot;
+	      end if
+	      if validate_text(&quot;num_valMoveNum&quot;) then
+	      	 pRe.MoveNum = dlg_re.getControl(&quot;num_valMoveNum&quot;).Text
+	      else
+	         response=False
+	      end if
+	      if validate_text(&quot;num_valMoveSel&quot;) then
+	      	 pRe.MoveSel = dlg_re.getControl(&quot;num_valMoveSel&quot;).Text
+	      else
+	         response=False
+	      end if
+	      if validate_text(&quot;txt_valTextString&quot;) then
+	      	 pRe.TextString = dlg_re.getControl(&quot;txt_valTextString&quot;).Text
+	      else
+	         response=False
+	      end if
+       case 2
+          if validate_text(&quot;txt_valRegExp_Find&quot;) then
+      	  	 pRe.RegExp_Find = dlg_re.getControl(&quot;txt_valRegExp_Find&quot;).Text
+	         pRe.RegExp_Replace = dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;).Text
+	      else
+	         response=False
+	      end if
+	      pRe.MoveDirection = &quot;&quot;
+	      pRe.MoveNum = -1
+	      pRe.MoveSel = -1
+	      if validate_text(&quot;txt_valTextString&quot;) then
+	      	 pRe.TextString = dlg_re.getControl(&quot;txt_valTextString&quot;).Text
+	      else
+	         response=False
+	      end if
+    end select
+	validate_regexp=response
+end function
+sub validate_field_edit_regexp(event as object)
+    dim source
+    dim col_ok
+	dim col_err
+	col_ok=&amp;hffffff
+	col_err=&amp;hFF8888
+    source=Event.Source.Model.Name
+    if validate_text(source) then
+        Event.Source.Model.BackgroundColor=col_ok
+    else
+        Event.Source.Model.BackgroundColor=col_err
+    end if
+end sub
+function validate_text(source as string)
+	dim obj, obj2
+	
+	dim val_result as boolean
+	
+	val_result=True
+
+	if source=&quot;num_valMoveNum&quot; then
+		obj=dlg_re.getControl(&quot;num_valMoveNum&quot;)
+		if isNumeric(obj.text) then
+			if int(obj.text)&lt;-1 or int(obj.text)&gt;100 then
+				val_result=False
+			end if
+		else
+			val_result=False
+		end if
+	end if
+	
+	if source=&quot;num_valMoveSel&quot; then
+		obj=dlg_re.getControl(&quot;num_valMoveSel&quot;)
+		if isNumeric(obj.text) then
+			if int(obj.text)&lt;-1 or int(obj.text)&gt;100 then
+				val_result=False
+			end if
+		else
+			val_result=False
+		end if
+	end if
+	
+	if source=&quot;txt_valTextString&quot; then
+		obj=dlg_re.getControl(&quot;txt_valTextString&quot;)
+		if len(obj.text)&lt;5 then
+			val_result=False
+		end if
+	end if
+	
+	if source=&quot;txt_valRegExp_Find&quot; or source=&quot;txt_valRegExp_Replace&quot; then
+		obj=dlg_re.getControl(&quot;txt_valRegExp_Find&quot;)
+		obj2=dlg_re.getControl(&quot;txt_valRegExp_Replace&quot;)
+		if len(obj.text)&gt;0 then
+			if not Test_RegExp(obj.text, obj2.text) then 
+				val_result=False
+			end if
+		else
+			val_result=False
+		end if
+	end if
+	
+	validate_text=val_result
+end function
+
+Function Test_RegExp(pRegExp as string, pReplace as string) as Boolean
+   Dim rx As Object
+   Dim rx_result
+   Dim new_Replace as string
+   Dim test_example as string
+   
+   on error goto errTest_RegExp
+   test_example=&quot;Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&quot;
+   set rx= CreateObject(&quot;vbscript.regexp&quot;)
+   With rx
+     .Pattern = pRegExp
+     .IgnoreCase = True
+     .Global = True
+   End With
+   if pReplace=&quot;&quot; then
+   	  Set rx_result = rx.Execute(test_example)
+   else
+   	  new_Replace=replace(pReplace,&quot;\n&quot;,chr(13))
+   	  test_example = rx.Replace(test_example, new_Replace)
+   end if
+   on error goto 0
+   Test_RegExp=True
+   exit function
+errTest_RegExp:
+   on error goto 0
+   Test_RegExp=false
+end function
+</script:module>

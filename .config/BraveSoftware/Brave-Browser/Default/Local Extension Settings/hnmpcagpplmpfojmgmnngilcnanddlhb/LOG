@@ -1,0 +1,9 @@
+2023/04/02-11:07:07.842 9e3 Recovering log #336
+2023/04/02-11:07:07.891 9e3 Level-0 table #338: started
+2023/04/02-11:07:08.141 9e3 Level-0 table #338: 35998 bytes OK
+2023/04/02-11:07:08.435 9e3 Delete type=3 #334
+2023/04/02-11:07:08.435 9e3 Delete type=0 #336
+2023/04/02-11:07:08.435 9e3 Compacting 4@0 + 3@1 files
+2023/04/02-11:07:10.598 9e3 Generated table #340@0: 47 keys, 32618 bytes
+2023/04/02-11:07:10.598 9e3 Compacted 4@0 + 3@1 files => 32618 bytes
+2023/04/02-11:07:11.059 9e3 compacted to: files[ 0 1 1 0 0 0 0 ]
